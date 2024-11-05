@@ -21,3 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Planty"
 include(":app")
+include(":opencv")
+include(":edgedetector")
