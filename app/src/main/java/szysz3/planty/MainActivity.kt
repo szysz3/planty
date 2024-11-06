@@ -9,7 +9,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import szysz3.edgedetector.EdgeDetector
 import szysz3.planty.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -34,22 +33,6 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-        val edgeDetector = EdgeDetector()
-        loadSampleImage("sample.png")?.let {
-            val edgesBitmap = edgeDetector.detectEdges(it)
-            binding.image.setImageBitmap(edgesBitmap)
-        }
     }
 
-    private fun loadSampleImage(fileName: String): Bitmap? {
-        return try {
-            assets.open(fileName).use { inputStream ->
-                BitmapFactory.decodeStream(inputStream)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
 }
