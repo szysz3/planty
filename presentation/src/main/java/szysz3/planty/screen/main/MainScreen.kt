@@ -1,9 +1,5 @@
-package szysz3.planty
+package szysz3.planty.screen.main
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
@@ -19,26 +15,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import szysz3.planty.ui.theme.PlantyTheme
-
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            PlantyTheme {
-                MainScreen()
-            }
-        }
-    }
-}
+import szysz3.planty.screen.dashboard.DashboardScreen
+import szysz3.planty.screen.home.HomeScreen
+import szysz3.planty.screen.notification.NotificationsScreen
 
 @Composable
 fun MainScreen() {
@@ -60,6 +44,25 @@ sealed class BottomNavItem(val route: String, val icon: ImageVector, val title: 
     object Dashboard : BottomNavItem("dashboard", Icons.Default.Person, "Dashboard")
     object Notifications :
         BottomNavItem("notifications", Icons.Default.Notifications, "Notifications")
+}
+
+@Composable
+fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modifier) {
+    NavHost(
+        navController = navController,
+        startDestination = BottomNavItem.Home.route,
+        modifier = modifier
+    ) {
+        composable(BottomNavItem.Home.route) {
+            HomeScreen()
+        }
+        composable(BottomNavItem.Dashboard.route) {
+            DashboardScreen()
+        }
+        composable(BottomNavItem.Notifications.route) {
+            NotificationsScreen()
+        }
+    }
 }
 
 @Composable
@@ -88,57 +91,5 @@ fun BottomNavigationBar(navController: NavHostController) {
                 }
             )
         }
-    }
-}
-
-@Composable
-fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modifier) {
-    NavHost(
-        navController = navController,
-        startDestination = BottomNavItem.Home.route,
-        modifier = modifier
-    ) {
-        composable(BottomNavItem.Home.route) {
-            HomeScreen()
-        }
-        composable(BottomNavItem.Dashboard.route) {
-            DashboardScreen()
-        }
-        composable(BottomNavItem.Notifications.route) {
-            NotificationsScreen()
-        }
-    }
-}
-
-// Define the screens for Home, Dashboard, and Notifications
-@Composable
-fun HomeScreen() {
-    Greeting("Home Screen", Modifier.fillMaxSize())
-}
-
-@Composable
-fun DashboardScreen() {
-    Greeting("Dashboard Screen", Modifier.fillMaxSize())
-}
-
-@Composable
-fun NotificationsScreen() {
-    Greeting("Notifications Screen", Modifier.fillMaxSize())
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier,
-        textAlign = TextAlign.Center
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PlantyTheme {
-        Greeting("Android")
     }
 }

@@ -20,5 +20,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Planty"
-include(":app")
- 
+include(":presentation")
+include(":domain")
+include(":data")

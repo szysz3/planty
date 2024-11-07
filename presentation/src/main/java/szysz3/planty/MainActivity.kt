@@ -1,0 +1,20 @@
+package szysz3.planty
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import szysz3.planty.screen.main.MainScreen
+import szysz3.planty.ui.theme.PlantyTheme
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            PlantyTheme {
+                MainScreen()
+            }
+        }
+    }
+}
