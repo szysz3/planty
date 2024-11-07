@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt)
+    id("kotlin-kapt")
 }
 
 android {
@@ -52,6 +54,15 @@ android {
 dependencies {
 
     implementation(project(":domain"))
+    // This is needed because of Hilt. Domain depends on data and we inject use cases
+    // so domain dependency has to be added as well. Hilt cannot locate repositories otherwise.
+    implementation(project(":data"))
+
+    // hilt
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.compose)
+    kapt(libs.hilt.compiler)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
