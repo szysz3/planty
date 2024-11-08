@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -72,14 +73,36 @@ fun BottomNavigationBar(navController: NavHostController) {
         BottomNavItem.Dashboard,
         BottomNavItem.Notifications
     )
-    BottomNavigation {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
+
+    BottomNavigation(
+        backgroundColor = MaterialTheme.colorScheme.surface, // Theme's surface color for navigation background
+        contentColor = MaterialTheme.colorScheme.onSurface,  // Theme's color for icons and text
+    ) {
         items.forEach { item ->
+            val isSelected = currentRoute == item.route
+
             BottomNavigationItem(
-                icon = { Icon(item.icon, contentDescription = item.title) },
-                label = { Text(item.title) },
-                selected = currentRoute == item.route,
+                icon = {
+                    Icon(
+                        item.icon,
+                        contentDescription = item.title,
+                        tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(
+                            alpha = 0.6f
+                        ) // Primary color for selected
+                    )
+                },
+                label = {
+                    Text(
+                        item.title,
+                        style = MaterialTheme.typography.labelLarge, // Using theme's label style
+                        color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(
+                            alpha = 0.6f
+                        )
+                    )
+                },
+                selected = isSelected,
                 onClick = {
                     navController.navigate(item.route) {
                         popUpTo(navController.graph.startDestinationId) {
@@ -88,7 +111,9 @@ fun BottomNavigationBar(navController: NavHostController) {
                         launchSingleTop = true
                         restoreState = true
                     }
-                }
+                },
+                selectedContentColor = MaterialTheme.colorScheme.primary, // Selected item color
+                unselectedContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f) // Unselected item color with reduced opacity
             )
         }
     }
