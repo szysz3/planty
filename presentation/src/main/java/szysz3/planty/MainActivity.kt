@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            PlantyTheme {
+            PlantyTheme(dynamicColor = false) {
                 MainScreen()
             }
         }

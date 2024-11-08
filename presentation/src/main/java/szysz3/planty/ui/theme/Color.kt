@@ -2,20 +2,18 @@ package szysz3.planty.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val SoftGreen = Color(0xFFB2D3C2)
+// Light Theme Colors
+val SoftGreen = Color(0xFFB2D3C2)       // Light, soft green for primary color in light mode
+val AccentGreen = Color(0xFF88C9A1)      // Slightly darker green for accenting the primary color
+val CalmBeige = Color(0xFFF5E8C7)        // Warm, calming beige for background
+val SoftGray = Color(0xFFE7ECEF)         // Very light gray for surface elements
+val DarkGreen = Color(0xFF587D71)        // Muted dark green for text and icons on light backgrounds
+val ErrorRed = Color(0xFFF28B82)         // Soft red for error messages in light mode
 
-//val CalmBeige = Color(0xFFF5E8C7)
-val CalmBeige = Color(0xFFF5E8C7)
-val LightBrown = Color(0xFFD3B89B)
-val SoftGray = Color(0xFFE7ECEF)
-val AccentGreen = Color(0xFF88C9A1)
-val DarkGreen = Color(0xFF587D71)
-val ErrorRed = Color(0xFFF28B82)
-
-val DeepGreen = Color(0xFF1B3A34)
-val DarkGray = Color(0xFF121212)
-val MutedGreen = Color(0xFF4A7C59)
-val DarkBeige = Color(0xFF3E3A39)
-val SoftOlive = Color(0xFF7B8B7B)
-val AccentTeal = Color(0xFF6C9A8B)
-val ErrorRedDark = Color(0xFFCF6679)
+// Dark Theme Colors
+val MutedGreen = Color(0xFF4A7C59)       // Muted green for primary color in dark mode
+val AccentTeal = Color(0xFF6C9A8B)       // Muted teal for secondary color in dark mode
+val DarkGray = Color(0xFF121212)         // Dark gray for background in dark mode
+val DarkBeige = Color(0xFF3E3A39)        // Dark beige for surface elements in dark mode
+val LightGray = Color(0xFFDADADA)        // Light gray for text and icons on dark backgrounds
+val ErrorRedDark = Color(0xFFCF6679)     // Soft red for error messages in dark mode

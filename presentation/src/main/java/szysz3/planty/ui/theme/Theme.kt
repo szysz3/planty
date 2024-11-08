@@ -12,19 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.DarkGray
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorsScheme = darkColorScheme(
-    primary = MutedGreen,
-    onPrimary = Color.White,
-    secondary = AccentTeal,
-    onSecondary = Color.White,
-    background = DarkGray,
-    onBackground = Color(0xFFDADADA),
-    surface = DarkBeige,
-    onSurface = Color.White,
-    error = ErrorRedDark,
-    onError = Color.Black
-)
-
+// Light Theme Colors
 private val LightColorsScheme = lightColorScheme(
     primary = SoftGreen,
     onPrimary = Color.Black,
@@ -36,6 +24,20 @@ private val LightColorsScheme = lightColorScheme(
     onSurface = Color.Black,
     error = ErrorRed,
     onError = Color.White
+)
+
+// Dark Theme Colors
+private val DarkColorsScheme = darkColorScheme(
+    primary = MutedGreen,
+    onPrimary = Color.White,
+    secondary = AccentTeal,
+    onSecondary = Color.White,
+    background = DarkGray,
+    onBackground = Color(0xFFDADADA),
+    surface = DarkBeige,
+    onSurface = Color.White,
+    error = ErrorRedDark,
+    onError = Color.Black
 )
 
 @Composable
