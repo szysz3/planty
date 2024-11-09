@@ -1,21 +1,30 @@
 package szysz3.planty.screen.main
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Notifications
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -30,7 +39,7 @@ fun MainScreen() {
     val navController = rememberNavController()
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        bottomBar = { BottomNavigationBar(navController) }
+        bottomBar = { BottomNavigationBar(navController) },
     ) { innerPadding ->
         NavigationGraph(
             navController = navController,
@@ -41,10 +50,10 @@ fun MainScreen() {
 
 // Define the BottomNavigation items
 sealed class BottomNavItem(val route: String, val icon: ImageVector, val title: String) {
-    object Home : BottomNavItem("home", Icons.Default.Home, "Home")
-    object Dashboard : BottomNavItem("dashboard", Icons.Default.Person, "Dashboard")
+    object Home : BottomNavItem("home", Icons.Rounded.Home, "Home")
+    object Dashboard : BottomNavItem("dashboard", Icons.Rounded.Person, "Dashboard")
     object Notifications :
-        BottomNavItem("notifications", Icons.Default.Notifications, "Notifications")
+        BottomNavItem("notifications", Icons.Rounded.Notifications, "Notifications")
 }
 
 @Composable
@@ -117,4 +126,33 @@ fun BottomNavigationBar(navController: NavHostController) {
             )
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopBar() {
+    TopAppBar(
+        title = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center // Center the text within the Box
+            ) {
+                Text(
+                    text = "Home",
+                    maxLines = 1
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = {
+//                isDeleteDialogVisible = true
+            }) {
+                Icon(Icons.Rounded.Delete, contentDescription = "Delete")
+            }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+    )
 }

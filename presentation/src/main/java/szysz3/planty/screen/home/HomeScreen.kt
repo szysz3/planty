@@ -1,87 +1,123 @@
 package szysz3.planty.screen.home
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.BottomSheetScaffold
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.rememberBottomSheetScaffoldState
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.launch
 import szysz3.planty.R
 import szysz3.planty.ui.widgets.RoundedButton
 import timber.log.Timber
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(viewModel: HomeScreenViewModel = hiltViewModel()) {
-    var gardenDimensions by remember { mutableStateOf<MapDimensions?>(null) }
-    var isBottomSheetVisible by remember { mutableStateOf(false) }
-    val scaffoldState = rememberBottomSheetScaffoldState()
+    val gardenDimensions by viewModel.gardenDimensions.collectAsState()
+    val isDeleteDialogVisible by viewModel.isDeleteDialogVisible.collectAsState()
+    val isBottomSheetVisible by viewModel.isBottomSheetVisible.collectAsState()
 
-    LaunchedEffect(isBottomSheetVisible) {
-        if (isBottomSheetVisible) {
-            scaffoldState.bottomSheetState.expand()
+    val bottomSheetState = rememberModalBottomSheetState()
+    val coroutineScope = rememberCoroutineScope()
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        if (gardenDimensions != null) {
+            GardenMap(
+                rows = gardenDimensions?.rowCount ?: 0,
+                columns = gardenDimensions?.columnCount ?: 0,
+                plants = listOf("A", "B", "C")
+            ) { row, col, plant ->
+                Timber.i("GardenMap: $row, $col, $plant")
+            }
         } else {
-            scaffoldState.bottomSheetState.collapse()
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(
+                    painter = painterResource(id = R.drawable.placeholder),
+                    contentDescription = "Garden map placeholder",
+                    modifier = Modifier.size(200.dp)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                RoundedButton(
+                    onClick = { viewModel.showBottomSheet(true) },
+                    text = "Create New Map",
+                )
+            }
         }
     }
 
-    BottomSheetScaffold(
-        scaffoldState = scaffoldState,
-        sheetContent = {
-            DimensionsInput(
-                onDimensionsSubmitted = { dimensions ->
-                    gardenDimensions = dimensions
-                    isBottomSheetVisible = false
+    if (isDeleteDialogVisible) {
+        AlertDialog(
+            onDismissRequest = { viewModel.showDeleteDialog(false) },
+            title = { Text(text = "Confirm Delete") },
+            text = { Text(text = "Are you sure you want to delete your garden map?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        // TODO: perform delete action here
+                        viewModel.setGardenDimensions(MapDimensions(0, 0))
+//                        viewModel.showTopBar(false)
+                        viewModel.showDeleteDialog(false)
+                    }
+                ) {
+                    Text("Delete")
                 }
-            )
-        },
-        sheetPeekHeight = 0.dp,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Box(
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    viewModel.showDeleteDialog(false)
+                }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+
+    if (isBottomSheetVisible) {
+        ModalBottomSheet(
+            sheetState = bottomSheetState,
             modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
-            contentAlignment = Alignment.Center
+                .fillMaxSize(),
+            onDismissRequest = { viewModel.showBottomSheet(false) }
         ) {
-            if (gardenDimensions != null) {
-                GardenMap(
-                    rows = gardenDimensions?.rowCount ?: 0,
-                    columns = gardenDimensions?.columnCount ?: 0,
-                    plants = listOf("A", "B", "C")
-                ) { row, col, plant ->
-                    Timber.i("GardenMap: $row, $col, $plant")
-                }
-            } else {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(
-                        painter = painterResource(id = R.drawable.placeholder),
-                        contentDescription = "Garden map placeholder",
-                        modifier = Modifier.size(200.dp)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    RoundedButton(
-                        onClick = { isBottomSheetVisible = true },
-                        text = "Create New Map",
-                    )
-                }
+            Box(
+                modifier = Modifier.wrapContentHeight()
+            ) {
+                DimensionsInput(
+                    onDimensionsSubmitted = { dimensions ->
+                        viewModel.setGardenDimensions(dimensions)
+//                        viewModel.showTopBar(true)
+                        coroutineScope.launch {
+                            bottomSheetState.hide()
+                        }.invokeOnCompletion {
+                            if (!bottomSheetState.isVisible) {
+                                viewModel.showBottomSheet(false)
+                            }
+                        }
+                    }
+                )
             }
         }
     }
