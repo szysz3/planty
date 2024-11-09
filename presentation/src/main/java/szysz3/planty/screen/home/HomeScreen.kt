@@ -26,15 +26,19 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import szysz3.planty.R
+import szysz3.planty.screen.main.MainScreenViewModel
 import szysz3.planty.ui.widgets.RoundedButton
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(viewModel: HomeScreenViewModel = hiltViewModel()) {
-    val gardenDimensions by viewModel.gardenDimensions.collectAsState()
-    val isDeleteDialogVisible by viewModel.isDeleteDialogVisible.collectAsState()
-    val isBottomSheetVisible by viewModel.isBottomSheetVisible.collectAsState()
+fun HomeScreen(
+    homeScreenViewModel: HomeScreenViewModel = hiltViewModel(),
+    mainScreenViewModel: MainScreenViewModel = hiltViewModel()
+) {
+    val gardenDimensions by homeScreenViewModel.gardenDimensions.collectAsState()
+    val isDeleteDialogVisible by homeScreenViewModel.isDeleteDialogVisible.collectAsState()
+    val isBottomSheetVisible by homeScreenViewModel.isBottomSheetVisible.collectAsState()
 
     val bottomSheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
@@ -61,7 +65,7 @@ fun HomeScreen(viewModel: HomeScreenViewModel = hiltViewModel()) {
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 RoundedButton(
-                    onClick = { viewModel.showBottomSheet(true) },
+                    onClick = { homeScreenViewModel.showBottomSheet(true) },
                     text = "Create New Map",
                 )
             }
@@ -70,16 +74,16 @@ fun HomeScreen(viewModel: HomeScreenViewModel = hiltViewModel()) {
 
     if (isDeleteDialogVisible) {
         AlertDialog(
-            onDismissRequest = { viewModel.showDeleteDialog(false) },
+            onDismissRequest = { homeScreenViewModel.showDeleteDialog(false) },
             title = { Text(text = "Confirm Delete") },
             text = { Text(text = "Are you sure you want to delete your garden map?") },
             confirmButton = {
                 TextButton(
                     onClick = {
                         // TODO: perform delete action here
-                        viewModel.setGardenDimensions(MapDimensions(0, 0))
-//                        viewModel.showTopBar(false)
-                        viewModel.showDeleteDialog(false)
+                        homeScreenViewModel.setGardenDimensions(MapDimensions(0, 0))
+                        mainScreenViewModel.showTopBar(false)
+                        homeScreenViewModel.showDeleteDialog(false)
                     }
                 ) {
                     Text("Delete")
@@ -87,7 +91,7 @@ fun HomeScreen(viewModel: HomeScreenViewModel = hiltViewModel()) {
             },
             dismissButton = {
                 TextButton(onClick = {
-                    viewModel.showDeleteDialog(false)
+                    homeScreenViewModel.showDeleteDialog(false)
                 }) {
                     Text("Cancel")
                 }
@@ -100,20 +104,20 @@ fun HomeScreen(viewModel: HomeScreenViewModel = hiltViewModel()) {
             sheetState = bottomSheetState,
             modifier = Modifier
                 .fillMaxSize(),
-            onDismissRequest = { viewModel.showBottomSheet(false) }
+            onDismissRequest = { homeScreenViewModel.showBottomSheet(false) }
         ) {
             Box(
                 modifier = Modifier.wrapContentHeight()
             ) {
                 DimensionsInput(
                     onDimensionsSubmitted = { dimensions ->
-                        viewModel.setGardenDimensions(dimensions)
-//                        viewModel.showTopBar(true)
+                        homeScreenViewModel.setGardenDimensions(dimensions)
+                        mainScreenViewModel.showTopBar(true)
                         coroutineScope.launch {
                             bottomSheetState.hide()
                         }.invokeOnCompletion {
                             if (!bottomSheetState.isVisible) {
-                                viewModel.showBottomSheet(false)
+                                homeScreenViewModel.showBottomSheet(false)
                             }
                         }
                     }
