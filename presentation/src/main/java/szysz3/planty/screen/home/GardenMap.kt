@@ -11,8 +11,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -22,9 +20,9 @@ fun GardenMap(
     rows: Int,
     columns: Int,
     plants: List<String>,
+    selectedCells: Map<Pair<Int, Int>, String>,
     onPlantSelected: (Int, Int, String) -> Unit
 ) {
-    val selectedCells = remember { mutableStateMapOf<Pair<Int, Int>, String>() }
     LazyVerticalGrid(
         columns = GridCells.Fixed(columns),
         modifier = Modifier
@@ -44,7 +42,6 @@ fun GardenMap(
                     .aspectRatio(1f)
                     .clickable {
                         val selectedPlant = plants.firstOrNull() ?: ""
-                        selectedCells[row to col] = selectedPlant
                         onPlantSelected(row, col, selectedPlant)
                     },
                 contentAlignment = Alignment.Center

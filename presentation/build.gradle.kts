@@ -58,6 +58,15 @@ dependencies {
     // so domain dependency has to be added as well. Hilt cannot locate repositories otherwise.
     implementation(project(":data"))
 
+    // room dependencies
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
+
+    // coroutines dependencies
+    implementation(libs.coroutines.core)
+    implementation(libs.coroutines.android)
+
     // hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.compose)

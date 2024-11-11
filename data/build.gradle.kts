@@ -38,6 +38,15 @@ dependencies {
 
     implementation(project(":domain"))
 
+    // room dependencies
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
+
+    // coroutines dependencies
+    implementation(libs.coroutines.core)
+    implementation(libs.coroutines.android)
+
     // hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

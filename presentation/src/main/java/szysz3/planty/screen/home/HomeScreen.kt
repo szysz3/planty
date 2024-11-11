@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -38,21 +39,28 @@ fun HomeScreen(
     val gardenDimensions by homeScreenViewModel.gardenDimensions.collectAsState()
     val isDeleteDialogVisible by homeScreenViewModel.isDeleteDialogVisible.collectAsState()
     val isBottomSheetVisible by homeScreenViewModel.isBottomSheetVisible.collectAsState()
+    val selectedCells by homeScreenViewModel.selectedCells.collectAsState()
 
     val bottomSheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        homeScreenViewModel.loadGarden()
+    }
 
     Box(
         modifier = Modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        if (gardenDimensions != null) {
+        if (selectedCells.isNotEmpty() && gardenDimensions != null) {
             GardenMap(
                 rows = gardenDimensions?.rowCount ?: 0,
                 columns = gardenDimensions?.columnCount ?: 0,
-                plants = listOf("A", "B", "C")
+                plants = listOf("A", "B", "C"),
+                selectedCells = selectedCells
             ) { row, col, plant ->
+                homeScreenViewModel.saveCell(row, col, plant)
                 Timber.i("GardenMap: $row, $col, $plant")
             }
         } else {
