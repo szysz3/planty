@@ -23,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import szysz3.planty.R
 import szysz3.planty.screen.main.MainScreenViewModel
@@ -33,10 +32,9 @@ import timber.log.Timber
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    mainScreenViewModel: MainScreenViewModel
+    mainScreenViewModel: MainScreenViewModel,
+    homeScreenViewModel: HomeScreenViewModel
 ) {
-    val homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
-
     val gardenDimensions by homeScreenViewModel.gardenDimensions.collectAsState()
     val isDeleteDialogVisible by homeScreenViewModel.isDeleteDialogVisible.collectAsState()
     val isBottomSheetVisible by homeScreenViewModel.isBottomSheetVisible.collectAsState()
@@ -82,7 +80,8 @@ fun HomeScreen(
                 TextButton(
                     onClick = {
                         // TODO: perform delete action here
-                        homeScreenViewModel.setGardenDimensions(MapDimensions(0, 0))
+                        homeScreenViewModel.setGardenDimensions(null)
+                        mainScreenViewModel.homeScreenInitialized(false)
                         mainScreenViewModel.showTopBar(false)
                         homeScreenViewModel.showDeleteDialog(false)
                     }

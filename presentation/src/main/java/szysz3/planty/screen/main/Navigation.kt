@@ -12,12 +12,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import szysz3.planty.screen.dashboard.DashboardScreen
 import szysz3.planty.screen.home.HomeScreen
+import szysz3.planty.screen.home.HomeScreenViewModel
 import szysz3.planty.screen.notification.NotificationsScreen
 
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
-    viewModel: MainScreenViewModel,
+    mainScreenViewModel: MainScreenViewModel,
+    homeScreenViewModel: HomeScreenViewModel,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -26,7 +28,10 @@ fun NavigationGraph(
         modifier = modifier
     ) {
         composable(BottomNavItem.Home.route) {
-            HomeScreen(viewModel)
+            HomeScreen(
+                mainScreenViewModel = mainScreenViewModel,
+                homeScreenViewModel = homeScreenViewModel
+            )
         }
         composable(BottomNavItem.Dashboard.route) {
             DashboardScreen()

@@ -7,10 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import szysz3.planty.screen.home.HomeScreenViewModel
 
 @Composable
 fun MainScreen(
-    mainScreenViewModel: MainScreenViewModel = hiltViewModel()
+    mainScreenViewModel: MainScreenViewModel = hiltViewModel(),
+    homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
 
@@ -18,12 +20,13 @@ fun MainScreen(
         modifier = Modifier.fillMaxSize(),
         bottomBar = { BottomNavigationBar(navController, mainScreenViewModel) },
         topBar = {
-            TopBar(mainScreenViewModel)
+            TopBar(mainScreenViewModel, homeScreenViewModel)
         },
     ) { innerPadding ->
         NavigationGraph(
             navController = navController,
-            viewModel = mainScreenViewModel,
+            mainScreenViewModel = mainScreenViewModel,
+            homeScreenViewModel = homeScreenViewModel,
             modifier = Modifier.padding(innerPadding)
         )
     }

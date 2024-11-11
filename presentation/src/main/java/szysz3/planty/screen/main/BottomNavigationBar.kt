@@ -11,7 +11,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
-fun BottomNavigationBar(navController: NavHostController, viewModel: MainScreenViewModel) {
+fun BottomNavigationBar(
+    navController: NavHostController,
+    mainScreenViewModel: MainScreenViewModel,
+) {
     val items = listOf(
         BottomNavItem.Home,
         BottomNavItem.Dashboard,
@@ -48,7 +51,7 @@ fun BottomNavigationBar(navController: NavHostController, viewModel: MainScreenV
                 },
                 selected = isSelected,
                 onClick = {
-                    viewModel.handleTopBarVisibility(item.route)
+                    mainScreenViewModel.handleTopBarVisibility(item.route)
 
                     navController.navigate(item.route) {
                         popUpTo(navController.graph.startDestinationId) {

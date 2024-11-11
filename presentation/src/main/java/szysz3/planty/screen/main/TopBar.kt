@@ -15,11 +15,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import szysz3.planty.screen.home.HomeScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(viewModel: MainScreenViewModel) {
-    val isTopBarVisible by viewModel.isTopBarVisible.collectAsState()
+fun TopBar(mainScreenViewModel: MainScreenViewModel, homeScreenViewModel: HomeScreenViewModel) {
+    val isTopBarVisible by mainScreenViewModel.isTopBarVisible.collectAsState()
     AnimatedVisibility(isTopBarVisible) {
         TopAppBar(
             title = {
@@ -36,7 +37,7 @@ fun TopBar(viewModel: MainScreenViewModel) {
             },
             actions = {
                 IconButton(onClick = {
-//                isDeleteDialogVisible = true
+                    homeScreenViewModel.showDeleteDialog(true)
                 }) {
                     Icon(Icons.Rounded.Delete, contentDescription = "Delete")
                 }
