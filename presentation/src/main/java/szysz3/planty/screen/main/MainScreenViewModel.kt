@@ -11,17 +11,21 @@ import javax.inject.Inject
 class MainScreenViewModel @Inject constructor() :
     ViewModel() {
 
+    private val _isHomeScreenInitialized = MutableStateFlow(false)
+    val isHomeScreenInitialized: StateFlow<Boolean> = _isHomeScreenInitialized.asStateFlow()
+
     private val _isTopBarVisible = MutableStateFlow(false)
     val isTopBarVisible: StateFlow<Boolean> = _isTopBarVisible.asStateFlow()
+
+    fun homeScreenInitialized(initialized: Boolean) {
+        _isHomeScreenInitialized.value = initialized
+    }
 
     fun showTopBar(show: Boolean) {
         _isTopBarVisible.value = show
     }
 
-    private val _isActionButtonVisible = MutableStateFlow(false)
-    val isActionButtonVisible: StateFlow<Boolean> = _isActionButtonVisible.asStateFlow()
-
-    fun showActionButton(show: Boolean) {
-        _isActionButtonVisible.value = show
+    fun handleTopBarVisibility(route: String) {
+        showTopBar(route == BottomNavItem.Home.route && isHomeScreenInitialized.value)
     }
 }

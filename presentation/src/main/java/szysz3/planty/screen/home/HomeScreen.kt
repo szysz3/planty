@@ -33,9 +33,10 @@ import timber.log.Timber
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    homeScreenViewModel: HomeScreenViewModel = hiltViewModel(),
-    mainScreenViewModel: MainScreenViewModel = hiltViewModel()
+    mainScreenViewModel: MainScreenViewModel
 ) {
+    val homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
+
     val gardenDimensions by homeScreenViewModel.gardenDimensions.collectAsState()
     val isDeleteDialogVisible by homeScreenViewModel.isDeleteDialogVisible.collectAsState()
     val isBottomSheetVisible by homeScreenViewModel.isBottomSheetVisible.collectAsState()
@@ -112,6 +113,7 @@ fun HomeScreen(
                 DimensionsInput(
                     onDimensionsSubmitted = { dimensions ->
                         homeScreenViewModel.setGardenDimensions(dimensions)
+                        mainScreenViewModel.homeScreenInitialized(true)
                         mainScreenViewModel.showTopBar(true)
                         coroutineScope.launch {
                             bottomSheetState.hide()
