@@ -34,6 +34,9 @@ class HomeScreenViewModel @Inject constructor(
     private val _isBottomSheetVisible = MutableStateFlow(false)
     val isBottomSheetVisible: StateFlow<Boolean> = _isBottomSheetVisible.asStateFlow()
 
+    private val _dataLoaded = MutableStateFlow(false)
+    val dataLoaded: StateFlow<Boolean> = _dataLoaded.asStateFlow()
+
     fun showDeleteDialog(show: Boolean) {
         _isDeleteDialogVisible.value = show
     }
@@ -44,6 +47,7 @@ class HomeScreenViewModel @Inject constructor(
 
     fun initializeGarden(dimensions: MapDimensions) {
         _gardenState.value = GardenState(emptyList(), dimensions)
+        _dataLoaded.value = true
     }
 
     fun saveCell(row: Int, column: Int, plant: String) {
@@ -70,6 +74,7 @@ class HomeScreenViewModel @Inject constructor(
             try {
                 val loadedCells = loadGardenUseCase(NoParams())
                 _gardenState.value = GardenState(loadedCells, calculateDimensions(loadedCells))
+                _dataLoaded.value = true
             } catch (e: Exception) {
                 Timber.e(e)
             }
@@ -88,6 +93,7 @@ class HomeScreenViewModel @Inject constructor(
             try {
                 clearGardenUseCase(NoParams())
                 _gardenState.value = GardenState(null, null)
+                _dataLoaded.value = false
             } catch (e: Exception) {
                 Timber.e(e)
             }

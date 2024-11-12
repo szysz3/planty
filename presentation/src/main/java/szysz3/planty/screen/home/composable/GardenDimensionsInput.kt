@@ -23,13 +23,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
 import szysz3.planty.screen.home.model.MapDimensions
 import szysz3.planty.ui.widgets.RoundedButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DimensionsInputModal(
+fun GardenDimensionsInput(
     bottomSheetState: SheetState,
     maxDimension: Int = 50,
     onDismissRequest: () -> Unit,
@@ -108,9 +107,6 @@ fun DimensionsInputModal(
 
                     if (!widthError && !heightError && width > 0 && height > 0) {
                         onDimensionsSubmitted(MapDimensions(width, height))
-                        coroutineScope.launch {
-                            bottomSheetState.hide()
-                        }
                     }
                 },
                 enabled = !widthError && !heightError,

@@ -12,8 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.launch
 import szysz3.planty.screen.home.composable.DeleteGardenDialog
-import szysz3.planty.screen.home.composable.DimensionsInputModal
 import szysz3.planty.screen.home.composable.EmptyGardenPlaceholder
+import szysz3.planty.screen.home.composable.GardenDimensionsInput
 import szysz3.planty.screen.home.composable.GardenMap
 import szysz3.planty.screen.home.viewmodel.HomeScreenViewModel
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
@@ -28,11 +28,17 @@ fun HomeScreen(
     val gardenState by homeScreenViewModel.gardenState.collectAsState()
     val isDeleteDialogVisible by homeScreenViewModel.isDeleteDialogVisible.collectAsState()
     val isBottomSheetVisible by homeScreenViewModel.isBottomSheetVisible.collectAsState()
+    val dataLoaded by homeScreenViewModel.dataLoaded.collectAsState()
     val bottomSheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         homeScreenViewModel.loadGarden()
+    }
+
+    LaunchedEffect(dataLoaded) {
+        mainScreenViewModel.homeScreenInitialized(dataLoaded)
+        mainScreenViewModel.showTopBar(dataLoaded)
     }
 
     val rowCount = gardenState.dimensions?.rowCount ?: 0
@@ -64,8 +70,6 @@ fun HomeScreen(
         DeleteGardenDialog(
             onConfirmDelete = {
                 homeScreenViewModel.clearGarden()
-                mainScreenViewModel.homeScreenInitialized(false)
-                mainScreenViewModel.showTopBar(false)
                 homeScreenViewModel.showDeleteDialog(false)
             },
             onCancel = {
@@ -75,13 +79,11 @@ fun HomeScreen(
     }
 
     if (isBottomSheetVisible) {
-        DimensionsInputModal(
+        GardenDimensionsInput(
             bottomSheetState = bottomSheetState,
             onDismissRequest = { homeScreenViewModel.showBottomSheet(false) },
             onDimensionsSubmitted = { dimensions ->
                 homeScreenViewModel.initializeGarden(dimensions)
-                mainScreenViewModel.homeScreenInitialized(true)
-                mainScreenViewModel.showTopBar(true)
                 coroutineScope.launch {
                     bottomSheetState.hide()
                 }.invokeOnCompletion {
