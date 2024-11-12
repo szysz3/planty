@@ -1,4 +1,4 @@
-package szysz3.planty.screen.main
+package szysz3.planty.screen.main.composable
 
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 
 @Composable
 fun BottomNavigationBar(

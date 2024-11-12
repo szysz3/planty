@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import dagger.hilt.android.AndroidEntryPoint
-import szysz3.planty.screen.main.MainScreen
+import szysz3.planty.screen.main.screen.MainScreen
 import szysz3.planty.ui.theme.PlantyTheme
 
 @AndroidEntryPoint

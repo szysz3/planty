@@ -1,4 +1,4 @@
-package szysz3.planty.screen.home
+package szysz3.planty.screen.home.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,13 +14,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import szysz3.planty.domain.model.GardenCell
 
 @Composable
 fun GardenMap(
     rows: Int,
     columns: Int,
     plants: List<String>,
-    selectedCells: Map<Pair<Int, Int>, String>,
+    selectedCells: List<GardenCell>,
     onPlantSelected: (Int, Int, String) -> Unit
 ) {
     LazyVerticalGrid(
@@ -32,7 +33,7 @@ fun GardenMap(
         items(rows * columns) { index ->
             val row = index / columns
             val col = index % columns
-            val plant = selectedCells[row to col]
+            val plant = selectedCells.find { it.row == row && it.column == col }
             val isSelected = plant != null
 
             Box(
@@ -46,7 +47,7 @@ fun GardenMap(
                     },
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = plant ?: "")
+                Text(text = plant?.plant ?: "")
             }
         }
     }

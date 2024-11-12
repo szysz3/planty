@@ -1,5 +1,6 @@
-package szysz3.planty.screen.main
+package szysz3.planty.screen.main.composable
 
+import HomeScreen
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Notifications
@@ -11,8 +12,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import szysz3.planty.screen.dashboard.DashboardScreen
-import szysz3.planty.screen.home.HomeScreen
-import szysz3.planty.screen.home.HomeScreenViewModel
+import szysz3.planty.screen.home.viewmodel.HomeScreenViewModel
+import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.notification.NotificationsScreen
 
 @Composable

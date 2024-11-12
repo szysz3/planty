@@ -1,4 +1,4 @@
-package szysz3.planty.screen.main
+package szysz3.planty.screen.main.composable
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
@@ -15,7 +15,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import szysz3.planty.screen.home.HomeScreenViewModel
+import szysz3.planty.screen.home.viewmodel.HomeScreenViewModel
+import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
