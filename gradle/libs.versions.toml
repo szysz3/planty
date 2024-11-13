@@ -1,21 +1,21 @@
 [versions]
-agp = "8.6.0"
-kotlin = "1.9.0"
+agp = "8.7.2"
+kotlin = "2.0.21"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
-activityCompose = "1.8.0"
-composeBom = "2024.04.01"
+activityCompose = "1.9.3"
+composeBom = "2024.10.01"
 navigationCompose = "2.8.3"
 appcompat = "1.7.0"
 material = "1.12.0"
-hilt = "2.51.1"
+hilt = "2.52"
 hilt-compose = "1.2.0"
 timber = "5.0.1"
-room = "2.6.0"
-coroutines = "1.7.3"
+room = "2.6.1"
+coroutines = "1.9.0"
 
 [libraries]
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
@@ -51,3 +51,4 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
