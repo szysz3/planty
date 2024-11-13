@@ -46,7 +46,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun initializeGarden(rows: Int, columns: Int) {
-        val initialGardenState = GardenState(rows, columns, emptyList())
+        val initialGardenState = GardenState.empty(rows, columns)
         _gardenState.value = initialGardenState
         _dataLoaded.value = true
         saveGardenState(initialGardenState)

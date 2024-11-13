@@ -33,8 +33,8 @@ fun GardenMap(
         items(rows * columns) { index ->
             val row = index / columns
             val col = index % columns
-            val plant = selectedCells.find { it.row == row && it.column == col }
-            val isSelected = plant != null
+            val plant = selectedCells.find { it.row == row && it.column == col }?.plant
+            val isSelected = !plant.isNullOrBlank()
 
             Box(
                 modifier = Modifier
@@ -47,7 +47,7 @@ fun GardenMap(
                     },
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = plant?.plant ?: "")
+                Text(text = plant ?: "")
             }
         }
     }
