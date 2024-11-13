@@ -41,19 +41,19 @@ fun HomeScreen(
         mainScreenViewModel.showTopBar(dataLoaded)
     }
 
-    val rowCount = gardenState.dimensions?.rowCount ?: 0
-    val columnCount = gardenState.dimensions?.columnCount ?: 0
+    val rows = gardenState.rows
+    val columns = gardenState.columns
 
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        if (gardenState.cells != null && rowCount > 0 && columnCount > 0) {
+        if (dataLoaded && rows > 0 && columns > 0) {
             GardenMap(
-                rows = rowCount,
-                columns = columnCount,
+                rows = rows,
+                columns = columns,
                 plants = listOf("A", "B", "C"),
-                selectedCells = gardenState.cells ?: emptyList(),
+                selectedCells = gardenState.cells,
                 onPlantSelected = { row, col, plant ->
                     homeScreenViewModel.saveCell(row, col, plant)
                     Timber.i("GardenMap: $row, $col, $plant")
@@ -82,8 +82,8 @@ fun HomeScreen(
         GardenDimensionsInput(
             bottomSheetState = bottomSheetState,
             onDismissRequest = { homeScreenViewModel.showBottomSheet(false) },
-            onDimensionsSubmitted = { dimensions ->
-                homeScreenViewModel.initializeGarden(dimensions)
+            onDimensionsSubmitted = { height, width ->
+                homeScreenViewModel.initializeGarden(height, width)
                 coroutineScope.launch {
                     bottomSheetState.hide()
                 }.invokeOnCompletion {

@@ -17,13 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import szysz3.planty.screen.home.model.MapDimensions
 import szysz3.planty.ui.widgets.RoundedButton
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,13 +30,12 @@ fun GardenDimensionsInput(
     bottomSheetState: SheetState,
     maxDimension: Int = 50,
     onDismissRequest: () -> Unit,
-    onDimensionsSubmitted: (MapDimensions) -> Unit
+    onDimensionsSubmitted: (Int, Int) -> Unit
 ) {
     var widthInput by remember { mutableStateOf("") }
     var heightInput by remember { mutableStateOf("") }
     var widthError by remember { mutableStateOf(false) }
     var heightError by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
 
     ModalBottomSheet(
         sheetState = bottomSheetState,
@@ -106,7 +103,7 @@ fun GardenDimensionsInput(
                     val height = heightInput.toIntOrNull() ?: 1
 
                     if (!widthError && !heightError && width > 0 && height > 0) {
-                        onDimensionsSubmitted(MapDimensions(width, height))
+                        onDimensionsSubmitted(height, width)
                     }
                 },
                 enabled = !widthError && !heightError,

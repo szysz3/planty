@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import szysz3.planty.domain.model.GardenCell
+import szysz3.planty.screen.home.model.GardenCell
 
 @Composable
 fun GardenMap(

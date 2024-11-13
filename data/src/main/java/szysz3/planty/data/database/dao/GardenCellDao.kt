@@ -10,7 +10,7 @@ import szysz3.planty.data.database.entity.GardenCellEntity
 interface GardenCellDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOrUpdate(cell: GardenCellEntity)
+    suspend fun insertAll(cells: List<GardenCellEntity>)
 
     @Query("SELECT * FROM garden_cells")
     suspend fun getAllCells(): List<GardenCellEntity>

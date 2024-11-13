@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import szysz3.planty.data.database.dao.GardenCellDao
 import szysz3.planty.data.database.entity.GardenCellEntity
 
-@Database(entities = [GardenCellEntity::class], version = 1)
+@Database(entities = [GardenCellEntity::class], version = 2)
 abstract class GardenDatabase : RoomDatabase() {
     abstract fun gardenCellDao(): GardenCellDao
 

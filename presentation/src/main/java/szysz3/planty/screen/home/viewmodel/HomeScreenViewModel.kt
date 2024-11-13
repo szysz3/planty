@@ -6,27 +6,27 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import szysz3.planty.domain.model.GardenCell
 import szysz3.planty.domain.usecase.ClearGardenUseCase
-import szysz3.planty.domain.usecase.LoadGardenCellUseCase
-import szysz3.planty.domain.usecase.SaveGardenCellUseCase
+import szysz3.planty.domain.usecase.LoadGardenStateUseCase
+import szysz3.planty.domain.usecase.SaveGardenStateUseCase
 import szysz3.planty.domain.usecase.base.NoParams
+import szysz3.planty.screen.home.model.GardenCell
 import szysz3.planty.screen.home.model.GardenState
-import szysz3.planty.screen.home.model.MapDimensions
 import timber.log.Timber
+import toDomainModel
+import toPresentationModel
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val saveCellUseCase: SaveGardenCellUseCase,
-    private val loadGardenUseCase: LoadGardenCellUseCase,
+    private val saveGardenStateUseCase: SaveGardenStateUseCase,
+    private val loadGardenStateUseCase: LoadGardenStateUseCase,
     private val clearGardenUseCase: ClearGardenUseCase
 ) : ViewModel() {
 
-    private val _gardenState = MutableStateFlow(GardenState(emptyList(), MapDimensions(0, 0)))
-    val gardenState: StateFlow<GardenState> = _gardenState.asStateFlow()
+    private val _gardenState = MutableStateFlow(GardenState())
+    val gardenState: StateFlow<GardenState> = _gardenState
 
     private val _isDeleteDialogVisible = MutableStateFlow(false)
     val isDeleteDialogVisible: StateFlow<Boolean> = _isDeleteDialogVisible.asStateFlow()
@@ -45,54 +45,58 @@ class HomeScreenViewModel @Inject constructor(
         _isBottomSheetVisible.value = show
     }
 
-    fun initializeGarden(dimensions: MapDimensions) {
-        _gardenState.value = GardenState(emptyList(), dimensions)
+    fun initializeGarden(rows: Int, columns: Int) {
+        val initialGardenState = GardenState(rows, columns, emptyList())
+        _gardenState.value = initialGardenState
         _dataLoaded.value = true
+        saveGardenState(initialGardenState)
     }
 
     fun saveCell(row: Int, column: Int, plant: String) {
         viewModelScope.launch {
-            try {
-                val newCell = GardenCell(row, column, plant)
-                saveCellUseCase(newCell)
-                updateGardenStateWithNewCell(newCell)
-            } catch (e: Exception) {
-                Timber.e(e)
-            }
+            val updatedCells = _gardenState.value.cells.toMutableList()
+            updatedCells.removeAll { it.row == row && it.column == column } // Remove existing cell at this position if any
+            updatedCells.add(GardenCell(row, column, plant))
+            val updatedGardenState = _gardenState.value.copy(cells = updatedCells)
+            _gardenState.value = updatedGardenState
+            saveGardenState(updatedGardenState)
         }
     }
 
-    private fun updateGardenStateWithNewCell(newCell: GardenCell) {
-        _gardenState.update { current ->
-            val updatedCells = (current.cells ?: emptyList()) + newCell
-            GardenState(updatedCells, calculateDimensions(updatedCells))
+    private fun saveGardenState(gardenState: GardenState) {
+        viewModelScope.launch {
+            try {
+                saveGardenStateUseCase(gardenState.toDomainModel())
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
         }
     }
 
     suspend fun loadGarden() {
         viewModelScope.launch {
             try {
-                val loadedCells = loadGardenUseCase(NoParams())
-                _gardenState.value = GardenState(loadedCells, calculateDimensions(loadedCells))
-                _dataLoaded.value = true
+                val loadedState = loadGardenStateUseCase(NoParams())
+                val gardenState = loadedState.toPresentationModel()
+                if (isGardenStateValid(gardenState)) {
+                    _gardenState.value = gardenState
+                    _dataLoaded.value = true
+                }
             } catch (e: Exception) {
                 Timber.e(e)
             }
         }
     }
 
-    private fun calculateDimensions(cells: List<GardenCell>?): MapDimensions? {
-        if (cells.isNullOrEmpty()) return null
-        val maxRow = cells.maxOfOrNull { it.row } ?: 0
-        val maxColumn = cells.maxOfOrNull { it.column } ?: 0
-        return MapDimensions(maxRow + 1, maxColumn + 1)
+    private fun isGardenStateValid(gardenState: GardenState): Boolean {
+        return gardenState.rows > 0 && gardenState.columns > 0
     }
 
     fun clearGarden() {
         viewModelScope.launch {
             try {
                 clearGardenUseCase(NoParams())
-                _gardenState.value = GardenState(null, null)
+                _gardenState.value = GardenState() // Reset to empty state
                 _dataLoaded.value = false
             } catch (e: Exception) {
                 Timber.e(e)

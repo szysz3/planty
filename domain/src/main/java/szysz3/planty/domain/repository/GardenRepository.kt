@@ -1,11 +1,9 @@
 package szysz3.planty.domain.repository
 
-import szysz3.planty.domain.model.GardenCell
+import szysz3.planty.domain.model.GardenState
 
 interface GardenRepository {
-    suspend fun saveCell(cell: GardenCell)
-
-    suspend fun loadGarden(): List<GardenCell>
-
-    suspend fun clearGarden()
+    suspend fun saveGardenState(gardenState: GardenState)
+    suspend fun loadGardenState(): GardenState
+    suspend fun clearGardenState()
 }

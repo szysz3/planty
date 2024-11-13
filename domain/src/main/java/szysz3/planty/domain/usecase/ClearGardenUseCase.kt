@@ -9,6 +9,6 @@ class ClearGardenUseCase @Inject constructor(
     private val repository: GardenRepository
 ) : BaseUseCase<NoParams, Unit>() {
     override suspend fun invoke(input: NoParams) {
-        return repository.clearGarden()
+        return repository.clearGardenState()
     }
 }
