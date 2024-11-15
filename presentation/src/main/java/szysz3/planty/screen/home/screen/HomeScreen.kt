@@ -35,6 +35,7 @@ fun HomeScreen(
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
+        mainScreenViewModel.showBackButton(false)
         homeScreenViewModel.loadGarden()
     }
 
