@@ -23,7 +23,9 @@ import timber.log.Timber
 @Composable
 fun HomeScreen(
     mainScreenViewModel: MainScreenViewModel,
-    homeScreenViewModel: HomeScreenViewModel
+    homeScreenViewModel: HomeScreenViewModel,
+    onNavigateToPlantAPlant: () -> Unit,
+    onNavigateToPlantDetails: () -> Unit
 ) {
     val gardenState by homeScreenViewModel.gardenState.collectAsState()
     val isDeleteDialogVisible by homeScreenViewModel.isDeleteDialogVisible.collectAsState()
@@ -55,8 +57,14 @@ fun HomeScreen(
                 plants = listOf("A", "B", "C"),
                 selectedCells = gardenState.cells,
                 onPlantSelected = { row, col, plant ->
-                    homeScreenViewModel.saveCell(row, col, plant)
+                    // TODO: Handle plant selection in PlantAPlantScreen
+//                    homeScreenViewModel.saveCell(row, col, plant)
                     Timber.i("GardenMap: $row, $col, $plant")
+                    if (plant.isBlank()) {
+                        onNavigateToPlantAPlant()
+                    } else {
+                        onNavigateToPlantDetails()
+                    }
                 }
             )
         } else {

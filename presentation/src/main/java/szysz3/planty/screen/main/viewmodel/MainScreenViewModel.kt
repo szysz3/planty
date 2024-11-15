@@ -13,10 +13,17 @@ class MainScreenViewModel @Inject constructor() :
     ViewModel() {
 
     private val _isHomeScreenInitialized = MutableStateFlow(false)
-    val isHomeScreenInitialized: StateFlow<Boolean> = _isHomeScreenInitialized.asStateFlow()
+    private val isHomeScreenInitialized: StateFlow<Boolean> = _isHomeScreenInitialized.asStateFlow()
 
     private val _isTopBarVisible = MutableStateFlow(false)
     val isTopBarVisible: StateFlow<Boolean> = _isTopBarVisible.asStateFlow()
+
+    private val _showBackButton = MutableStateFlow(false)
+    val showBackButton: StateFlow<Boolean> = _showBackButton.asStateFlow()
+
+    fun showBackButton(show: Boolean) {
+        _showBackButton.value = show
+    }
 
     fun homeScreenInitialized(initialized: Boolean) {
         _isHomeScreenInitialized.value = initialized

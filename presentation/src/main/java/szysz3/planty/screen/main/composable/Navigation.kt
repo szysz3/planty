@@ -15,6 +15,8 @@ import szysz3.planty.screen.dashboard.DashboardScreen
 import szysz3.planty.screen.home.viewmodel.HomeScreenViewModel
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.notification.NotificationsScreen
+import szysz3.planty.screen.plantaplant.screen.PlantAPlantScreen
+import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreen
 
 @Composable
 fun NavigationGraph(
@@ -31,7 +33,13 @@ fun NavigationGraph(
         composable(BottomNavItem.Home.route) {
             HomeScreen(
                 mainScreenViewModel = mainScreenViewModel,
-                homeScreenViewModel = homeScreenViewModel
+                homeScreenViewModel = homeScreenViewModel,
+                onNavigateToPlantAPlant = {
+                    navigate(navController, NavigationItem.PlantAPlant)
+                },
+                onNavigateToPlantDetails = {
+                    navigate(navController, NavigationItem.PlantDetails)
+                }
             )
         }
         composable(BottomNavItem.Dashboard.route) {
@@ -40,10 +48,32 @@ fun NavigationGraph(
         composable(BottomNavItem.Notifications.route) {
             NotificationsScreen()
         }
+        composable(NavigationItem.PlantDetails.route) {
+            PlantDetailsScreen(mainScreenViewModel)
+        }
+        composable(NavigationItem.PlantAPlant.route) {
+            PlantAPlantScreen(mainScreenViewModel)
+        }
     }
 }
 
-sealed class BottomNavItem(val route: String, val icon: ImageVector, val title: String) {
+fun navigate(navController: NavHostController, navigationItem: NavigationItem) {
+    navController.navigate(navigationItem.route) {
+        popUpTo(navController.graph.startDestinationId) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
+    }
+}
+
+open class NavigationItem(val route: String) {
+    object PlantAPlant : NavigationItem("\\home\\plantAPlant")
+    object PlantDetails : NavigationItem("\\home\\plantDetails")
+}
+
+open class BottomNavItem(route: String, val icon: ImageVector, val title: String) :
+    NavigationItem(route) {
     object Home : BottomNavItem("home", Icons.Rounded.Home, "Home")
     object Dashboard : BottomNavItem("dashboard", Icons.Rounded.Person, "Dashboard")
     object Notifications :

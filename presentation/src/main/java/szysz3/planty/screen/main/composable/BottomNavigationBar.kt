@@ -29,7 +29,7 @@ fun BottomNavigationBar(
         contentColor = MaterialTheme.colorScheme.onSurface,  // Theme's color for icons and text
     ) {
         items.forEach { item ->
-            val isSelected = currentRoute == item.route
+            val isSelected = currentRoute?.contains(item.route) == true
 
             BottomNavigationItem(
                 icon = {

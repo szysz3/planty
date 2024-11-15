@@ -24,7 +24,7 @@ fun MainScreen(
         modifier = Modifier.fillMaxSize(),
         bottomBar = { BottomNavigationBar(navController, mainScreenViewModel) },
         topBar = {
-            TopBar(mainScreenViewModel, homeScreenViewModel)
+            TopBar(navController, mainScreenViewModel, homeScreenViewModel)
         },
     ) { innerPadding ->
         NavigationGraph(

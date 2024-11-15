@@ -43,6 +43,7 @@ fun GardenMap(
                     .aspectRatio(1f)
                     .clickable {
                         val selectedPlant = plants.firstOrNull() ?: ""
+//                        val selectedPlant = ""
                         onPlantSelected(row, col, selectedPlant)
                     },
                 contentAlignment = Alignment.Center
