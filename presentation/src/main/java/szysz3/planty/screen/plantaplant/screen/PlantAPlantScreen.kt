@@ -23,7 +23,8 @@ import szysz3.planty.screen.plantaplant.model.Plant
 
 @Composable
 fun PlantAPlantScreen(
-    mainScreenViewModel: MainScreenViewModel
+    mainScreenViewModel: MainScreenViewModel,
+    onNavigateToPlantDetails: () -> Unit
 ) {
     val plants =
         listOf(Plant.random(), Plant.random(), Plant.random(), Plant.random(), Plant.random())
@@ -52,7 +53,7 @@ fun PlantAPlantScreen(
                 )
             }
         )
-        
+
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 150.dp),
             contentPadding = PaddingValues(16.dp),
@@ -64,7 +65,7 @@ fun PlantAPlantScreen(
                 PlantCard(
                     plant = plants[index],
                     onPlantSelected = {
-//                        navController.navigate("plantDetails/${plant.id}")
+                        onNavigateToPlantDetails()
                     }
                 )
             }

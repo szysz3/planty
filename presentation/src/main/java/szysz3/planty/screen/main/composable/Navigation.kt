@@ -17,6 +17,7 @@ import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.notification.NotificationsScreen
 import szysz3.planty.screen.plantaplant.screen.PlantAPlantScreen
 import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreen
+import timber.log.Timber
 
 @Composable
 fun NavigationGraph(
@@ -49,19 +50,21 @@ fun NavigationGraph(
             NotificationsScreen()
         }
         composable(NavigationItem.PlantDetails.route) {
-            PlantDetailsScreen(mainScreenViewModel)
+            PlantDetailsScreen(mainScreenViewModel) {
+                Timber.d("---> Plant chosen")
+                navController.popBackStack(BottomNavItem.Home.route, false)
+            }
         }
         composable(NavigationItem.PlantAPlant.route) {
-            PlantAPlantScreen(mainScreenViewModel)
+            PlantAPlantScreen(mainScreenViewModel) {
+                navigate(navController, NavigationItem.PlantDetails)
+            }
         }
     }
 }
 
 fun navigate(navController: NavHostController, navigationItem: NavigationItem) {
     navController.navigate(navigationItem.route) {
-        popUpTo(navController.graph.startDestinationId) {
-            saveState = true
-        }
         launchSingleTop = true
         restoreState = true
     }
