@@ -42,8 +42,8 @@ fun GardenMap(
                     .background(if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground)
                     .aspectRatio(1f)
                     .clickable {
-                        val selectedPlant = plants.firstOrNull() ?: ""
-//                        val selectedPlant = ""
+//                        val selectedPlant = plants.firstOrNull() ?: ""
+                        val selectedPlant = ""
                         onPlantSelected(row, col, selectedPlant)
                     },
                 contentAlignment = Alignment.Center
