@@ -1,14 +1,20 @@
-package szysz3.planty.data.repository
+package szysz3.planty.data.repository.mock
 
-import szysz3.planty.data.database.dao.PlantDao
-import szysz3.planty.data.database.entity.toDomain
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import szysz3.planty.domain.model.Plant
 import szysz3.planty.domain.repository.PlantRepository
+import java.io.BufferedReader
 import javax.inject.Inject
 
-class PlantRepositoryImpl @Inject constructor(
-    private val plantDao: PlantDao
-) : PlantRepository {
+class PlantMockRepositoryImpl @Inject constructor(@ApplicationContext context: Context) :
+    PlantRepository {
+
+    private val plantData by lazy {
+        val inputStream = context.assets.open("sample_plant_data.csv")
+        inputStream.bufferedReader().use(BufferedReader::readLines)
+    }
+
     override suspend fun insertPlant(plant: Plant) {
         TODO("Not yet implemented")
     }
@@ -18,7 +24,9 @@ class PlantRepositoryImpl @Inject constructor(
     }
 
     override suspend fun searchPlants(query: String): List<Plant> {
-        return plantDao.searchPlants(query).toDomain()
+        return plantData.toPlant().filter { plant ->
+            plant.commonName?.contains(query) == true || plant.latinName.contains(query)
+        }
     }
 
     override suspend fun getPlantById(id: Int): Plant? {
@@ -30,6 +38,6 @@ class PlantRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPlantsFromRange(startRange: Int, endRange: Int): List<Plant> {
-        return plantDao.getPlantsByRange(startRange, endRange).toDomain()
+        return plantData.toPlant().subList(startRange, endRange)
     }
 }

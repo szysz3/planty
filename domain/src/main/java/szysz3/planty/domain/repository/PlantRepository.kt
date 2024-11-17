@@ -8,4 +8,5 @@ interface PlantRepository {
     suspend fun searchPlants(query: String): List<Plant>
     suspend fun getPlantById(id: Int): Plant?
     suspend fun deletePlant(plant: Plant)
+    suspend fun getPlantsFromRange(startRange: Int, endRange: Int): List<Plant>
 }

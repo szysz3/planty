@@ -18,6 +18,9 @@ interface PlantDao {
     @Query("SELECT * FROM plants WHERE latinName LIKE :query OR commonName LIKE :query")
     suspend fun searchPlants(query: String): List<PlantEntity>
 
+    @Query("SELECT * FROM plants LIMIT :endIndex OFFSET :startIndex")
+    suspend fun getPlantsByRange(startIndex: Int, endIndex: Int): List<PlantEntity>
+
     @Query("SELECT * FROM plants WHERE id = :id")
     suspend fun getPlantById(id: Int): PlantEntity?
 

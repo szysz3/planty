@@ -8,5 +8,5 @@ import javax.inject.Inject
 @HiltViewModel
 class PlantAPlantViewModel @Inject constructor(
     private val plantSearchUseCase: PlantSearchUseCase,
-) : ViewModel() {
-}
+    private val getPlantFromRangeUseCase: PlantSearchUseCase,
+) : ViewModel()
