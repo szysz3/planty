@@ -42,6 +42,7 @@ fun HomeScreen(
     LaunchedEffect(dataLoaded) {
         mainScreenViewModel.homeScreenInitialized(dataLoaded)
         mainScreenViewModel.showTopBar(dataLoaded)
+        mainScreenViewModel.showDeleteButton(dataLoaded)
     }
 
     val rows = gardenState.rows

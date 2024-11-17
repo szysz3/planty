@@ -31,6 +31,7 @@ fun PlantAPlantScreen(
 
     LaunchedEffect(Unit) {
         mainScreenViewModel.showBackButton(true)
+        mainScreenViewModel.showDeleteButton(false)
     }
 
     Column(

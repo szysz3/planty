@@ -17,7 +17,6 @@ import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.notification.NotificationsScreen
 import szysz3.planty.screen.plantaplant.screen.PlantAPlantScreen
 import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreen
-import timber.log.Timber
 
 @Composable
 fun NavigationGraph(
@@ -51,7 +50,6 @@ fun NavigationGraph(
         }
         composable(NavigationItem.PlantDetails.route) {
             PlantDetailsScreen(mainScreenViewModel) {
-                Timber.d("---> Plant chosen")
                 navController.popBackStack(BottomNavItem.Home.route, false)
             }
         }

@@ -21,6 +21,13 @@ class MainScreenViewModel @Inject constructor() :
     private val _showBackButton = MutableStateFlow(false)
     val showBackButton: StateFlow<Boolean> = _showBackButton.asStateFlow()
 
+    private val _showDeleteButton = MutableStateFlow(false)
+    val showDeleteButton: StateFlow<Boolean> = _showDeleteButton.asStateFlow()
+
+    fun showDeleteButton(show: Boolean) {
+        _showDeleteButton.value = show
+    }
+
     fun showBackButton(show: Boolean) {
         _showBackButton.value = show
     }
