@@ -96,7 +96,7 @@ class HomeScreenViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 clearGardenUseCase(NoParams())
-                _gardenState.value = GardenState() // Reset to empty state
+                _gardenState.value = GardenState()
                 _dataLoaded.value = false
             } catch (e: Exception) {
                 Timber.e(e)

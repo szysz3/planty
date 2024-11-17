@@ -1,9 +1,9 @@
 package szysz3.planty.data.repository
 
 import szysz3.planty.data.database.dao.PlantDao
+import szysz3.planty.data.database.entity.toDomain
 import szysz3.planty.domain.model.Plant
 import szysz3.planty.domain.repository.PlantRepository
-import toDomain
 import javax.inject.Inject
 
 class PlantRepositoryImpl @Inject constructor(

@@ -1,5 +1,5 @@
-import szysz3.planty.data.database.entity.GardenCellEntity
-import szysz3.planty.data.database.entity.PlantEntity
+package szysz3.planty.data.database.entity
+
 import szysz3.planty.domain.model.GardenCell
 import szysz3.planty.domain.model.GardenState
 import szysz3.planty.domain.model.Plant

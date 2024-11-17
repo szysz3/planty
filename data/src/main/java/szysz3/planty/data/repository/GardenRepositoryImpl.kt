@@ -3,10 +3,10 @@ package szysz3.planty.data.repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import szysz3.planty.data.database.dao.GardenCellDao
+import szysz3.planty.data.database.entity.toDomain
+import szysz3.planty.data.database.entity.toEntityList
 import szysz3.planty.domain.model.GardenState
 import szysz3.planty.domain.repository.GardenRepository
-import toDomain
-import toEntityList
 import javax.inject.Inject
 
 class GardenRepositoryImpl @Inject constructor(

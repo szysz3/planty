@@ -9,7 +9,7 @@ import szysz3.planty.data.database.dao.PlantDao
 import szysz3.planty.data.database.entity.GardenCellEntity
 import szysz3.planty.data.database.entity.PlantEntity
 
-@Database(entities = [GardenCellEntity::class, PlantEntity::class], version = 2)
+@Database(entities = [GardenCellEntity::class, PlantEntity::class], version = 3)
 abstract class GardenDatabase : RoomDatabase() {
     abstract fun gardenCellDao(): GardenCellDao
 
