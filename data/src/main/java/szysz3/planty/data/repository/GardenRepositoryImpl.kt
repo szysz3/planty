@@ -3,9 +3,10 @@ package szysz3.planty.data.repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import szysz3.planty.data.database.dao.GardenCellDao
-import szysz3.planty.data.database.entity.GardenCellEntity
 import szysz3.planty.domain.model.GardenState
 import szysz3.planty.domain.repository.GardenRepository
+import toDomain
+import toEntityList
 import javax.inject.Inject
 
 class GardenRepositoryImpl @Inject constructor(
@@ -16,26 +17,21 @@ class GardenRepositoryImpl @Inject constructor(
         withContext(Dispatchers.IO) {
             // Clear existing cells and insert new state
             gardenCellDao.clearGarden()
-            val cellEntities = gardenState.cells.map { cell ->
-                GardenCellEntity(row = cell.row, column = cell.column, plant = cell.plant)
-            }
+            val cellEntities = gardenState.toEntityList()
             gardenCellDao.insertAll(cellEntities)
         }
     }
 
-    override suspend fun loadGardenState(): GardenState = withContext(Dispatchers.IO) {
-        val cellEntities = gardenCellDao.getAllCells()
-        val cells = cellEntities.map { entity ->
-            szysz3.planty.domain.model.GardenCell(
-                row = entity.row,
-                column = entity.column,
-                plant = entity.plant
-            )
+    override suspend fun loadGardenState(): GardenState {
+        return withContext(Dispatchers.IO) {
+            val cellEntities = gardenCellDao.getAllCells()
+
+            // Derive rows and columns dynamically based on loaded cells
+            val rows = cellEntities.maxOfOrNull { it.row + 1 } ?: 0
+            val columns = cellEntities.maxOfOrNull { it.column + 1 } ?: 0
+
+            cellEntities.toDomain(rows, columns)
         }
-        // Derive rows and columns dynamically based on loaded cells
-        val rows = cells.maxOfOrNull { it.row + 1 } ?: 0
-        val columns = cells.maxOfOrNull { it.column + 1 } ?: 0
-        GardenState(rows = rows, columns = columns, cells = cells)
     }
 
     override suspend fun clearGardenState() {

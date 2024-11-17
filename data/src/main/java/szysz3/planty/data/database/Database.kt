@@ -5,11 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import szysz3.planty.data.database.dao.GardenCellDao
+import szysz3.planty.data.database.dao.PlantDao
 import szysz3.planty.data.database.entity.GardenCellEntity
+import szysz3.planty.data.database.entity.PlantEntity
 
-@Database(entities = [GardenCellEntity::class], version = 2)
+@Database(entities = [GardenCellEntity::class, PlantEntity::class], version = 2)
 abstract class GardenDatabase : RoomDatabase() {
     abstract fun gardenCellDao(): GardenCellDao
+
+    abstract fun plantDao(): PlantDao
 
     companion object {
         private const val GARDEN_DATABASE_NAME = "garden_db"

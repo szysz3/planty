@@ -17,13 +17,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.plantaplant.composable.PlantCard
 import szysz3.planty.screen.plantaplant.model.Plant
+import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
 
 @Composable
 fun PlantAPlantScreen(
     mainScreenViewModel: MainScreenViewModel,
+    plantAPlantViewModel: PlantAPlantViewModel = hiltViewModel(),
     onNavigateToPlantDetails: () -> Unit
 ) {
     val plants =
