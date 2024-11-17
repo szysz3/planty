@@ -12,11 +12,13 @@ import szysz3.planty.screen.main.composable.BottomNavigationBar
 import szysz3.planty.screen.main.composable.NavigationGraph
 import szysz3.planty.screen.main.composable.TopBar
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
+import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
 
 @Composable
 fun MainScreen(
     mainScreenViewModel: MainScreenViewModel = hiltViewModel(),
-    homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
+    homeScreenViewModel: HomeScreenViewModel = hiltViewModel(),
+    plantAPlantViewModel: PlantAPlantViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
 
@@ -31,6 +33,7 @@ fun MainScreen(
             navController = navController,
             mainScreenViewModel = mainScreenViewModel,
             homeScreenViewModel = homeScreenViewModel,
+            plantAPlantViewModel = plantAPlantViewModel,
             modifier = Modifier.padding(innerPadding)
         )
     }

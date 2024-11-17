@@ -12,48 +12,57 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
-import szysz3.planty.screen.plantaplant.model.Plant
+import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
 
 @Composable
 fun PlantDetailsScreen(
     mainScreenViewModel: MainScreenViewModel,
+    plantAPlantViewModel: PlantAPlantViewModel,
     onPlantChosen: () -> Unit
 ) {
-    val plant = Plant.random()
+    val plant by plantAPlantViewModel.selectedPlant.collectAsState()
 
     LaunchedEffect(Unit) {
         mainScreenViewModel.showBackButton(true)
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Image(
-            painter = painterResource(id = plant.imageRes),
-            contentDescription = plant.name,
+    plant?.let { plant ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(text = plant.name, style = MaterialTheme.typography.titleLarge)
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = plant.detailedDescription,
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Button(
-            onClick = { onPlantChosen() },
-            modifier = Modifier.fillMaxWidth()
+                .fillMaxSize()
+                .padding(16.dp)
         ) {
-            Text("Choose Plant")
+            Image(
+                painter = painterResource(id = plant.imageRes),
+                contentDescription = plant.latinName,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = plant.latinName, style = MaterialTheme.typography.titleLarge)
+
+            plant.commonName?.let { commonName ->
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = commonName,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+            Button(
+                onClick = { onPlantChosen() },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Choose Plant")
+            }
         }
     }
 }

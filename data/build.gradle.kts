@@ -43,6 +43,9 @@ dependencies {
     kapt(libs.room.compiler)
     implementation(libs.room.ktx)
 
+    // csv parsing
+    implementation(libs.opencsv)
+
     // coroutines dependencies
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)

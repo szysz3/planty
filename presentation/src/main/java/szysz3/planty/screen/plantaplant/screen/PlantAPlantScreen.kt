@@ -15,26 +15,28 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.plantaplant.composable.PlantCard
-import szysz3.planty.screen.plantaplant.model.Plant
 import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
 
 @Composable
 fun PlantAPlantScreen(
     mainScreenViewModel: MainScreenViewModel,
-    plantAPlantViewModel: PlantAPlantViewModel = hiltViewModel(),
+    plantAPlantViewModel: PlantAPlantViewModel,
     onNavigateToPlantDetails: () -> Unit
 ) {
-    val plants =
-        listOf(Plant.random(), Plant.random(), Plant.random(), Plant.random(), Plant.random())
+    val dataLoaded by plantAPlantViewModel.dataLoaded.collectAsState()
+    val plants by plantAPlantViewModel.plants.collectAsState()
 
     LaunchedEffect(Unit) {
         mainScreenViewModel.showBackButton(true)
         mainScreenViewModel.showDeleteButton(false)
+
+        plantAPlantViewModel.getPlantsFromRange()
     }
 
     Column(
@@ -69,6 +71,7 @@ fun PlantAPlantScreen(
                 PlantCard(
                     plant = plants[index],
                     onPlantSelected = {
+                        plantAPlantViewModel.selectPlant(plants[index])
                         onNavigateToPlantDetails()
                     }
                 )

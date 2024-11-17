@@ -1,18 +1,28 @@
 package szysz3.planty.data.repository.mock
 
 import android.content.Context
+import com.opencsv.CSVReader
 import dagger.hilt.android.qualifiers.ApplicationContext
 import szysz3.planty.domain.model.Plant
 import szysz3.planty.domain.repository.PlantRepository
-import java.io.BufferedReader
+import java.io.InputStreamReader
 import javax.inject.Inject
 
 class PlantMockRepositoryImpl @Inject constructor(@ApplicationContext context: Context) :
     PlantRepository {
 
     private val plantData by lazy {
+        val plants = mutableListOf<Plant>()
         val inputStream = context.assets.open("sample_plant_data.csv")
-        inputStream.bufferedReader().use(BufferedReader::readLines)
+
+        CSVReader(InputStreamReader(inputStream)).use { csvReader ->
+            var line: Array<String>?
+            csvReader.readNext() // Skip header line if present
+            while (csvReader.readNext().also { line = it } != null) {
+                line?.let { plants.add(it.toPlant()) }
+            }
+        }
+        plants
     }
 
     override suspend fun insertPlant(plant: Plant) {
@@ -24,7 +34,7 @@ class PlantMockRepositoryImpl @Inject constructor(@ApplicationContext context: C
     }
 
     override suspend fun searchPlants(query: String): List<Plant> {
-        return plantData.toPlant().filter { plant ->
+        return plantData.filter { plant ->
             plant.commonName?.contains(query) == true || plant.latinName.contains(query)
         }
     }
@@ -38,6 +48,6 @@ class PlantMockRepositoryImpl @Inject constructor(@ApplicationContext context: C
     }
 
     override suspend fun getPlantsFromRange(startRange: Int, endRange: Int): List<Plant> {
-        return plantData.toPlant().subList(startRange, endRange)
+        return plantData.subList(startRange, endRange)
     }
 }

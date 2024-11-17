@@ -16,6 +16,7 @@ hilt-compose = "1.2.0"
 timber = "5.0.1"
 room = "2.6.1"
 coroutines = "1.9.0"
+opencsv = "5.7.1"
 
 [libraries]
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
@@ -45,6 +46,7 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+opencsv = { module = "com.opencsv:opencsv", version.ref = "opencsv" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

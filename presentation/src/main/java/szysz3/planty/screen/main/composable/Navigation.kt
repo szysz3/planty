@@ -16,6 +16,7 @@ import szysz3.planty.screen.home.viewmodel.HomeScreenViewModel
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.notification.NotificationsScreen
 import szysz3.planty.screen.plantaplant.screen.PlantAPlantScreen
+import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
 import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreen
 
 @Composable
@@ -23,6 +24,7 @@ fun NavigationGraph(
     navController: NavHostController,
     mainScreenViewModel: MainScreenViewModel,
     homeScreenViewModel: HomeScreenViewModel,
+    plantAPlantViewModel: PlantAPlantViewModel,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -49,12 +51,18 @@ fun NavigationGraph(
             NotificationsScreen()
         }
         composable(NavigationItem.PlantDetails.route) {
-            PlantDetailsScreen(mainScreenViewModel) {
+            PlantDetailsScreen(
+                mainScreenViewModel = mainScreenViewModel,
+                plantAPlantViewModel = plantAPlantViewModel
+            ) {
                 navController.popBackStack(BottomNavItem.Home.route, false)
             }
         }
         composable(NavigationItem.PlantAPlant.route) {
-            PlantAPlantScreen(mainScreenViewModel) {
+            PlantAPlantScreen(
+                mainScreenViewModel = mainScreenViewModel,
+                plantAPlantViewModel = plantAPlantViewModel
+            ) {
                 navigate(navController, NavigationItem.PlantDetails)
             }
         }

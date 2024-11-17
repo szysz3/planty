@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import szysz3.planty.screen.plantaplant.model.Plant
 
@@ -31,6 +33,7 @@ fun PlantCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .aspectRatio(0.8f)
             .padding(8.dp)
             .clickable { onPlantSelected() },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -42,26 +45,36 @@ fun PlantCard(
             // Placeholder image
             Image(
                 painter = painterResource(id = plant.imageRes),
-                contentDescription = plant.name,
+                contentDescription = plant.commonName,
                 modifier = Modifier
                     .size(100.dp)
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.surface)
             )
             Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.weight(1f))
             // Plant name
             Text(
-                text = plant.name,
+                text = plant.latinName,
+                textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .fillMaxWidth()
             )
             // Plant description
-            Text(
-                text = plant.shortDescription,
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
+            if (plant.commonName?.isNotBlank() == true) {
+                Text(
+                    text = plant.commonName,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.Gray,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth()
+                )
+            }
+            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }
