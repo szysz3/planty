@@ -35,7 +35,8 @@ class PlantMockRepositoryImpl @Inject constructor(@ApplicationContext context: C
 
     override suspend fun searchPlants(query: String): List<Plant> {
         return plantData.filter { plant ->
-            plant.commonName?.contains(query) == true || plant.latinName.contains(query)
+            plant.commonName?.lowercase()?.contains(query) == true || plant.latinName.lowercase()
+                .contains(query)
         }
     }
 
