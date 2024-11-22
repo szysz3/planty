@@ -5,6 +5,7 @@ import szysz3.planty.domain.model.Plant
 fun Array<String>.toPlant(): Plant {
     return this.let {
         Plant(
+            id = 0,
             latinName = it[0].trim(),
             family = it[1].trim(),
             commonName = it[2].trim(),

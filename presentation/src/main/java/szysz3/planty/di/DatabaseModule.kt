@@ -8,6 +8,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import szysz3.planty.data.database.GardenDatabase
 import szysz3.planty.data.database.dao.GardenCellDao
+import szysz3.planty.data.database.dao.GardenPlantDao
 import szysz3.planty.data.database.dao.PlantDao
 import javax.inject.Singleton
 
@@ -31,5 +32,11 @@ object DatabaseModule {
     @Singleton
     fun providePlantDao(database: GardenDatabase): PlantDao {
         return database.plantDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideGardenPlantDao(database: GardenDatabase): GardenPlantDao {
+        return database.gardenPlantDao()
     }
 }

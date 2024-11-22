@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import szysz3.planty.screen.home.viewmodel.HomeScreenViewModel
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
 
@@ -24,6 +25,7 @@ import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
 fun PlantDetailsScreen(
     mainScreenViewModel: MainScreenViewModel,
     plantAPlantViewModel: PlantAPlantViewModel,
+    homeScreenViewModel: HomeScreenViewModel,
     onPlantChosen: () -> Unit
 ) {
     val plant by plantAPlantViewModel.selectedPlant.collectAsState()
@@ -58,7 +60,10 @@ fun PlantDetailsScreen(
 
             Spacer(modifier = Modifier.weight(1f))
             Button(
-                onClick = { onPlantChosen() },
+                onClick = {
+                    homeScreenViewModel.saveCell(plant)
+                    onPlantChosen()
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Choose Plant")

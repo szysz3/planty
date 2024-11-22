@@ -11,7 +11,12 @@ fun GardenStateDomain.toPresentationModel(): GardenState {
         rows = this.rows,
         columns = this.columns,
         cells = this.cells.map { cell ->
-            GardenCell(row = cell.row, column = cell.column, plant = cell.plant)
+            GardenCell(
+                id = cell.id,
+                row = cell.row,
+                column = cell.column,
+                plant = cell.plant?.toPresentationModel()
+            )
         }
     )
 }
@@ -22,28 +27,49 @@ fun GardenState.toDomainModel(): GardenStateDomain {
         columns = this.columns,
         cells = this.cells.map { cell ->
             GardenCellDomain(
+                id = cell.id,
                 row = cell.row,
                 column = cell.column,
-                plant = cell.plant
+                plant = cell.plant?.toDomain()
             )
         }
     )
 }
 
+fun Plant.toDomain(): PlantDomain {
+    return PlantDomain(
+        id = this.id,
+        latinName = this.latinName,
+        commonName = this.commonName,
+        height = this.height,
+        width = this.width,
+        soil = this.soil,
+        ph = this.ph,
+        growthRate = this.growthRate,
+        deciduousEvergreen = this.deciduousEvergreen,
+        shade = this.shade,
+    )
+}
+
+fun PlantDomain.toPresentationModel(): Plant {
+    return Plant(
+        id = this.id,
+        latinName = this.latinName,
+        commonName = this.commonName,
+        height = this.height,
+        width = this.width,
+        soil = this.soil,
+        ph = this.ph,
+        growthRate = this.growthRate,
+        deciduousEvergreen = this.deciduousEvergreen,
+        shade = this.shade,
+        // TODO: get plant image from outside
+        imageRes = R.drawable.plant_placeholder
+    )
+}
+
 fun List<PlantDomain>.toPresentationModel(): List<Plant> {
     return map { plant ->
-        Plant(
-            latinName = plant.latinName,
-            commonName = plant.commonName,
-            height = plant.height,
-            width = plant.width,
-            soil = plant.soil,
-            ph = plant.ph,
-            growthRate = plant.growthRate,
-            deciduousEvergreen = plant.deciduousEvergreen,
-            shade = plant.shade,
-            // TODO: get plant image from outside
-            imageRes = R.drawable.plant_placeholder
-        )
+        plant.toPresentationModel()
     }
 }

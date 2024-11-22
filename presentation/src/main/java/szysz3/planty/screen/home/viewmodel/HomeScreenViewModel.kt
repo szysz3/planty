@@ -13,6 +13,7 @@ import szysz3.planty.domain.usecase.SaveGardenStateUseCase
 import szysz3.planty.domain.usecase.base.NoParams
 import szysz3.planty.screen.home.model.GardenCell
 import szysz3.planty.screen.home.model.GardenState
+import szysz3.planty.screen.plantaplant.model.Plant
 import timber.log.Timber
 import toDomainModel
 import toPresentationModel
@@ -37,6 +38,13 @@ class HomeScreenViewModel @Inject constructor(
     private val _dataLoaded = MutableStateFlow(false)
     val dataLoaded: StateFlow<Boolean> = _dataLoaded.asStateFlow()
 
+    private val _selectedCell = MutableStateFlow<Pair<Int, Int>?>(null)
+    val selectedCell: StateFlow<Pair<Int, Int>?> = _selectedCell.asStateFlow()
+
+    fun updateSelectedCell(row: Int, column: Int) {
+        _selectedCell.value = Pair(row, column)
+    }
+
     fun showDeleteDialog(show: Boolean) {
         _isDeleteDialogVisible.value = show
     }
@@ -52,11 +60,15 @@ class HomeScreenViewModel @Inject constructor(
         saveGardenState(initialGardenState)
     }
 
-    fun saveCell(row: Int, column: Int, plant: String) {
+    fun saveCell(plant: Plant) {
         viewModelScope.launch {
+            val row = _selectedCell.value?.first ?: return@launch
+            val column = _selectedCell.value?.second ?: return@launch
+
             val updatedCells = _gardenState.value.cells.toMutableList()
             updatedCells.removeAll { it.row == row && it.column == column } // Remove existing cell at this position if any
-            updatedCells.add(GardenCell(row, column, plant))
+            updatedCells.add(GardenCell(0, row, column, plant))
+
             val updatedGardenState = _gardenState.value.copy(cells = updatedCells)
             _gardenState.value = updatedGardenState
             saveGardenState(updatedGardenState)
@@ -98,6 +110,7 @@ class HomeScreenViewModel @Inject constructor(
                 clearGardenUseCase(NoParams())
                 _gardenState.value = GardenState()
                 _dataLoaded.value = false
+                _selectedCell.value = null
             } catch (e: Exception) {
                 Timber.e(e)
             }

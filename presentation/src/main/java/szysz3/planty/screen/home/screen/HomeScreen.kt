@@ -17,7 +17,6 @@ import szysz3.planty.screen.home.composable.GardenDimensionsInput
 import szysz3.planty.screen.home.composable.GardenMap
 import szysz3.planty.screen.home.viewmodel.HomeScreenViewModel
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -56,17 +55,20 @@ fun HomeScreen(
             GardenMap(
                 rows = rows,
                 columns = columns,
-                plants = listOf("A", "B", "C"),
-                selectedCells = gardenState.cells,
-                onPlantSelected = { row, col, plant ->
+                state = gardenState,
+                onPlantSelected = { row, col ->
                     // TODO: Handle plant selection in PlantAPlantScreen
-//                    homeScreenViewModel.saveCell(row, col, plant)
-                    Timber.i("GardenMap: $row, $col, $plant")
-                    if (plant.isBlank()) {
-                        onNavigateToPlantAPlant()
-                    } else {
-                        onNavigateToPlantDetails()
-                    }
+                    homeScreenViewModel.updateSelectedCell(row, col)
+//                    Timber.i("GardenMap: $row, $col, $plant")
+
+
+//                    if (plant.isBlank()) {
+                    onNavigateToPlantAPlant()
+//                    } else {
+//                        onNavigateToPlantDetails()
+//                    }
+
+
                 }
             )
         } else {

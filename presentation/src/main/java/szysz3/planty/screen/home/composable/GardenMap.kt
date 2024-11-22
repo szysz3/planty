@@ -14,15 +14,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import szysz3.planty.screen.home.model.GardenCell
+import szysz3.planty.screen.home.model.GardenState
 
 @Composable
 fun GardenMap(
     rows: Int,
     columns: Int,
-    plants: List<String>,
-    selectedCells: List<GardenCell>,
-    onPlantSelected: (Int, Int, String) -> Unit
+    state: GardenState,
+    onPlantSelected: (Int, Int) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(columns),
@@ -33,8 +32,8 @@ fun GardenMap(
         items(rows * columns) { index ->
             val row = index / columns
             val col = index % columns
-            val plant = selectedCells.find { it.row == row && it.column == col }?.plant
-            val isSelected = !plant.isNullOrBlank()
+            val plant = state.cells.find { it.row == row && it.column == col }?.plant
+            val isSelected = plant != null
 
             Box(
                 modifier = Modifier
@@ -42,13 +41,11 @@ fun GardenMap(
                     .background(if (isSelected) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground)
                     .aspectRatio(1f)
                     .clickable {
-//                        val selectedPlant = plants.firstOrNull() ?: ""
-                        val selectedPlant = ""
-                        onPlantSelected(row, col, selectedPlant)
+                        onPlantSelected(row, col)
                     },
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = plant ?: "")
+                Text(text = plant?.commonName ?: "")
             }
         }
     }

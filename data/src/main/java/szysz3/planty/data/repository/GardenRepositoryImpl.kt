@@ -1,42 +1,80 @@
 package szysz3.planty.data.repository
 
+import androidx.room.Transaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import szysz3.planty.data.database.dao.GardenCellDao
+import szysz3.planty.data.database.dao.GardenPlantDao
 import szysz3.planty.data.database.entity.toDomain
-import szysz3.planty.data.database.entity.toEntityList
+import szysz3.planty.data.database.entity.toEntity
+import szysz3.planty.data.database.entity.toGardenPlantEntity
+import szysz3.planty.domain.model.GardenCell
 import szysz3.planty.domain.model.GardenState
+import szysz3.planty.domain.model.Plant
 import szysz3.planty.domain.repository.GardenRepository
 import javax.inject.Inject
 
 class GardenRepositoryImpl @Inject constructor(
-    private val gardenCellDao: GardenCellDao
+    private val gardenCellDao: GardenCellDao,
+    private val gardenPlantDao: GardenPlantDao
 ) : GardenRepository {
-
-    override suspend fun saveGardenState(gardenState: GardenState) {
-        withContext(Dispatchers.IO) {
-            // Clear existing cells and insert new state
-            gardenCellDao.clearGarden()
-            val cellEntities = gardenState.toEntityList()
-            gardenCellDao.insertAll(cellEntities)
-        }
-    }
 
     override suspend fun loadGardenState(): GardenState {
         return withContext(Dispatchers.IO) {
-            val cellEntities = gardenCellDao.getAllCells()
+            val gardenCellEntities = gardenCellDao.getAllCells()
+            val gardenCells = gardenCellEntities.map { cell ->
+                val plant = cell.plantId.let { plantId ->
+                    gardenPlantDao.getGardenPlantById(plantId)?.toDomain()
+                }
+                cell.toDomain(plant)
+            }
 
-            // Derive rows and columns dynamically based on loaded cells
-            val rows = cellEntities.maxOfOrNull { it.row + 1 } ?: 0
-            val columns = cellEntities.maxOfOrNull { it.column + 1 } ?: 0
+            GardenState(
+                rows = calculateRows(gardenCells),
+                columns = calculateColumns(gardenCells),
+                cells = gardenCells
+            )
+        }
+    }
 
-            cellEntities.toDomain(rows, columns)
+    @Transaction
+    override suspend fun saveGardenState(state: GardenState) {
+        withContext(Dispatchers.IO) {
+            clearGardenState()
+
+            // Save all plants and collect their generated IDs
+            val plantIdMap = mutableMapOf<Plant, Long>()
+            state.cells.forEach { cell ->
+                cell.plant?.let { plant ->
+                    val plantEntity = plant.toGardenPlantEntity()
+                    val plantId = gardenPlantDao.insertPlant(plantEntity)
+                    plantIdMap[plant] = plantId
+                }
+            }
+
+            // Update cells with the corresponding plant IDs
+            val cellEntities = state.cells.map { cell ->
+                val plantId = cell.plant?.let { plantIdMap[it] }// Map plant to its ID
+                cell.toEntity(plantId) // Update the GardenCellEntity with plantId
+            }
+
+            // Save all cells
+            gardenCellDao.insertAll(cellEntities)
         }
     }
 
     override suspend fun clearGardenState() {
         withContext(Dispatchers.IO) {
             gardenCellDao.clearGarden()
+            gardenPlantDao.clearAllPlants()
         }
+    }
+
+    private fun calculateRows(cells: List<GardenCell>): Int {
+        return cells.maxOfOrNull { it.row + 1 } ?: 0
+    }
+
+    private fun calculateColumns(cells: List<GardenCell>): Int {
+        return cells.maxOfOrNull { it.column + 1 } ?: 0
     }
 }

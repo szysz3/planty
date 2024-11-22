@@ -11,7 +11,7 @@ data class GardenState(
             val cells = List(rows * columns) { index ->
                 val row = index / columns
                 val column = index % columns
-                GardenCell(row = row, column = column, plant = "")
+                GardenCell(id = 0, row = row, column = column, plant = null)
             }
             return GardenState(rows = rows, columns = columns, cells = cells)
         }

@@ -1,6 +1,7 @@
 package szysz3.planty.screen.plantaplant.model
 
 data class Plant(
+    val id: Int,
     val latinName: String,
     val commonName: String?,
     val height: Float?,

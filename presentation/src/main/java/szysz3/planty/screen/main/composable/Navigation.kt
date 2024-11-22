@@ -53,7 +53,8 @@ fun NavigationGraph(
         composable(NavigationItem.PlantDetails.route) {
             PlantDetailsScreen(
                 mainScreenViewModel = mainScreenViewModel,
-                plantAPlantViewModel = plantAPlantViewModel
+                plantAPlantViewModel = plantAPlantViewModel,
+                homeScreenViewModel = homeScreenViewModel
             ) {
                 navController.popBackStack(BottomNavItem.Home.route, false)
             }
