@@ -1,4 +1,4 @@
-package szysz3.planty.screen.home.viewmodel
+package szysz3.planty.screen.mygarden.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,8 +11,8 @@ import szysz3.planty.domain.usecase.ClearGardenUseCase
 import szysz3.planty.domain.usecase.LoadGardenStateUseCase
 import szysz3.planty.domain.usecase.SaveGardenStateUseCase
 import szysz3.planty.domain.usecase.base.NoParams
-import szysz3.planty.screen.home.model.GardenCell
-import szysz3.planty.screen.home.model.GardenState
+import szysz3.planty.screen.mygarden.model.GardenCell
+import szysz3.planty.screen.mygarden.model.GardenState
 import szysz3.planty.screen.plantaplant.model.Plant
 import timber.log.Timber
 import toDomainModel
@@ -20,7 +20,7 @@ import toPresentationModel
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(
+class MyGardenViewModel @Inject constructor(
     private val saveGardenStateUseCase: SaveGardenStateUseCase,
     private val loadGardenStateUseCase: LoadGardenStateUseCase,
     private val clearGardenUseCase: ClearGardenUseCase

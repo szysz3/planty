@@ -1,4 +1,4 @@
-package szysz3.planty.screen.home.composable
+package szysz3.planty.screen.mygarden.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import szysz3.planty.screen.home.model.GardenState
+import szysz3.planty.screen.mygarden.model.GardenState
 
 @Composable
 fun GardenMap(

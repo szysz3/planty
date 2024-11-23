@@ -1,4 +1,4 @@
-package szysz3.planty.screen.home.model
+package szysz3.planty.screen.mygarden.model
 
 import szysz3.planty.screen.plantaplant.model.Plant
 

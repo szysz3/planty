@@ -17,8 +17,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import szysz3.planty.screen.home.viewmodel.HomeScreenViewModel
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
+import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
 import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
 import szysz3.planty.screen.plantdetails.composable.DeletePlantDialog
 
@@ -26,7 +26,7 @@ import szysz3.planty.screen.plantdetails.composable.DeletePlantDialog
 fun PlantDetailsScreen(
     mainScreenViewModel: MainScreenViewModel,
     plantAPlantViewModel: PlantAPlantViewModel,
-    homeScreenViewModel: HomeScreenViewModel,
+    myGardenViewModel: MyGardenViewModel,
     origin: PlantDetailsScreenOrigin,
     onNavigateBack: () -> Unit,
     onPlantChosen: () -> Unit
@@ -36,11 +36,11 @@ fun PlantDetailsScreen(
         mainScreenViewModel.showDeleteButton(origin == PlantDetailsScreenOrigin.HOME_SCREEN)
     }
 
-    val isDeleteDialogVisible by homeScreenViewModel.isDeleteDialogVisible.collectAsState()
+    val isDeleteDialogVisible by myGardenViewModel.isDeleteDialogVisible.collectAsState()
     val plantToPlant by plantAPlantViewModel.selectedPlant.collectAsState()
 
     val selectedPlant = if (origin == PlantDetailsScreenOrigin.HOME_SCREEN) {
-        homeScreenViewModel.getPlantForSelectedCell()
+        myGardenViewModel.getPlantForSelectedCell()
     } else {
         plantToPlant
     }
@@ -73,7 +73,7 @@ fun PlantDetailsScreen(
             if (origin == PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN) {
                 Button(
                     onClick = {
-                        homeScreenViewModel.saveCell(plant)
+                        myGardenViewModel.saveCell(plant)
                         onPlantChosen()
                     },
                     modifier = Modifier.fillMaxWidth()
@@ -87,12 +87,12 @@ fun PlantDetailsScreen(
     if (isDeleteDialogVisible) {
         DeletePlantDialog(
             onConfirmDelete = {
-                homeScreenViewModel.saveCell(null)
-                homeScreenViewModel.showDeleteDialog(false)
+                myGardenViewModel.saveCell(null)
+                myGardenViewModel.showDeleteDialog(false)
                 onNavigateBack()
             },
             onCancel = {
-                homeScreenViewModel.showDeleteDialog(false)
+                myGardenViewModel.showDeleteDialog(false)
             }
         )
     }

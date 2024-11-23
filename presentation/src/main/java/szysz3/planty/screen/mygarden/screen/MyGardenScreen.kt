@@ -11,32 +11,32 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.launch
-import szysz3.planty.screen.home.composable.DeleteGardenDialog
-import szysz3.planty.screen.home.composable.EmptyGardenPlaceholder
-import szysz3.planty.screen.home.composable.GardenDimensionsInput
-import szysz3.planty.screen.home.composable.GardenMap
-import szysz3.planty.screen.home.viewmodel.HomeScreenViewModel
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
+import szysz3.planty.screen.mygarden.composable.DeleteGardenDialog
+import szysz3.planty.screen.mygarden.composable.EmptyGardenPlaceholder
+import szysz3.planty.screen.mygarden.composable.GardenDimensionsInput
+import szysz3.planty.screen.mygarden.composable.GardenMap
+import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
 import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreenOrigin
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
+fun MyGardenScreen(
     mainScreenViewModel: MainScreenViewModel,
-    homeScreenViewModel: HomeScreenViewModel,
+    myGardenViewModel: MyGardenViewModel,
     onNavigateToPlantAPlant: () -> Unit,
     onNavigateToPlantDetails: (origin: PlantDetailsScreenOrigin) -> Unit
 ) {
-    val gardenState by homeScreenViewModel.gardenState.collectAsState()
-    val isDeleteDialogVisible by homeScreenViewModel.isDeleteDialogVisible.collectAsState()
-    val isBottomSheetVisible by homeScreenViewModel.isBottomSheetVisible.collectAsState()
-    val dataLoaded by homeScreenViewModel.dataLoaded.collectAsState()
+    val gardenState by myGardenViewModel.gardenState.collectAsState()
+    val isDeleteDialogVisible by myGardenViewModel.isDeleteDialogVisible.collectAsState()
+    val isBottomSheetVisible by myGardenViewModel.isBottomSheetVisible.collectAsState()
+    val dataLoaded by myGardenViewModel.dataLoaded.collectAsState()
     val bottomSheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         mainScreenViewModel.showBackButton(false)
-        homeScreenViewModel.loadGarden()
+        myGardenViewModel.loadGarden()
     }
 
     LaunchedEffect(dataLoaded) {
@@ -58,8 +58,8 @@ fun HomeScreen(
                 columns = columns,
                 state = gardenState,
                 onPlantSelected = { row, col ->
-                    homeScreenViewModel.updateSelectedCell(row, col)
-                    if (homeScreenViewModel.getPlantForSelectedCell() == null) {
+                    myGardenViewModel.updateSelectedCell(row, col)
+                    if (myGardenViewModel.getPlantForSelectedCell() == null) {
                         onNavigateToPlantAPlant()
                     } else {
                         onNavigateToPlantDetails(PlantDetailsScreenOrigin.HOME_SCREEN)
@@ -68,7 +68,7 @@ fun HomeScreen(
             )
         } else {
             EmptyGardenPlaceholder(onCreateNewMap = {
-                homeScreenViewModel.showBottomSheet(true)
+                myGardenViewModel.showBottomSheet(true)
             })
         }
     }
@@ -76,11 +76,11 @@ fun HomeScreen(
     if (isDeleteDialogVisible) {
         DeleteGardenDialog(
             onConfirmDelete = {
-                homeScreenViewModel.clearGarden()
-                homeScreenViewModel.showDeleteDialog(false)
+                myGardenViewModel.clearGarden()
+                myGardenViewModel.showDeleteDialog(false)
             },
             onCancel = {
-                homeScreenViewModel.showDeleteDialog(false)
+                myGardenViewModel.showDeleteDialog(false)
             }
         )
     }
@@ -88,13 +88,13 @@ fun HomeScreen(
     if (isBottomSheetVisible) {
         GardenDimensionsInput(
             bottomSheetState = bottomSheetState,
-            onDismissRequest = { homeScreenViewModel.showBottomSheet(false) },
+            onDismissRequest = { myGardenViewModel.showBottomSheet(false) },
             onDimensionsSubmitted = { height, width ->
-                homeScreenViewModel.initializeGarden(height, width)
+                myGardenViewModel.initializeGarden(height, width)
                 coroutineScope.launch {
                     bottomSheetState.hide()
                 }.invokeOnCompletion {
-                    if (!bottomSheetState.isVisible) homeScreenViewModel.showBottomSheet(false)
+                    if (!bottomSheetState.isVisible) myGardenViewModel.showBottomSheet(false)
                 }
             }
         )

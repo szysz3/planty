@@ -21,15 +21,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import szysz3.planty.screen.home.viewmodel.HomeScreenViewModel
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
+import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
     navigationController: NavController,
     mainScreenViewModel: MainScreenViewModel,
-    homeScreenViewModel: HomeScreenViewModel
+    myGardenViewModel: MyGardenViewModel
 ) {
     val isTopBarVisible by mainScreenViewModel.isTopBarVisible.collectAsState()
     val showBackButton by mainScreenViewModel.showBackButton.collectAsState()
@@ -71,7 +71,7 @@ fun TopBar(
             actions = {
                 IconButton(
                     onClick = {
-                        homeScreenViewModel.showDeleteDialog(true)
+                        myGardenViewModel.showDeleteDialog(true)
                     },
                     modifier = Modifier.alpha(if (showDeleteButton) 1f else 0f),
                     enabled = showDeleteButton

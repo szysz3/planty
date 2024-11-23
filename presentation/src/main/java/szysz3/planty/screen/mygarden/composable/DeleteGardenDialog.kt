@@ -1,4 +1,4 @@
-package szysz3.planty.screen.home.composable
+package szysz3.planty.screen.mygarden.composable
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text

@@ -1,4 +1,4 @@
-package szysz3.planty.screen.home.composable
+package szysz3.planty.screen.mygarden.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

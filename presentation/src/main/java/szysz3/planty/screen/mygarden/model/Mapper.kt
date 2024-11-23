@@ -1,6 +1,6 @@
 import szysz3.planty.R
-import szysz3.planty.screen.home.model.GardenCell
-import szysz3.planty.screen.home.model.GardenState
+import szysz3.planty.screen.mygarden.model.GardenCell
+import szysz3.planty.screen.mygarden.model.GardenState
 import szysz3.planty.screen.plantaplant.model.Plant
 import szysz3.planty.domain.model.GardenCell as GardenCellDomain
 import szysz3.planty.domain.model.GardenState as GardenStateDomain
