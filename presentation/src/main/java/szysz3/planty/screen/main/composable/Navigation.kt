@@ -92,8 +92,8 @@ fun navigate(navController: NavHostController, navigationItem: NavigationItem) {
 }
 
 open class NavigationItem(val route: String) {
-    object PlantAPlant : NavigationItem("\\home\\plantAPlant")
-    object PlantDetails : NavigationItem("\\home\\plantDetails/{${plantDetailsScreenArgName}}") {
+    object PlantAPlant : NavigationItem("/home/plantAPlant")
+    object PlantDetails : NavigationItem("/home/plantDetails/{${plantDetailsScreenArgName}}") {
         fun withArgs(origin: Int): NavigationItem {
             return NavigationItem(
                 route.replace(
