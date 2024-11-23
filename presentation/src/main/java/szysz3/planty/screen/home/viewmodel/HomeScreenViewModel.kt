@@ -60,7 +60,7 @@ class HomeScreenViewModel @Inject constructor(
         saveGardenState(initialGardenState)
     }
 
-    fun saveCell(plant: Plant) {
+    fun saveCell(plant: Plant?) {
         viewModelScope.launch {
             val row = _selectedCell.value?.first ?: return@launch
             val column = _selectedCell.value?.second ?: return@launch

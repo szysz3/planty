@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import szysz3.planty.screen.home.viewmodel.HomeScreenViewModel
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
+import szysz3.planty.screen.plantdetails.composable.DeletePlantDialog
 
 @Composable
 fun PlantDetailsScreen(
@@ -27,6 +28,7 @@ fun PlantDetailsScreen(
     plantAPlantViewModel: PlantAPlantViewModel,
     homeScreenViewModel: HomeScreenViewModel,
     origin: PlantDetailsScreenOrigin,
+    onNavigateBack: () -> Unit,
     onPlantChosen: () -> Unit
 ) {
     LaunchedEffect(Unit) {
@@ -34,6 +36,7 @@ fun PlantDetailsScreen(
         mainScreenViewModel.showDeleteButton(origin == PlantDetailsScreenOrigin.HOME_SCREEN)
     }
 
+    val isDeleteDialogVisible by homeScreenViewModel.isDeleteDialogVisible.collectAsState()
     val plantToPlant by plantAPlantViewModel.selectedPlant.collectAsState()
 
     val selectedPlant = if (origin == PlantDetailsScreenOrigin.HOME_SCREEN) {
@@ -79,5 +82,18 @@ fun PlantDetailsScreen(
                 }
             }
         }
+    }
+
+    if (isDeleteDialogVisible) {
+        DeletePlantDialog(
+            onConfirmDelete = {
+                homeScreenViewModel.saveCell(null)
+                homeScreenViewModel.showDeleteDialog(false)
+                onNavigateBack()
+            },
+            onCancel = {
+                homeScreenViewModel.showDeleteDialog(false)
+            }
+        )
     }
 }

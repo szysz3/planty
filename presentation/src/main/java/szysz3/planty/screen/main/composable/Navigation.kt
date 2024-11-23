@@ -56,22 +56,26 @@ fun NavigationGraph(
         composable(
             route = NavigationItem.PlantDetails.route,
             arguments = listOf(
-                navArgument(NavigationItem.plantDetailsScreenArgName) {
+                navArgument(NavigationItem.PLANT_DETAILS_ARG_NAME) {
                     type = NavType.IntType
                     nullable = false
                 }
             )
         ) { backStackEntry ->
             val origin =
-                backStackEntry.arguments?.getInt(NavigationItem.plantDetailsScreenArgName) ?: 0
+                backStackEntry.arguments?.getInt(NavigationItem.PLANT_DETAILS_ARG_NAME) ?: 0
             PlantDetailsScreen(
                 mainScreenViewModel = mainScreenViewModel,
                 plantAPlantViewModel = plantAPlantViewModel,
                 homeScreenViewModel = homeScreenViewModel,
-                origin = PlantDetailsScreenOrigin.fromValue(origin)
-            ) {
-                navController.popBackStack(BottomNavItem.Home.route, false)
-            }
+                origin = PlantDetailsScreenOrigin.fromValue(origin),
+                onPlantChosen = {
+                    navController.popBackStack(BottomNavItem.Home.route, false)
+                },
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
         }
         composable(NavigationItem.PlantAPlant.route) {
             PlantAPlantScreen(
@@ -93,11 +97,11 @@ fun navigate(navController: NavHostController, navigationItem: NavigationItem) {
 
 open class NavigationItem(val route: String) {
     object PlantAPlant : NavigationItem("/home/plantAPlant")
-    object PlantDetails : NavigationItem("/home/plantDetails/{${plantDetailsScreenArgName}}") {
+    object PlantDetails : NavigationItem("/home/plantDetails/{${PLANT_DETAILS_ARG_NAME}}") {
         fun withArgs(origin: Int): NavigationItem {
             return NavigationItem(
                 route.replace(
-                    "{${plantDetailsScreenArgName}}",
+                    "{${PLANT_DETAILS_ARG_NAME}}",
                     origin.toString()
                 )
             )
@@ -105,7 +109,7 @@ open class NavigationItem(val route: String) {
     }
 
     companion object {
-        const val plantDetailsScreenArgName = "origin"
+        const val PLANT_DETAILS_ARG_NAME = "origin"
     }
 }
 
