@@ -116,4 +116,11 @@ class HomeScreenViewModel @Inject constructor(
             }
         }
     }
+
+    fun getPlantForSelectedCell(): Plant? {
+        return _gardenState.value.cells.find {
+            it.row == selectedCell.value?.first &&
+                    it.column == selectedCell.value?.second
+        }?.plant
+    }
 }

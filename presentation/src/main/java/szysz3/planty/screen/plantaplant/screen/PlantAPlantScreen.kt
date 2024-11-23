@@ -34,12 +34,13 @@ import androidx.compose.ui.unit.dp
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.plantaplant.composable.PlantCard
 import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
+import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreenOrigin
 
 @Composable
 fun PlantAPlantScreen(
     mainScreenViewModel: MainScreenViewModel,
     plantAPlantViewModel: PlantAPlantViewModel,
-    onNavigateToPlantDetails: () -> Unit
+    onNavigateToPlantDetails: (PlantDetailsScreenOrigin) -> Unit
 ) {
     val dataLoaded by plantAPlantViewModel.dataLoaded.collectAsState()
     val plants by plantAPlantViewModel.plants.collectAsState()
@@ -117,7 +118,7 @@ fun PlantAPlantScreen(
                         plant = plants[index],
                         onPlantSelected = {
                             plantAPlantViewModel.selectPlant(plants[index])
-                            onNavigateToPlantDetails()
+                            onNavigateToPlantDetails(PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN)
                         }
                     )
                 }

@@ -17,6 +17,7 @@ import szysz3.planty.screen.home.composable.GardenDimensionsInput
 import szysz3.planty.screen.home.composable.GardenMap
 import szysz3.planty.screen.home.viewmodel.HomeScreenViewModel
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
+import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreenOrigin
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -24,7 +25,7 @@ fun HomeScreen(
     mainScreenViewModel: MainScreenViewModel,
     homeScreenViewModel: HomeScreenViewModel,
     onNavigateToPlantAPlant: () -> Unit,
-    onNavigateToPlantDetails: () -> Unit
+    onNavigateToPlantDetails: (origin: PlantDetailsScreenOrigin) -> Unit
 ) {
     val gardenState by homeScreenViewModel.gardenState.collectAsState()
     val isDeleteDialogVisible by homeScreenViewModel.isDeleteDialogVisible.collectAsState()
@@ -57,18 +58,12 @@ fun HomeScreen(
                 columns = columns,
                 state = gardenState,
                 onPlantSelected = { row, col ->
-                    // TODO: Handle plant selection in PlantAPlantScreen
                     homeScreenViewModel.updateSelectedCell(row, col)
-//                    Timber.i("GardenMap: $row, $col, $plant")
-
-
-//                    if (plant.isBlank()) {
-                    onNavigateToPlantAPlant()
-//                    } else {
-//                        onNavigateToPlantDetails()
-//                    }
-
-
+                    if (homeScreenViewModel.getPlantForSelectedCell() == null) {
+                        onNavigateToPlantAPlant()
+                    } else {
+                        onNavigateToPlantDetails(PlantDetailsScreenOrigin.HOME_SCREEN)
+                    }
                 }
             )
         } else {

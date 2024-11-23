@@ -9,8 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import szysz3.planty.screen.dashboard.DashboardScreen
 import szysz3.planty.screen.home.viewmodel.HomeScreenViewModel
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
@@ -18,6 +20,7 @@ import szysz3.planty.screen.notification.NotificationsScreen
 import szysz3.planty.screen.plantaplant.screen.PlantAPlantScreen
 import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
 import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreen
+import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreenOrigin
 
 @Composable
 fun NavigationGraph(
@@ -39,8 +42,8 @@ fun NavigationGraph(
                 onNavigateToPlantAPlant = {
                     navigate(navController, NavigationItem.PlantAPlant)
                 },
-                onNavigateToPlantDetails = {
-                    navigate(navController, NavigationItem.PlantDetails)
+                onNavigateToPlantDetails = { origin ->
+                    navigate(navController, NavigationItem.PlantDetails.withArgs(origin.value))
                 }
             )
         }
@@ -50,11 +53,22 @@ fun NavigationGraph(
         composable(BottomNavItem.Notifications.route) {
             NotificationsScreen()
         }
-        composable(NavigationItem.PlantDetails.route) {
+        composable(
+            route = NavigationItem.PlantDetails.route,
+            arguments = listOf(
+                navArgument(NavigationItem.plantDetailsScreenArgName) {
+                    type = NavType.IntType
+                    nullable = false
+                }
+            )
+        ) { backStackEntry ->
+            val origin =
+                backStackEntry.arguments?.getInt(NavigationItem.plantDetailsScreenArgName) ?: 0
             PlantDetailsScreen(
                 mainScreenViewModel = mainScreenViewModel,
                 plantAPlantViewModel = plantAPlantViewModel,
-                homeScreenViewModel = homeScreenViewModel
+                homeScreenViewModel = homeScreenViewModel,
+                origin = PlantDetailsScreenOrigin.fromValue(origin)
             ) {
                 navController.popBackStack(BottomNavItem.Home.route, false)
             }
@@ -62,9 +76,9 @@ fun NavigationGraph(
         composable(NavigationItem.PlantAPlant.route) {
             PlantAPlantScreen(
                 mainScreenViewModel = mainScreenViewModel,
-                plantAPlantViewModel = plantAPlantViewModel
-            ) {
-                navigate(navController, NavigationItem.PlantDetails)
+                plantAPlantViewModel = plantAPlantViewModel,
+            ) { origin ->
+                navigate(navController, NavigationItem.PlantDetails.withArgs(origin.value))
             }
         }
     }
@@ -79,7 +93,20 @@ fun navigate(navController: NavHostController, navigationItem: NavigationItem) {
 
 open class NavigationItem(val route: String) {
     object PlantAPlant : NavigationItem("\\home\\plantAPlant")
-    object PlantDetails : NavigationItem("\\home\\plantDetails")
+    object PlantDetails : NavigationItem("\\home\\plantDetails/{${plantDetailsScreenArgName}}") {
+        fun withArgs(origin: Int): NavigationItem {
+            return NavigationItem(
+                route.replace(
+                    "{${plantDetailsScreenArgName}}",
+                    origin.toString()
+                )
+            )
+        }
+    }
+
+    companion object {
+        const val plantDetailsScreenArgName = "origin"
+    }
 }
 
 open class BottomNavItem(route: String, val icon: ImageVector, val title: String) :

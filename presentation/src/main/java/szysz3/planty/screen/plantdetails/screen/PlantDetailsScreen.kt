@@ -26,15 +26,23 @@ fun PlantDetailsScreen(
     mainScreenViewModel: MainScreenViewModel,
     plantAPlantViewModel: PlantAPlantViewModel,
     homeScreenViewModel: HomeScreenViewModel,
+    origin: PlantDetailsScreenOrigin,
     onPlantChosen: () -> Unit
 ) {
-    val plant by plantAPlantViewModel.selectedPlant.collectAsState()
-
     LaunchedEffect(Unit) {
         mainScreenViewModel.showBackButton(true)
+        mainScreenViewModel.showDeleteButton(origin == PlantDetailsScreenOrigin.HOME_SCREEN)
     }
 
-    plant?.let { plant ->
+    val plantToPlant by plantAPlantViewModel.selectedPlant.collectAsState()
+
+    val selectedPlant = if (origin == PlantDetailsScreenOrigin.HOME_SCREEN) {
+        homeScreenViewModel.getPlantForSelectedCell()
+    } else {
+        plantToPlant
+    }
+
+    selectedPlant?.let { plant ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -59,14 +67,16 @@ fun PlantDetailsScreen(
             }
 
             Spacer(modifier = Modifier.weight(1f))
-            Button(
-                onClick = {
-                    homeScreenViewModel.saveCell(plant)
-                    onPlantChosen()
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Choose Plant")
+            if (origin == PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN) {
+                Button(
+                    onClick = {
+                        homeScreenViewModel.saveCell(plant)
+                        onPlantChosen()
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Choose Plant")
+                }
             }
         }
     }
