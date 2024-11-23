@@ -95,28 +95,41 @@ fun navigate(navController: NavHostController, navigationItem: NavigationItem) {
     }
 }
 
-open class NavigationItem(val route: String) {
-    object PlantAPlant : NavigationItem("/home/plantAPlant")
-    object PlantDetails : NavigationItem("/home/plantDetails/{${PLANT_DETAILS_ARG_NAME}}") {
+open class NavigationItem(val route: String, val title: String) {
+    object PlantAPlant : NavigationItem("/home/plantAPlant", "Plant a plant")
+    object PlantDetails :
+        NavigationItem("/home/plantDetails/{${PLANT_DETAILS_ARG_NAME}}", "Plant details") {
         fun withArgs(origin: Int): NavigationItem {
             return NavigationItem(
                 route.replace(
                     "{${PLANT_DETAILS_ARG_NAME}}",
                     origin.toString()
-                )
+                ), title
             )
         }
     }
 
     companion object {
         const val PLANT_DETAILS_ARG_NAME = "origin"
+
+        fun getTitleForRoute(route: String): String? {
+            return when {
+                route.startsWith(PlantDetails.route.substringBefore("/{")) -> PlantDetails.title
+                route == PlantAPlant.route -> PlantAPlant.title
+                route == BottomNavItem.Home.route -> BottomNavItem.Home.title
+                route == BottomNavItem.Dashboard.route -> BottomNavItem.Dashboard.title
+                route == BottomNavItem.Notifications.route -> BottomNavItem.Notifications.title
+                else -> null
+            }
+        }
     }
 }
 
-open class BottomNavItem(route: String, val icon: ImageVector, val title: String) :
-    NavigationItem(route) {
-    object Home : BottomNavItem("home", Icons.Rounded.Home, "Home")
-    object Dashboard : BottomNavItem("dashboard", Icons.Rounded.Person, "Dashboard")
+open class BottomNavItem(route: String, title: String, val icon: ImageVector) :
+    NavigationItem(route, title) {
+    object Home : BottomNavItem("home", "Home", Icons.Rounded.Home)
+    object Dashboard : BottomNavItem("dashboard", "Dashboard", Icons.Rounded.Person)
     object Notifications :
-        BottomNavItem("notifications", Icons.Rounded.Notifications, "Notifications")
+        BottomNavItem("notifications", "Notifications", Icons.Rounded.Notifications)
 }
+

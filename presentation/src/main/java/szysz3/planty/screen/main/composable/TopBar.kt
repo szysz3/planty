@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import szysz3.planty.screen.home.viewmodel.HomeScreenViewModel
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 
@@ -33,6 +34,8 @@ fun TopBar(
     val isTopBarVisible by mainScreenViewModel.isTopBarVisible.collectAsState()
     val showBackButton by mainScreenViewModel.showBackButton.collectAsState()
     val showDeleteButton by mainScreenViewModel.showDeleteButton.collectAsState()
+    val currentBackStackEntry by navigationController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
 
     AnimatedVisibility(
         visible = isTopBarVisible,
@@ -47,7 +50,7 @@ fun TopBar(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Home",
+                        text = NavigationItem.getTitleForRoute(currentRoute ?: "") ?: "",
                         maxLines = 1
                     )
                 }
