@@ -1,6 +1,8 @@
 package szysz3.planty.screen.tasklist
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Card
@@ -18,21 +20,19 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.tasklist.model.Task
+import szysz3.planty.screen.tasklist.utils.dragContainer
+import szysz3.planty.screen.tasklist.utils.draggableItems
+import szysz3.planty.screen.tasklist.utils.rememberDragDropState
 import szysz3.planty.screen.tasklist.viewmodel.TaskListViewModel
 
 @Composable
@@ -41,36 +41,37 @@ fun TaskListScreen(
     taskListViewModel: TaskListViewModel = hiltViewModel()
 ) {
     val tasks by taskListViewModel.tasks.collectAsState()
-    var draggedItemIndex by remember { mutableStateOf<Int?>(null) }
+    val listState = rememberLazyListState()
+    val dragDropState = rememberDragDropState(
+        lazyListState = listState,
+        draggableItemsNum = tasks.size,
+        onMove = { fromIndex, toIndex ->
+            taskListViewModel.moveTask(fromIndex, toIndex)
+        }
+    )
 
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                // Navigate to the add task screen
                 taskListViewModel.navigateToAddTaskScreen()
             }) {
                 Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add Task")
-            }
-        },
-        bottomBar = {
-            Surface(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = "Total Active Task Cost: ${taskListViewModel.totalCost}",
-                    modifier = Modifier.padding(16.dp),
-                    style = MaterialTheme.typography.bodyLarge,
-                    textAlign = TextAlign.Center
-                )
             }
         }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .dragContainer(dragDropState)
+                .padding(paddingValues),
+            state = listState,
+            contentPadding = PaddingValues(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            itemsIndexed(tasks) { index, task ->
+            draggableItems(items = tasks, dragDropState = dragDropState) { modifier, task ->
                 TaskCard(
                     task = task,
+                    modifier = modifier
                 )
             }
         }
@@ -95,13 +96,11 @@ fun TaskCard(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            // Title
             Text(
                 text = task.title,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            // Task List
             task.tasks.forEach { subTask ->
                 Row(
                     modifier = Modifier
@@ -111,7 +110,7 @@ fun TaskCard(
                 ) {
                     Checkbox(
                         checked = subTask.isCompleted,
-                        onCheckedChange = { /* Handle check state */ }
+                        onCheckedChange = { /* Handle state */ }
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(

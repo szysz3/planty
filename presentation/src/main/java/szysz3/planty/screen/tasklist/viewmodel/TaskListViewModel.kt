@@ -32,6 +32,13 @@ class TaskListViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    fun moveTask(fromIndex: Int, toIndex: Int) {
+        val updatedTasks = _tasks.value.toMutableList()
+        val task = updatedTasks.removeAt(fromIndex)
+        updatedTasks.add(toIndex, task)
+        _tasks.value = updatedTasks
+    }
+
     /**
      * Deletes a task card from the list.
      */
