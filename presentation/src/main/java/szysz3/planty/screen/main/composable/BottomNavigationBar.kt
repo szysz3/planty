@@ -18,7 +18,7 @@ fun BottomNavigationBar(
 ) {
     val items = listOf(
         BottomNavItem.Home,
-        BottomNavItem.Dashboard,
+        BottomNavItem.TaskList,
         BottomNavItem.Notifications
     )
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
