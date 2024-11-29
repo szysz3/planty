@@ -19,6 +19,8 @@ coroutines = "1.9.0"
 opencsv = "5.7.1"
 googleServices = "4.4.2"
 firebase = "33.6.0"
+firebase-auth = "22.1.1"
+play-services-auth = "20.7.0"
 
 [libraries]
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
@@ -50,6 +52,8 @@ coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", ve
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 opencsv = { module = "com.opencsv:opencsv", version.ref = "opencsv" }
 firebase = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
+firebase-auth = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebase-auth" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

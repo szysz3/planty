@@ -66,7 +66,6 @@ fun TopBar(
                 ) {
                     Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Delete")
                 }
-
             },
             actions = {
                 IconButton(
@@ -78,7 +77,6 @@ fun TopBar(
                 ) {
                     Icon(Icons.Rounded.Delete, contentDescription = "Delete")
                 }
-
             },
         )
     }

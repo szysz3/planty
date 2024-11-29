@@ -43,6 +43,11 @@ dependencies {
     kapt(libs.room.compiler)
     implementation(libs.room.ktx)
 
+    //firebase
+    implementation(platform(libs.firebase))
+    implementation(libs.firebase.auth)
+    implementation(libs.play.services.auth)
+
     // csv parsing
     implementation(libs.opencsv)
 

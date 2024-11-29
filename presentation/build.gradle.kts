@@ -71,6 +71,8 @@ dependencies {
 
     //firebase
     implementation(platform(libs.firebase))
+    implementation(libs.firebase.auth)
+    implementation(libs.play.services.auth)
 
     // hilt
     implementation(libs.hilt.android)
