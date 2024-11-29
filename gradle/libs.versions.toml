@@ -17,8 +17,8 @@ timber = "5.0.1"
 room = "2.6.1"
 coroutines = "1.9.0"
 opencsv = "5.7.1"
-tensorflow-lite = "2.12.0"
-tensorflow-lite-task-vision = "0.4.0"
+googleServices = "4.4.2"
+firebase = "33.6.0"
 
 [libraries]
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
@@ -49,8 +49,7 @@ room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 opencsv = { module = "com.opencsv:opencsv", version.ref = "opencsv" }
-tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflow-lite" }
-tensorflow-lite-task-vision = { module = "org.tensorflow:tensorflow-lite-task-vision", version.ref = "tensorflow-lite-task-vision" }
+firebase = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -58,3 +57,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }

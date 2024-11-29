@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.google.services)
     id("kotlin-kapt")
 }
 
@@ -67,6 +68,9 @@ dependencies {
     // coroutines dependencies
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
+
+    //firebase
+    implementation(platform(libs.firebase))
 
     // hilt
     implementation(libs.hilt.android)
