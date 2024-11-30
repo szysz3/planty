@@ -46,10 +46,14 @@ dependencies {
     //firebase
     implementation(platform(libs.firebase))
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.storage)
     implementation(libs.play.services.auth)
 
     // csv parsing
     implementation(libs.opencsv)
+
+    //timber
+    implementation(libs.timber)
 
     // coroutines dependencies
     implementation(libs.coroutines.core)
