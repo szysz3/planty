@@ -1,17 +1,15 @@
 package szysz3.planty.data.repository
 
 import android.net.Uri
-import com.google.firebase.Firebase
-import com.google.firebase.storage.storage
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import szysz3.planty.domain.repository.PlantIdRepository
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
-class PlantIdRepositoryImpl @Inject constructor() : PlantIdRepository {
-    private val storage = Firebase.storage
-
+class PlantIdRepositoryImpl @Inject constructor(private val storage: FirebaseStorage) :
+    PlantIdRepository {
     override suspend fun uploadPlantImage(imageData: ByteArray): Uri? {
         val storageRef = storage.reference
         val imageRef = storageRef.child("plant_images/${UUID.randomUUID()}.jpg")
