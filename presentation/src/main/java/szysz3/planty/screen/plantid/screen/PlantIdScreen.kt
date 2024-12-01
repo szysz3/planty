@@ -52,7 +52,7 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
     val takePictureLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
-                viewModel.uploadPhoto { result ->
+                viewModel.identifyPlant { result ->
                     Timber.d("Upload result: $result")
                 }
             }

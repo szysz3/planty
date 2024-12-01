@@ -59,6 +59,14 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
 
+    //okhttp
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
+    // moshi
+    implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
+
     // hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

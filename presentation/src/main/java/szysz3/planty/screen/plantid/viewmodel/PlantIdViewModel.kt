@@ -7,9 +7,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import szysz3.planty.BuildConfig
+import szysz3.planty.domain.model.remote.PlantIdResponse
 import szysz3.planty.domain.usecase.CreateTempPhotoFileUseCase
 import szysz3.planty.domain.usecase.DeleteTempPhotoFileUseCase
 import szysz3.planty.domain.usecase.IdentifyPlantUseCase
+import szysz3.planty.domain.usecase.IdentifyPlantsParams
 import szysz3.planty.domain.usecase.base.NoParams
 import szysz3.planty.screen.plantid.model.PlantIdUiState
 import javax.inject.Inject
@@ -33,14 +36,18 @@ class PlantIdViewModel @Inject constructor(
     private val _photoUploaded = MutableStateFlow(false)
     val photoUploaded: StateFlow<Boolean> = _photoUploaded
 
-    fun uploadPhoto(onComplete: (Uri?) -> Unit) {
+    fun identifyPlant(onComplete: (PlantIdResponse?) -> Unit) {
         viewModelScope.launch {
             _isLoading.value = true
-            val uploadedUri = _photoUri.value?.let { identifyPlantUseCase(it) }
+            val idParams = IdentifyPlantsParams(
+                apiKey = BuildConfig.API_KEY,
+                imageUris = listOfNotNull(_photoUri.value)
+            )
+            val idResult = _photoUri.value?.let { identifyPlantUseCase(idParams) }
             _isLoading.value = false
             _photoUploaded.value = true
 
-            onComplete(uploadedUri)
+            onComplete(idResult)
         }
     }
 

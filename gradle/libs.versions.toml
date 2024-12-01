@@ -23,6 +23,8 @@ firebase-auth = "22.1.1"
 play-services-auth = "20.7.0"
 firebase-storage = "20.2.3"
 coil = "2.2.2"
+okhttp = "4.12.0"
+moshi = "1.15.0"
 
 [libraries]
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
@@ -56,8 +58,12 @@ opencsv = { module = "com.opencsv:opencsv", version.ref = "opencsv" }
 firebase = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
 firebase-auth = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebase-auth" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth" }
-firebase-storage = { module = "com.google.firebase:firebase-storage-ktx" }
+firebase-storage = { module = "com.google.firebase:firebase-storage-ktx", version.ref = "firebase-storage" }
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
+moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
+moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

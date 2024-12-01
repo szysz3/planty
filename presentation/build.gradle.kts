@@ -24,8 +24,17 @@ android {
         }
     }
 
+    android.buildFeatures.buildConfig = true
+
+    val apiKey: String = System.getenv("API_KEY")
+        ?: throw IllegalStateException("API_KEY environment variable is not set")
+
     buildTypes {
+        debug {
+            buildConfigField("String", "API_KEY", "\"$apiKey\"")
+        }
         release {
+            buildConfigField("String", "API_KEY", "\"$apiKey\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
