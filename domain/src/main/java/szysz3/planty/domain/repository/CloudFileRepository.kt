@@ -2,6 +2,6 @@ package szysz3.planty.domain.repository
 
 import android.net.Uri
 
-interface PlantIdRepository {
+interface CloudFileRepository {
     suspend fun uploadPlantImage(imageData: ByteArray): Uri?
 }

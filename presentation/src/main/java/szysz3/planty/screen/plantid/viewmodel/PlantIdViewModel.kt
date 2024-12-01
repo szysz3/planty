@@ -9,14 +9,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import szysz3.planty.domain.usecase.CreateTempPhotoFileUseCase
 import szysz3.planty.domain.usecase.DeleteTempPhotoFileUseCase
-import szysz3.planty.domain.usecase.UploadPlantImageUseCase
+import szysz3.planty.domain.usecase.IdentifyPlantUseCase
 import szysz3.planty.domain.usecase.base.NoParams
 import szysz3.planty.screen.plantid.model.PlantIdUiState
 import javax.inject.Inject
 
 @HiltViewModel
 class PlantIdViewModel @Inject constructor(
-    private val uploadPlantImageUseCase: UploadPlantImageUseCase,
+    private val identifyPlantUseCase: IdentifyPlantUseCase,
     private val createFileUseCase: CreateTempPhotoFileUseCase,
     private val deleteFileUseCase: DeleteTempPhotoFileUseCase
 ) : ViewModel() {
@@ -36,7 +36,7 @@ class PlantIdViewModel @Inject constructor(
     fun uploadPhoto(onComplete: (Uri?) -> Unit) {
         viewModelScope.launch {
             _isLoading.value = true
-            val uploadedUri = _photoUri.value?.let { uploadPlantImageUseCase(it) }
+            val uploadedUri = _photoUri.value?.let { identifyPlantUseCase(it) }
             _isLoading.value = false
             _photoUploaded.value = true
 

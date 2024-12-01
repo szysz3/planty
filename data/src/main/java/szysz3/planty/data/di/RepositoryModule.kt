@@ -5,14 +5,14 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import szysz3.planty.data.repository.AuthRepositoryImpl
-import szysz3.planty.data.repository.FileRepositoryImpl
+import szysz3.planty.data.repository.CloudFileRepositoryImpl
 import szysz3.planty.data.repository.GardenRepositoryImpl
-import szysz3.planty.data.repository.PlantIdRepositoryImpl
+import szysz3.planty.data.repository.LocalFileRepositoryImpl
 import szysz3.planty.data.repository.mock.PlantMockRepositoryImpl
 import szysz3.planty.domain.repository.AuthRepository
-import szysz3.planty.domain.repository.FileRepository
+import szysz3.planty.domain.repository.CloudFileRepository
 import szysz3.planty.domain.repository.GardenRepository
-import szysz3.planty.domain.repository.PlantIdRepository
+import szysz3.planty.domain.repository.LocalFileRepository
 import szysz3.planty.domain.repository.PlantRepository
 import javax.inject.Singleton
 
@@ -34,9 +34,9 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindPlantIdRepository(impl: PlantIdRepositoryImpl): PlantIdRepository
+    abstract fun bindPlantIdRepository(impl: CloudFileRepositoryImpl): CloudFileRepository
 
     @Binds
     @Singleton
-    abstract fun bindFileRepository(impl: FileRepositoryImpl): FileRepository
+    abstract fun bindFileRepository(impl: LocalFileRepositoryImpl): LocalFileRepository
 }
