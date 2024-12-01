@@ -49,6 +49,9 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.play.services.auth)
 
+    //aws
+    implementation(libs.aws.s3)
+
     // csv parsing
     implementation(libs.opencsv)
 
