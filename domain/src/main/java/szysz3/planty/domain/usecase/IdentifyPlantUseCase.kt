@@ -4,13 +4,11 @@ import android.content.Context
 import android.net.Uri
 import dagger.hilt.android.qualifiers.ApplicationContext
 import szysz3.planty.domain.model.remote.PlantIdResponse
-import szysz3.planty.domain.repository.CloudFileRepository
 import szysz3.planty.domain.repository.PlantIdRepository
 import szysz3.planty.domain.usecase.base.BaseUseCase
 import javax.inject.Inject
 
 class IdentifyPlantUseCase @Inject constructor(
-    private val cloudFileRepo: CloudFileRepository,
     private val idRepo: PlantIdRepository,
     @ApplicationContext private val context: Context
 ) : BaseUseCase<IdentifyPlantsParams, PlantIdResponse?>() {
@@ -21,15 +19,7 @@ class IdentifyPlantUseCase @Inject constructor(
                     ?: throw IllegalArgumentException("Failed to read image data from Uri")
             }
 
-        val plantImage = cloudFileRepo.uploadPlantImage(imageData)
-        plantImage?.let {
-            return idRepo.identifyPlant(
-                imageUrls = listOf(it.toString()),
-                apiKey = input.apiKey
-            )
-        }
-
-        return null
+        return idRepo.identifyPlant(imageData, input.apiKey)
     }
 }
 

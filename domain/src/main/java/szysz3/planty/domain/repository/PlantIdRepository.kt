@@ -4,7 +4,7 @@ import szysz3.planty.domain.model.remote.PlantIdResponse
 
 interface PlantIdRepository {
     suspend fun identifyPlant(
-        imageUrls: List<String>,
+        image: ByteArray,
         apiKey: String
     ): PlantIdResponse
 }

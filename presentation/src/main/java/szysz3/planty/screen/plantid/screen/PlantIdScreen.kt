@@ -37,6 +37,7 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
     val isUploaded by viewModel.photoUploaded.collectAsState()
     val context = LocalContext.current
     var shouldLaunchCamera by remember { mutableStateOf(false) }
+    var identifiedPlant by remember { mutableStateOf("") }
 
     // Launcher for requesting camera permission
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -54,6 +55,7 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
             if (success) {
                 viewModel.identifyPlant { result ->
                     Timber.d("Upload result: $result")
+                    identifiedPlant = result?.bestMatch ?: "Not norecognized"
                 }
             }
         }
@@ -111,6 +113,11 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
             Button(onClick = { viewModel.deletePhotoFile() }) {
                 Text("Delete Photo")
             }
+        }
+
+        if (identifiedPlant.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text("Identified Plant: $identifiedPlant")
         }
     }
 }
