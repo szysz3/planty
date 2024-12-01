@@ -36,8 +36,8 @@ class FileRepositoryImpl @Inject constructor(
 
     override suspend fun deleteFile(uri: Uri): Boolean {
         return try {
-            val file = File(uri.path ?: return false)
-            file.delete()
+            val rowsDeleted = context.contentResolver.delete(uri, null, null)
+            rowsDeleted > 0
         } catch (e: Exception) {
             Timber.e("Error deleting file: ${e.message}")
             false
