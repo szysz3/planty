@@ -24,23 +24,23 @@ class MainScreenViewModel @Inject constructor() :
     private val _showDeleteButton = MutableStateFlow(false)
     val showDeleteButton: StateFlow<Boolean> = _showDeleteButton.asStateFlow()
 
-    fun showDeleteButton(show: Boolean) {
+    fun updateShowDeleteButton(show: Boolean) {
         _showDeleteButton.value = show
     }
 
-    fun showBackButton(show: Boolean) {
+    fun updateShowBackButton(show: Boolean) {
         _showBackButton.value = show
     }
 
-    fun homeScreenInitialized(initialized: Boolean) {
+    fun updateHomeScreenInitialized(initialized: Boolean) {
         _isHomeScreenInitialized.value = initialized
     }
 
-    fun showTopBar(show: Boolean) {
+    fun updateTopBarVisibility(show: Boolean) {
         _isTopBarVisible.value = show
     }
 
     fun handleTopBarVisibility(route: String) {
-        showTopBar(route == BottomNavItem.Home.route && isHomeScreenInitialized.value)
+        updateTopBarVisibility(route == BottomNavItem.Home.route && isHomeScreenInitialized.value)
     }
 }

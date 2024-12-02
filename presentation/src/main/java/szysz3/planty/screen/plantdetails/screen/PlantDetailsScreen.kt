@@ -21,6 +21,7 @@ import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
 import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
 import szysz3.planty.screen.plantdetails.composable.DeletePlantDialog
+import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
 
 @Composable
 fun PlantDetailsScreen(
@@ -32,16 +33,16 @@ fun PlantDetailsScreen(
     onPlantChosen: () -> Unit
 ) {
     LaunchedEffect(Unit) {
-        mainScreenViewModel.showBackButton(true)
-        mainScreenViewModel.showDeleteButton(origin == PlantDetailsScreenOrigin.HOME_SCREEN)
+        mainScreenViewModel.updateShowBackButton(true)
+        mainScreenViewModel.updateShowDeleteButton(origin == PlantDetailsScreenOrigin.HOME_SCREEN)
     }
 
-    val isDeleteDialogVisible by myGardenViewModel.isDeleteDialogVisible.collectAsState()
-    val uiState by plantAPlantViewModel.uiState.collectAsState()
+    val uiState by myGardenViewModel.uiState.collectAsState()
+    val plantUiState by plantAPlantViewModel.uiState.collectAsState()
 
     val selectedPlant = when (origin) {
         PlantDetailsScreenOrigin.HOME_SCREEN -> myGardenViewModel.getPlantForSelectedCell()
-        PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN -> uiState.selectedPlant
+        PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN -> plantUiState.selectedPlant
     }
 
     selectedPlant?.let { plant ->
@@ -62,10 +63,7 @@ fun PlantDetailsScreen(
 
             plant.commonName?.let { commonName ->
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = commonName,
-                    style = MaterialTheme.typography.bodyLarge
-                )
+                Text(text = commonName, style = MaterialTheme.typography.bodyLarge)
             }
 
             Spacer(modifier = Modifier.weight(1f))
@@ -83,7 +81,7 @@ fun PlantDetailsScreen(
         }
     }
 
-    if (isDeleteDialogVisible) {
+    if (uiState.isDeleteDialogVisible) {
         DeletePlantDialog(
             onConfirmDelete = {
                 myGardenViewModel.saveCell(null)

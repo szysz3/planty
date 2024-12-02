@@ -8,83 +8,49 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import szysz3.planty.screen.tasklist.model.SubTask
 import szysz3.planty.screen.tasklist.model.Task
+import szysz3.planty.screen.tasklist.model.TaskListScreenState
 import javax.inject.Inject
 
 @HiltViewModel
 class TaskListViewModel @Inject constructor() : ViewModel() {
 
-    private val _tasks =
-        MutableStateFlow<List<Task>>(listOf(mockTasks(), mockTasks(), mockTasks()).flatten())
-    val tasks: StateFlow<List<Task>> = _tasks
+    private val _uiState = MutableStateFlow(TaskListScreenState(tasks = mockInitialTasks()))
+    val uiState: StateFlow<TaskListScreenState> = _uiState
 
-    val totalCost: Int
-        get() = _tasks.value.filterNot { it.isCompleted }
-            .flatMap { it.tasks }
-            .filterNot { it.isCompleted }
-            .sumOf { it.cost }
-
-    /**
-     * Adds a new task card to the list.
-     */
     fun addTaskCard(task: Task) {
-        _tasks.update { currentTasks ->
-            currentTasks + task
-        }
+        _uiState.update { it.copy(tasks = it.tasks + task) }
     }
 
     fun moveTask(fromIndex: Int, toIndex: Int) {
-        val updatedTasks = _tasks.value.toMutableList()
+        val updatedTasks = _uiState.value.tasks.toMutableList()
         val task = updatedTasks.removeAt(fromIndex)
         updatedTasks.add(toIndex, task)
-        _tasks.value = updatedTasks
+        _uiState.update { it.copy(tasks = updatedTasks) }
     }
 
-    /**
-     * Deletes a task card from the list.
-     */
     fun deleteTask(task: Task) {
-        _tasks.update { currentTasks ->
-            currentTasks.filterNot { it == task }
-        }
+        _uiState.update { it.copy(tasks = it.tasks.filterNot { it == task }) }
     }
 
-    /**
-     * Reorders tasks in the list.
-     */
     fun reorderTasks(draggedIndex: Int?, dragOffset: Offset) {
         if (draggedIndex == null) return
-        // Logic for handling reordering based on dragOffset (to be implemented).
     }
 
-    /**
-     * Opens the task details for editing.
-     */
     fun openTaskDetails(task: Task) {
-        // Handle navigation to task details or modal popup.
     }
 
-    /**
-     * Navigates to the Add Task Screen.
-     */
     fun navigateToAddTaskScreen() {
-        // Handle navigation logic.
     }
 
-    /**
-     * Toggles the completion status of a task.
-     */
     fun toggleTaskCompletion(task: Task, isCompleted: Boolean) {
-        _tasks.update { currentTasks ->
-            currentTasks.map {
-                if (it == task) it.copy(isCompleted = isCompleted) else it
-            }
+        _uiState.update {
+            it.copy(tasks = it.tasks.map { t ->
+                if (t == task) t.copy(isCompleted = isCompleted) else t
+            })
         }
     }
 
-    /**
-     * Generates mocked data for initial task list.
-     */
-    private fun mockTasks(): List<Task> {
+    private fun mockInitialTasks(): List<Task> {
         return listOf(
             Task(
                 title = "Watering Plants",

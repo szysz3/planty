@@ -17,7 +17,7 @@ import szysz3.planty.screen.mygarden.composable.EmptyGardenPlaceholder
 import szysz3.planty.screen.mygarden.composable.GardenDimensionsInput
 import szysz3.planty.screen.mygarden.composable.GardenMap
 import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
-import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreenOrigin
+import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -27,36 +27,33 @@ fun MyGardenScreen(
     onNavigateToPlantAPlant: () -> Unit,
     onNavigateToPlantDetails: (origin: PlantDetailsScreenOrigin) -> Unit
 ) {
-    val gardenState by myGardenViewModel.gardenState.collectAsState()
-    val isDeleteDialogVisible by myGardenViewModel.isDeleteDialogVisible.collectAsState()
-    val isBottomSheetVisible by myGardenViewModel.isBottomSheetVisible.collectAsState()
-    val dataLoaded by myGardenViewModel.dataLoaded.collectAsState()
+    val uiState by myGardenViewModel.uiState.collectAsState()
     val bottomSheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        mainScreenViewModel.showBackButton(false)
+        mainScreenViewModel.updateShowBackButton(false)
         myGardenViewModel.loadGarden()
     }
 
-    LaunchedEffect(dataLoaded) {
-        mainScreenViewModel.homeScreenInitialized(dataLoaded)
-        mainScreenViewModel.showTopBar(dataLoaded)
-        mainScreenViewModel.showDeleteButton(dataLoaded)
+    LaunchedEffect(uiState.dataLoaded) {
+        mainScreenViewModel.updateHomeScreenInitialized(uiState.dataLoaded)
+        mainScreenViewModel.updateTopBarVisibility(uiState.dataLoaded)
+        mainScreenViewModel.updateShowDeleteButton(uiState.dataLoaded)
     }
 
-    val rows = gardenState.rows
-    val columns = gardenState.columns
+    val rows = uiState.gardenState.rows
+    val columns = uiState.gardenState.columns
 
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        if (dataLoaded && rows > 0 && columns > 0) {
+        if (uiState.dataLoaded && rows > 0 && columns > 0) {
             GardenMap(
                 rows = rows,
                 columns = columns,
-                state = gardenState,
+                state = uiState.gardenState,
                 onPlantSelected = { row, col ->
                     myGardenViewModel.updateSelectedCell(row, col)
                     if (myGardenViewModel.getPlantForSelectedCell() == null) {
@@ -73,7 +70,7 @@ fun MyGardenScreen(
         }
     }
 
-    if (isDeleteDialogVisible) {
+    if (uiState.isDeleteDialogVisible) {
         DeleteGardenDialog(
             onConfirmDelete = {
                 myGardenViewModel.clearGarden()
@@ -85,7 +82,7 @@ fun MyGardenScreen(
         )
     }
 
-    if (isBottomSheetVisible) {
+    if (uiState.isBottomSheetVisible) {
         GardenDimensionsInput(
             bottomSheetState = bottomSheetState,
             onDismissRequest = { myGardenViewModel.showBottomSheet(false) },

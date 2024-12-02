@@ -17,10 +17,10 @@ import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
 import szysz3.planty.screen.plantaplant.screen.PlantAPlantScreen
 import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
+import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
 import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreen
-import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreenOrigin
 import szysz3.planty.screen.plantid.screen.PlantIdScreen
-import szysz3.planty.screen.tasklist.TaskListScreen
+import szysz3.planty.screen.tasklist.screen.TaskListScreen
 
 @Composable
 fun NavigationGraph(

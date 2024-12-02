@@ -58,7 +58,7 @@ fun TopBar(
             navigationIcon = {
                 IconButton(
                     onClick = {
-                        mainScreenViewModel.showBackButton(false)
+                        mainScreenViewModel.updateShowBackButton(false)
                         navigationController.popBackStack()
                     },
                     modifier = Modifier.alpha(if (showBackButton) 1f else 0f),

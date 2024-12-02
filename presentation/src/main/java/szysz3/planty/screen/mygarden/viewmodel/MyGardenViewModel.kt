@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import szysz3.planty.domain.usecase.ClearGardenUseCase
 import szysz3.planty.domain.usecase.LoadGardenStateUseCase
@@ -13,6 +13,7 @@ import szysz3.planty.domain.usecase.SaveGardenStateUseCase
 import szysz3.planty.domain.usecase.base.NoParams
 import szysz3.planty.screen.mygarden.model.GardenCell
 import szysz3.planty.screen.mygarden.model.GardenState
+import szysz3.planty.screen.mygarden.model.MyGardenScreenState
 import szysz3.planty.screen.plantaplant.model.Plant
 import timber.log.Timber
 import toDomainModel
@@ -26,51 +27,43 @@ class MyGardenViewModel @Inject constructor(
     private val clearGardenUseCase: ClearGardenUseCase
 ) : ViewModel() {
 
-    private val _gardenState = MutableStateFlow(GardenState())
-    val gardenState: StateFlow<GardenState> = _gardenState
-
-    private val _isDeleteDialogVisible = MutableStateFlow(false)
-    val isDeleteDialogVisible: StateFlow<Boolean> = _isDeleteDialogVisible.asStateFlow()
-
-    private val _isBottomSheetVisible = MutableStateFlow(false)
-    val isBottomSheetVisible: StateFlow<Boolean> = _isBottomSheetVisible.asStateFlow()
-
-    private val _dataLoaded = MutableStateFlow(false)
-    val dataLoaded: StateFlow<Boolean> = _dataLoaded.asStateFlow()
-
-    private val _selectedCell = MutableStateFlow<Pair<Int, Int>?>(null)
-    val selectedCell: StateFlow<Pair<Int, Int>?> = _selectedCell.asStateFlow()
+    private val _uiState = MutableStateFlow(MyGardenScreenState())
+    val uiState: StateFlow<MyGardenScreenState> = _uiState
 
     fun updateSelectedCell(row: Int, column: Int) {
-        _selectedCell.value = Pair(row, column)
+        _uiState.update { it.copy(selectedCell = Pair(row, column)) }
     }
 
     fun showDeleteDialog(show: Boolean) {
-        _isDeleteDialogVisible.value = show
+        _uiState.update { it.copy(isDeleteDialogVisible = show) }
     }
 
     fun showBottomSheet(show: Boolean) {
-        _isBottomSheetVisible.value = show
+        _uiState.update { it.copy(isBottomSheetVisible = show) }
     }
 
     fun initializeGarden(rows: Int, columns: Int) {
         val initialGardenState = GardenState.empty(rows, columns)
-        _gardenState.value = initialGardenState
-        _dataLoaded.value = true
+        _uiState.update {
+            it.copy(
+                gardenState = initialGardenState,
+                dataLoaded = true
+            )
+        }
         saveGardenState(initialGardenState)
     }
 
     fun saveCell(plant: Plant?) {
         viewModelScope.launch {
-            val row = _selectedCell.value?.first ?: return@launch
-            val column = _selectedCell.value?.second ?: return@launch
+            val row = _uiState.value.selectedCell?.first ?: return@launch
+            val column = _uiState.value.selectedCell?.second ?: return@launch
 
-            val updatedCells = _gardenState.value.cells.toMutableList()
-            updatedCells.removeAll { it.row == row && it.column == column } // Remove existing cell at this position if any
+            val updatedCells = _uiState.value.gardenState.cells.toMutableList()
+            updatedCells.removeAll { it.row == row && it.column == column }
             updatedCells.add(GardenCell(0, row, column, plant))
 
-            val updatedGardenState = _gardenState.value.copy(cells = updatedCells)
-            _gardenState.value = updatedGardenState
+            val updatedGardenState = _uiState.value.gardenState.copy(cells = updatedCells)
+            _uiState.update { it.copy(gardenState = updatedGardenState) }
             saveGardenState(updatedGardenState)
         }
     }
@@ -91,8 +84,12 @@ class MyGardenViewModel @Inject constructor(
                 val loadedState = loadGardenStateUseCase(NoParams())
                 val gardenState = loadedState.toPresentationModel()
                 if (isGardenStateValid(gardenState)) {
-                    _gardenState.value = gardenState
-                    _dataLoaded.value = true
+                    _uiState.update {
+                        it.copy(
+                            gardenState = gardenState,
+                            dataLoaded = true
+                        )
+                    }
                 }
             } catch (e: Exception) {
                 Timber.e(e)
@@ -108,9 +105,13 @@ class MyGardenViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 clearGardenUseCase(NoParams())
-                _gardenState.value = GardenState()
-                _dataLoaded.value = false
-                _selectedCell.value = null
+                _uiState.update {
+                    it.copy(
+                        gardenState = GardenState(),
+                        dataLoaded = false,
+                        selectedCell = null
+                    )
+                }
             } catch (e: Exception) {
                 Timber.e(e)
             }
@@ -118,9 +119,9 @@ class MyGardenViewModel @Inject constructor(
     }
 
     fun getPlantForSelectedCell(): Plant? {
-        return _gardenState.value.cells.find {
-            it.row == selectedCell.value?.first &&
-                    it.column == selectedCell.value?.second
+        return _uiState.value.gardenState.cells.find {
+            it.row == _uiState.value.selectedCell?.first &&
+                    it.column == _uiState.value.selectedCell?.second
         }?.plant
     }
 }

@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.plantaplant.composable.PlantCard
 import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
-import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreenOrigin
+import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
 
 @Composable
 fun PlantAPlantScreen(
@@ -48,8 +48,8 @@ fun PlantAPlantScreen(
     val localSearchQuery = remember { mutableStateOf(uiState.searchQuery) }
 
     LaunchedEffect(Unit) {
-        mainScreenViewModel.showBackButton(true)
-        mainScreenViewModel.showDeleteButton(false)
+        mainScreenViewModel.updateShowBackButton(true)
+        mainScreenViewModel.updateShowDeleteButton(false)
     }
 
     Box(
