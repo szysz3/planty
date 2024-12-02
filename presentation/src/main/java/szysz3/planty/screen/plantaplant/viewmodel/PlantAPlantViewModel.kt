@@ -6,13 +6,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import szysz3.planty.domain.usecase.GetPlantsFromRangeParams
 import szysz3.planty.domain.usecase.GetPlantsFromRangeUseCase
 import szysz3.planty.domain.usecase.PlantSearchUseCase
 import szysz3.planty.screen.plantaplant.model.Plant
+import szysz3.planty.screen.plantaplant.model.PlantAPlantScreenState
 import toPresentationModel
 import javax.inject.Inject
 
@@ -23,26 +24,34 @@ class PlantAPlantViewModel @Inject constructor(
     private val getPlantFromRangeUseCase: GetPlantsFromRangeUseCase,
 ) : ViewModel() {
 
-    private val _selectedPlant = MutableStateFlow<Plant?>(null)
-    val selectedPlant: StateFlow<Plant?> = _selectedPlant
-
-    private val _plants = MutableStateFlow(emptyList<Plant>())
-    val plants: StateFlow<List<Plant>> = _plants
-
-    private val _dataLoaded = MutableStateFlow(false)
-    val dataLoaded: StateFlow<Boolean> = _dataLoaded.asStateFlow()
+    private val _uiState = MutableStateFlow(PlantAPlantScreenState())
+    val uiState: StateFlow<PlantAPlantScreenState> = _uiState
 
     private val _searchQuery = MutableStateFlow("")
 
     init {
+        observeSearchQuery()
+        loadInitialData()
+    }
+
+    private fun observeSearchQuery() {
         viewModelScope.launch {
-            _searchQuery.debounce(300L).collect { query ->
-                if (query.isEmpty()) {
-                    getPlantsFromRange()
-                } else {
-                    getPlantsFilteredByQuery(query)
+            _searchQuery
+                .debounce(300L) // Apply debounce to the search query flow
+                .collect { query ->
+                    if (query.isEmpty()) {
+                        getPlantsFromRange()
+                    } else {
+                        getPlantsFilteredByQuery(query)
+                    }
                 }
-            }
+        }
+    }
+
+    private fun loadInitialData() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(dataLoaded = false) }
+            getPlantsFromRange()
         }
     }
 
@@ -50,22 +59,27 @@ class PlantAPlantViewModel @Inject constructor(
         _searchQuery.value = query
     }
 
-    fun getPlantsFromRange(startRange: Int = 0, endRange: Int = 9) {
+    private fun getPlantsFromRange(startRange: Int = 0, endRange: Int = 9) {
         viewModelScope.launch {
             val plants =
                 getPlantFromRangeUseCase.invoke(GetPlantsFromRangeParams(startRange, endRange))
-            _plants.value = plants.toPresentationModel()
-            _dataLoaded.value = true
+            _uiState.update {
+                it.copy(
+                    plants = plants.toPresentationModel(),
+                    dataLoaded = true
+                )
+            }
         }
     }
 
     fun selectPlant(plant: Plant) {
-        _selectedPlant.value = plant
+        _uiState.update { it.copy(selectedPlant = plant) }
     }
 
     private fun getPlantsFilteredByQuery(query: String) {
         viewModelScope.launch {
-            _plants.value = plantSearchUseCase.invoke(query).toPresentationModel()
+            val plants = plantSearchUseCase.invoke(query).toPresentationModel()
+            _uiState.update { it.copy(plants = plants) }
         }
     }
 }

@@ -28,20 +28,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import szysz3.planty.screen.plantid.viewmodel.PlantIdViewModel
 import szysz3.planty.util.PermissionUtils
-import timber.log.Timber
 
 @Composable
 fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
-    val photoUri by viewModel.photoUri.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val isUploaded by viewModel.photoUploaded.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
     var shouldLaunchCamera by remember { mutableStateOf(false) }
-    var identifiedPlant by remember { mutableStateOf("") }
 
-    // Launcher for requesting camera permission
     val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
+        ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (isGranted) {
             viewModel.createPhotoFile()
@@ -49,20 +44,16 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
         }
     }
 
-    // Launcher for taking a picture
-    val takePictureLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-            if (success) {
-                viewModel.identifyPlant { result ->
-                    Timber.d("Upload result: $result")
-                    identifiedPlant = result?.bestMatch ?: "Not norecognized"
-                }
-            }
+    val takePictureLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { success ->
+        if (success) {
+            viewModel.identifyPlant()
         }
+    }
 
-    // Launch the camera after photoUri is updated
-    LaunchedEffect(photoUri, shouldLaunchCamera) {
-        photoUri?.let {
+    LaunchedEffect(uiState.photoUri, shouldLaunchCamera) {
+        uiState.photoUri?.let {
             if (shouldLaunchCamera) {
                 shouldLaunchCamera = false
                 takePictureLauncher.launch(it)
@@ -81,18 +72,17 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (isLoading) {
-            CircularProgressIndicator()
-        } else if (photoUri != null && isUploaded) {
-            AsyncImage(
-                model = photoUri,
+        when {
+            uiState.isLoading -> CircularProgressIndicator()
+            uiState.photoUri != null && uiState.photoUploaded -> AsyncImage(
+                model = uiState.photoUri,
                 contentDescription = "Selected Photo",
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
             )
-        } else {
-            Text("No photo selected")
+
+            else -> Text("No photo selected")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -108,16 +98,16 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
             Text("Take Photo")
         }
 
-        if (photoUri != null && isUploaded) {
+        if (uiState.photoUri != null && uiState.photoUploaded) {
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = { viewModel.deletePhotoFile() }) {
                 Text("Delete Photo")
             }
         }
 
-        if (identifiedPlant.isNotEmpty()) {
+        if (uiState.identifiedPlant.isNotEmpty()) {
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Identified Plant: $identifiedPlant")
+            Text("Identified Plant: ${uiState.identifiedPlant}")
         }
     }
 }

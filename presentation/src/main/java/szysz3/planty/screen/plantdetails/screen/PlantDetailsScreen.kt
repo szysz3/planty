@@ -37,12 +37,11 @@ fun PlantDetailsScreen(
     }
 
     val isDeleteDialogVisible by myGardenViewModel.isDeleteDialogVisible.collectAsState()
-    val plantToPlant by plantAPlantViewModel.selectedPlant.collectAsState()
+    val uiState by plantAPlantViewModel.uiState.collectAsState()
 
-    val selectedPlant = if (origin == PlantDetailsScreenOrigin.HOME_SCREEN) {
-        myGardenViewModel.getPlantForSelectedCell()
-    } else {
-        plantToPlant
+    val selectedPlant = when (origin) {
+        PlantDetailsScreenOrigin.HOME_SCREEN -> myGardenViewModel.getPlantForSelectedCell()
+        PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN -> uiState.selectedPlant
     }
 
     selectedPlant?.let { plant ->

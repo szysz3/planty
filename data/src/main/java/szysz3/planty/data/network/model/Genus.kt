@@ -1,4 +1,4 @@
-package szysz3.planty.data.remote.model
+package szysz3.planty.data.network.model
 
 data class Genus(
     val scientificNameWithoutAuthor: String,

@@ -38,13 +38,12 @@ class GardenRepositoryImpl @Inject constructor(
     }
 
     @Transaction
-    override suspend fun saveGardenState(state: GardenState) {
+    override suspend fun saveGardenState(gardenState: GardenState) {
         withContext(Dispatchers.IO) {
             clearGardenState()
 
-            // Save all plants and collect their generated IDs
             val plantIdMap = mutableMapOf<Plant, Long>()
-            state.cells.forEach { cell ->
+            gardenState.cells.forEach { cell ->
                 cell.plant?.let { plant ->
                     val plantEntity = plant.toGardenPlantEntity()
                     val plantId = gardenPlantDao.insertPlant(plantEntity)
@@ -52,13 +51,11 @@ class GardenRepositoryImpl @Inject constructor(
                 }
             }
 
-            // Update cells with the corresponding plant IDs
-            val cellEntities = state.cells.map { cell ->
-                val plantId = cell.plant?.let { plantIdMap[it] }// Map plant to its ID
-                cell.toEntity(plantId) // Update the GardenCellEntity with plantId
+            val cellEntities = gardenState.cells.map { cell ->
+                val plantId = cell.plant?.let { plantIdMap[it] }
+                cell.toEntity(plantId)
             }
 
-            // Save all cells
             gardenCellDao.insertAll(cellEntities)
         }
     }

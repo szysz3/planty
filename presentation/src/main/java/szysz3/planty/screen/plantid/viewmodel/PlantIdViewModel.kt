@@ -1,6 +1,5 @@
 package szysz3.planty.screen.plantid.viewmodel
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,13 +7,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import szysz3.planty.BuildConfig
-import szysz3.planty.domain.model.remote.PlantIdResponse
 import szysz3.planty.domain.usecase.CreateTempPhotoFileUseCase
 import szysz3.planty.domain.usecase.DeleteTempPhotoFileUseCase
 import szysz3.planty.domain.usecase.IdentifyPlantUseCase
 import szysz3.planty.domain.usecase.IdentifyPlantsParams
 import szysz3.planty.domain.usecase.base.NoParams
-import szysz3.planty.screen.plantid.model.PlantIdUiState
+import szysz3.planty.screen.plantid.model.PlantIdScreenState
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,48 +22,48 @@ class PlantIdViewModel @Inject constructor(
     private val deleteFileUseCase: DeleteTempPhotoFileUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(PlantIdUiState())
-    val uiState: StateFlow<PlantIdUiState> = _uiState
+    private val _uiState = MutableStateFlow(PlantIdScreenState())
+    val uiState: StateFlow<PlantIdScreenState> = _uiState
 
-    private val _photoUri = MutableStateFlow<Uri?>(null)
-    val photoUri: StateFlow<Uri?> = _photoUri
-
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
-
-    private val _photoUploaded = MutableStateFlow(false)
-    val photoUploaded: StateFlow<Boolean> = _photoUploaded
-
-    fun identifyPlant(onComplete: (PlantIdResponse?) -> Unit) {
+    fun identifyPlant() {
         viewModelScope.launch {
-            _isLoading.value = true
+            val uri = _uiState.value.photoUri ?: return@launch
+            _uiState.value = _uiState.value.copy(isLoading = true)
+
             val idParams = IdentifyPlantsParams(
                 apiKey = BuildConfig.API_KEY,
-                imageUris = listOfNotNull(_photoUri.value)
+                imageUris = listOf(uri)
             )
-            val idResult = _photoUri.value?.let { identifyPlantUseCase(idParams) }
-            _isLoading.value = false
-            _photoUploaded.value = true
 
-            onComplete(idResult)
+            val result = identifyPlantUseCase(idParams)
+            _uiState.value = _uiState.value.copy(
+                isLoading = false,
+                photoUploaded = true,
+                identifiedPlant = result?.bestMatch ?: "Not recognized"
+            )
         }
     }
 
     fun createPhotoFile() {
         viewModelScope.launch {
-            _photoUploaded.value = false
-            _photoUri.value = createFileUseCase(NoParams())
+            val uri = createFileUseCase(NoParams())
+            _uiState.value = _uiState.value.copy(
+                photoUri = uri,
+                photoUploaded = false,
+                identifiedPlant = ""
+            )
         }
     }
 
     fun deletePhotoFile() {
         viewModelScope.launch {
-            val uri = _photoUri.value
-            if (uri != null) {
-                val deleted = deleteFileUseCase(uri)
-                if (deleted) {
-                    _photoUri.value = null
-                }
+            val uri = _uiState.value.photoUri ?: return@launch
+            if (deleteFileUseCase(uri)) {
+                _uiState.value = _uiState.value.copy(
+                    photoUri = null,
+                    photoUploaded = false,
+                    identifiedPlant = ""
+                )
             }
         }
     }

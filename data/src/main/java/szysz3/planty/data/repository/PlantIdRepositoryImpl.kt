@@ -9,9 +9,10 @@ import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
-import okio.IOException
+import szysz3.planty.data.network.HttpResponseHandler
 import szysz3.planty.domain.model.remote.PlantIdResponse
 import szysz3.planty.domain.repository.PlantIdRepository
+import timber.log.Timber
 import javax.inject.Inject
 
 class PlantIdRepositoryImpl @Inject constructor(
@@ -21,39 +22,43 @@ class PlantIdRepositoryImpl @Inject constructor(
     private val responseAdapter = moshi.adapter(PlantIdResponse::class.java)
 
     override suspend fun identifyPlant(
-        image: ByteArray, // Image data as ByteArray
-        apiKey: String // Mandatory API key
+        image: ByteArray,
+        apiKey: String
     ): PlantIdResponse {
         return withContext(Dispatchers.IO) {
-            // Prepare multipart form data
-            val multipartBody = MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart(
-                    "images",
-                    "image.jpg",
-                    RequestBody.create("image/jpeg".toMediaTypeOrNull(), image)
-                )
-                .build()
+            try {
+                val multipartBody = MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart(
+                        FORM_DATA_PART_IMAGES,
+                        IMAGE_FILE_NAME,
+                        RequestBody.create(MIME_TYPE_IMAGE.toMediaTypeOrNull(), image)
+                    )
+                    .build()
 
-            // Build request
-            val url = "https://my-api.plantnet.org/v2/identify/all" // Using 'all' for project
-            val request = Request.Builder()
-                .url(url)
-                .post(multipartBody)
-                .addHeader("Authorization", "Bearer $apiKey")
-                .build()
+                val request = Request.Builder()
+                    .url(API_URL)
+                    .post(multipartBody)
+                    .addHeader(HEADER_AUTHORIZATION, "Bearer $apiKey")
+                    .build()
 
-            // Execute request and handle response
-            client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) {
-                    throw IOException("Failed to identify plant: ${response.message}")
+                client.newCall(request).execute().use { response ->
+                    HttpResponseHandler.handleResponse(response) { responseBody ->
+                        responseAdapter.fromJson(responseBody)
+                    }
                 }
-
-                response.body?.string()?.let { responseBody ->
-                    responseAdapter.fromJson(responseBody)
-                        ?: throw IOException("Invalid response format")
-                } ?: throw IOException("Empty response body")
+            } catch (e: Exception) {
+                Timber.e(e, "Error identifying plant")
+                throw e
             }
         }
+    }
+
+    companion object {
+        const val API_URL = "https://my-api.plantnet.org/v2/identify/all"
+        const val MIME_TYPE_IMAGE = "image/jpeg"
+        const val FORM_DATA_PART_IMAGES = "images"
+        const val IMAGE_FILE_NAME = "image.jpg"
+        const val HEADER_AUTHORIZATION = "Authorization"
     }
 }

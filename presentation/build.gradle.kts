@@ -77,12 +77,7 @@ dependencies {
     // coroutines dependencies
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
-
-    //firebase
-    implementation(platform(libs.firebase))
-    implementation(libs.firebase.auth)
-    implementation(libs.play.services.auth)
-
+    
     //coil
     implementation(libs.coil)
 

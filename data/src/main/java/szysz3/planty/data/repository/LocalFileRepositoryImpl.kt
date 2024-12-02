@@ -29,17 +29,19 @@ class LocalFileRepositoryImpl @Inject constructor(
                 file
             )
         } catch (e: IOException) {
-            Timber.e("Error creating file: ${e.message}")
+            Timber.e(e, "Error creating file")
             return null
         }
     }
 
     override suspend fun deleteFile(uri: Uri): Boolean {
         return try {
-            val rowsDeleted = context.contentResolver.delete(uri, null, null)
-            rowsDeleted > 0
+            withContext(Dispatchers.IO) {
+                val rowsDeleted = context.contentResolver.delete(uri, null, null)
+                rowsDeleted > 0
+            }
         } catch (e: Exception) {
-            Timber.e("Error deleting file: ${e.message}")
+            Timber.e(e, "Error deleting file")
             false
         }
     }

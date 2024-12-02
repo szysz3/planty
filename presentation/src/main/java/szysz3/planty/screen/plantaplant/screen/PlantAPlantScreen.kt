@@ -25,7 +25,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
@@ -42,16 +41,15 @@ fun PlantAPlantScreen(
     plantAPlantViewModel: PlantAPlantViewModel,
     onNavigateToPlantDetails: (PlantDetailsScreenOrigin) -> Unit
 ) {
-    val dataLoaded by plantAPlantViewModel.dataLoaded.collectAsState()
-    val plants by plantAPlantViewModel.plants.collectAsState()
-    var searchQuery by remember { mutableStateOf("") }
+    val uiState by plantAPlantViewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
+
+    // Local state for managing search query input
+    val localSearchQuery = remember { mutableStateOf(uiState.searchQuery) }
 
     LaunchedEffect(Unit) {
         mainScreenViewModel.showBackButton(true)
         mainScreenViewModel.showDeleteButton(false)
-
-        plantAPlantViewModel.getPlantsFromRange()
     }
 
     Box(
@@ -71,14 +69,14 @@ fun PlantAPlantScreen(
         ) {
             // Search Bar
             OutlinedTextField(
-                value = searchQuery,
+                value = localSearchQuery.value,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Search
                 ),
                 maxLines = 1,
                 onValueChange = { value ->
-                    searchQuery = value
+                    localSearchQuery.value = value
                     plantAPlantViewModel.updateSearchQuery(value)
                 },
                 modifier = Modifier
@@ -92,10 +90,10 @@ fun PlantAPlantScreen(
                     )
                 },
                 trailingIcon = {
-                    if (searchQuery.isNotEmpty()) {
+                    if (localSearchQuery.value.isNotEmpty()) {
                         IconButton(onClick = {
-                            searchQuery = ""
-                            plantAPlantViewModel.updateSearchQuery("") // Reset filters
+                            localSearchQuery.value = ""
+                            plantAPlantViewModel.updateSearchQuery("")
                         }) {
                             Icon(
                                 imageVector = Icons.Rounded.Clear,
@@ -106,6 +104,7 @@ fun PlantAPlantScreen(
                 }
             )
 
+            // Plant Grid
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(minSize = 150.dp),
                 contentPadding = PaddingValues(16.dp),
@@ -113,11 +112,11 @@ fun PlantAPlantScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(plants.size) { index ->
+                items(uiState.plants.size) { index ->
                     PlantCard(
-                        plant = plants[index],
+                        plant = uiState.plants[index],
                         onPlantSelected = {
-                            plantAPlantViewModel.selectPlant(plants[index])
+                            plantAPlantViewModel.selectPlant(uiState.plants[index])
                             onNavigateToPlantDetails(PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN)
                         }
                     )
