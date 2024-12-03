@@ -4,43 +4,38 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import szysz3.planty.screen.main.composable.BottomNavItem
+import szysz3.planty.screen.main.model.MainScreenState
 import javax.inject.Inject
 
 @HiltViewModel
-class MainScreenViewModel @Inject constructor() :
-    ViewModel() {
+class MainScreenViewModel @Inject constructor() : ViewModel() {
 
-    private val _isHomeScreenInitialized = MutableStateFlow(false)
-    private val isHomeScreenInitialized: StateFlow<Boolean> = _isHomeScreenInitialized.asStateFlow()
+    private val _uiState = MutableStateFlow(MainScreenState())
+    val uiState: StateFlow<MainScreenState> = _uiState
 
-    private val _isTopBarVisible = MutableStateFlow(false)
-    val isTopBarVisible: StateFlow<Boolean> = _isTopBarVisible.asStateFlow()
+    fun updateHomeScreenInitialized(initialized: Boolean) {
+        _uiState.update { it.copy(isHomeScreenInitialized = initialized) }
+    }
 
-    private val _showBackButton = MutableStateFlow(false)
-    val showBackButton: StateFlow<Boolean> = _showBackButton.asStateFlow()
-
-    private val _showDeleteButton = MutableStateFlow(false)
-    val showDeleteButton: StateFlow<Boolean> = _showDeleteButton.asStateFlow()
-
-    fun updateShowDeleteButton(show: Boolean) {
-        _showDeleteButton.value = show
+    fun updateTopBarVisibility(visible: Boolean) {
+        if (_uiState.value.isTopBarVisible != visible) {
+            _uiState.update { it.copy(isTopBarVisible = visible) }
+        }
     }
 
     fun updateShowBackButton(show: Boolean) {
-        _showBackButton.value = show
+        _uiState.update { it.copy(showBackButton = show) }
     }
 
-    fun updateHomeScreenInitialized(initialized: Boolean) {
-        _isHomeScreenInitialized.value = initialized
-    }
-
-    fun updateTopBarVisibility(show: Boolean) {
-        _isTopBarVisible.value = show
+    fun updateShowDeleteButton(show: Boolean) {
+        _uiState.update { it.copy(showDeleteButton = show) }
     }
 
     fun handleTopBarVisibility(route: String) {
-        updateTopBarVisibility(route == BottomNavItem.Home.route && isHomeScreenInitialized.value)
+        val shouldShowTopBar =
+            route == BottomNavItem.Home.route && _uiState.value.isHomeScreenInitialized
+        updateTopBarVisibility(shouldShowTopBar)
     }
 }
