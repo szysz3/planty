@@ -6,5 +6,6 @@ data class PlantIdScreenState(
     val photoUri: Uri? = null,
     val isLoading: Boolean = false,
     val photoUploaded: Boolean = false,
-    val identifiedPlant: String = ""
+    val identifiedPlant: String? = null,
+    val errorMessage: String? = null
 )

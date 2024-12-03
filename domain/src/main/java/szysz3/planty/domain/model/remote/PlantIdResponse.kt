@@ -7,5 +7,5 @@ data class PlantIdResponse(
     val bestMatch: String?,
     val results: List<Result>,
     val version: String,
-    val remainingIdentificationRequests: Int
+    val remainingIdentificationRequests: Int?
 )

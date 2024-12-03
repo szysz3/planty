@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.CircularProgressIndicator
@@ -25,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
 import szysz3.planty.screen.plantid.viewmodel.PlantIdViewModel
 import szysz3.planty.util.PermissionUtils
 
@@ -72,17 +70,14 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        when {
-            uiState.isLoading -> CircularProgressIndicator()
-            uiState.photoUri != null && uiState.photoUploaded -> AsyncImage(
-                model = uiState.photoUri,
-                contentDescription = "Selected Photo",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-            )
-
-            else -> Text("No photo selected")
+        if (uiState.isLoading) {
+            CircularProgressIndicator()
+        } else {
+            uiState.identifiedPlant?.let { plant ->
+                Text(text = "Identified Plant: $plant", style = MaterialTheme.typography.body1)
+            } ?: uiState.errorMessage?.let { error ->
+                Text(text = error, color = MaterialTheme.colors.error)
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -96,18 +91,6 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
             }
         }) {
             Text("Take Photo")
-        }
-
-        if (uiState.photoUri != null && uiState.photoUploaded) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = { viewModel.deletePhotoFile() }) {
-                Text("Delete Photo")
-            }
-        }
-
-        if (uiState.identifiedPlant.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Identified Plant: ${uiState.identifiedPlant}")
         }
     }
 }

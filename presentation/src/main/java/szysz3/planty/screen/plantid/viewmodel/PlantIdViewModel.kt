@@ -35,12 +35,22 @@ class PlantIdViewModel @Inject constructor(
                 imageUris = listOf(uri)
             )
 
-            val result = identifyPlantUseCase(idParams)
-            _uiState.value = _uiState.value.copy(
-                isLoading = false,
-                photoUploaded = true,
-                identifiedPlant = result?.bestMatch ?: "Not recognized"
-            )
+            try {
+                val result = identifyPlantUseCase(idParams)
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    photoUploaded = true,
+                    identifiedPlant = result?.bestMatch ?: "Not recognized"
+                )
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    errorMessage = "Error identifying plant: ${e.message}",
+                    isLoading = false,
+                    identifiedPlant = null
+                )
+            }
+
+            // TODO: delete photo file
         }
     }
 
@@ -50,7 +60,7 @@ class PlantIdViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(
                 photoUri = uri,
                 photoUploaded = false,
-                identifiedPlant = ""
+                identifiedPlant = null
             )
         }
     }
@@ -62,7 +72,7 @@ class PlantIdViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(
                     photoUri = null,
                     photoUploaded = false,
-                    identifiedPlant = ""
+                    identifiedPlant = null
                 )
             }
         }
