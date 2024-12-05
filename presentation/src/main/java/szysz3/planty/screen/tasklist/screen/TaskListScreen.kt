@@ -40,6 +40,7 @@ fun TaskListScreen(
         }
     )
 
+    // TODO: Get rid of Scaffold here
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {
