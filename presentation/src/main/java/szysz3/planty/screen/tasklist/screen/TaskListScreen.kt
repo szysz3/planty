@@ -1,6 +1,7 @@
 package szysz3.planty.screen.tasklist.screen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -9,11 +10,12 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -40,21 +42,15 @@ fun TaskListScreen(
         }
     )
 
-    // TODO: Get rid of Scaffold here
-    Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
-                taskListViewModel.navigateToAddTaskScreen()
-            }) {
-                Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add Task")
-            }
-        }
-    ) { paddingValues ->
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd // For the Floating Action Button
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .dragContainer(dragDropState)
-                .padding(paddingValues),
+                .padding(16.dp), // Adjust padding as needed
             state = listState,
             contentPadding = PaddingValues(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -68,6 +64,18 @@ fun TaskListScreen(
                     }
                 )
             }
+        }
+
+        FloatingActionButton(
+            onClick = { taskListViewModel.navigateToAddTaskScreen() },
+            modifier = Modifier
+                .padding(16.dp),
+            elevation = FloatingActionButtonDefaults.elevation(8.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.Add,
+                contentDescription = "Add Task"
+            )
         }
     }
 }
