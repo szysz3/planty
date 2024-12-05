@@ -13,6 +13,7 @@ import szysz3.planty.domain.usecase.IdentifyPlantUseCase
 import szysz3.planty.domain.usecase.IdentifyPlantsParams
 import szysz3.planty.domain.usecase.base.NoParams
 import szysz3.planty.screen.plantid.model.PlantIdScreenState
+import szysz3.planty.screen.plantid.model.toPresentationModel
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -41,13 +42,13 @@ class PlantIdViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     photoUploaded = true,
-                    identifiedPlant = result?.bestMatch ?: "Not recognized"
+                    identifiedPlants = result?.toPresentationModel()
                 )
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     errorMessage = "Error identifying plant: ${e.message}",
                     isLoading = false,
-                    identifiedPlant = null
+                    identifiedPlants = null
                 )
             }
 
@@ -57,13 +58,17 @@ class PlantIdViewModel @Inject constructor(
         }
     }
 
+    fun clearErrorMessage() {
+        _uiState.value = _uiState.value.copy(errorMessage = null)
+    }
+
     fun createPhotoFile() {
         viewModelScope.launch {
             val uri = createFileUseCase(NoParams())
             _uiState.value = _uiState.value.copy(
                 photoUri = uri,
                 photoUploaded = false,
-                identifiedPlant = null
+                identifiedPlants = null
             )
         }
     }

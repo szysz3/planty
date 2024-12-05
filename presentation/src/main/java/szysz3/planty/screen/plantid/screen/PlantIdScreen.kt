@@ -1,17 +1,21 @@
 package szysz3.planty.screen.plantid.screen
 
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -24,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import szysz3.planty.screen.plantid.composable.PlantResultCard
 import szysz3.planty.screen.plantid.viewmodel.PlantIdViewModel
 import szysz3.planty.util.PermissionUtils
 
@@ -59,38 +64,49 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        Text(text = "Plant Identification", style = MaterialTheme.typography.h4)
-
-        Spacer(modifier = Modifier.height(16.dp))
-
         if (uiState.isLoading) {
             CircularProgressIndicator()
         } else {
-            uiState.identifiedPlant?.let { plant ->
-                Text(text = "Identified Plant: $plant", style = MaterialTheme.typography.body1)
+            uiState.identifiedPlants?.let { plants ->
+                // List of identification results
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    contentPadding = PaddingValues(vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(plants) { plant ->
+                        PlantResultCard(plantName = plant.name, confidence = plant.confidence)
+                    }
+                }
             } ?: uiState.errorMessage?.let { error ->
-                Text(text = error, color = MaterialTheme.colors.error)
+                Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                viewModel.clearErrorMessage()
             }
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = {
-            if (PermissionUtils.hasCameraPermission(context)) {
-                viewModel.createPhotoFile()
-                shouldLaunchCamera = true
-            } else {
-                permissionLauncher.launch(android.Manifest.permission.CAMERA)
+        
+        if (!uiState.isLoading) {
+            FloatingActionButton(
+                onClick = {
+                    if (PermissionUtils.hasCameraPermission(context)) {
+                        viewModel.createPhotoFile()
+                        shouldLaunchCamera = true
+                    } else {
+                        permissionLauncher.launch(android.Manifest.permission.CAMERA)
+                    }
+                },
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp),
+                elevation = FloatingActionButtonDefaults.elevation(8.dp)
+            ) {
+                Icon(Icons.Rounded.Search, contentDescription = "Identify plant")
             }
-        }) {
-            Text("Take Photo")
         }
     }
 }
