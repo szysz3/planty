@@ -13,6 +13,7 @@ import szysz3.planty.domain.usecase.IdentifyPlantUseCase
 import szysz3.planty.domain.usecase.IdentifyPlantsParams
 import szysz3.planty.domain.usecase.base.NoParams
 import szysz3.planty.screen.plantid.model.PlantIdScreenState
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -50,7 +51,9 @@ class PlantIdViewModel @Inject constructor(
                 )
             }
 
-            // TODO: delete photo file
+            if (!deleteFileUseCase(uri)) {
+                Timber.e("Error deleting file $uri")
+            }
         }
     }
 
@@ -62,19 +65,6 @@ class PlantIdViewModel @Inject constructor(
                 photoUploaded = false,
                 identifiedPlant = null
             )
-        }
-    }
-
-    fun deletePhotoFile() {
-        viewModelScope.launch {
-            val uri = _uiState.value.photoUri ?: return@launch
-            if (deleteFileUseCase(uri)) {
-                _uiState.value = _uiState.value.copy(
-                    photoUri = null,
-                    photoUploaded = false,
-                    identifiedPlant = null
-                )
-            }
         }
     }
 }
