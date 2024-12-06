@@ -1,3 +1,4 @@
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExperimentalMaterialApi
@@ -10,7 +11,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import kotlinx.coroutines.launch
+import szysz3.planty.R
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.mygarden.composable.DeleteGardenDialog
 import szysz3.planty.screen.mygarden.composable.EmptyGardenPlaceholder
@@ -49,6 +53,13 @@ fun MyGardenScreen(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.my_garden_screen_bcg), // Replace with your background image
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop // Adjust as needed (Crop, Fit, FillBounds, etc.)
+        )
+
         if (uiState.dataLoaded && rows > 0 && columns > 0) {
             GardenMap(
                 rows = rows,

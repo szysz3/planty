@@ -3,6 +3,7 @@ package szysz3.planty.screen.plantid.screen
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,9 +26,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import szysz3.planty.R
 import szysz3.planty.screen.plantid.composable.PlantResultCard
 import szysz3.planty.screen.plantid.viewmodel.PlantIdViewModel
 import szysz3.planty.util.PermissionUtils
@@ -68,6 +72,13 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.plant_id_screen_bcg), // Replace with your background image
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop // Adjust as needed (Crop, Fit, FillBounds, etc.)
+        )
+
         if (uiState.isLoading) {
             CircularProgressIndicator()
         } else {
@@ -89,7 +100,7 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
                 viewModel.clearErrorMessage()
             }
         }
-        
+
         if (!uiState.isLoading) {
             FloatingActionButton(
                 onClick = {
