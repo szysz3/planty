@@ -1,6 +1,5 @@
 package szysz3.planty.screen.plantaplant.screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -27,9 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -38,6 +35,7 @@ import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.plantaplant.composable.PlantCard
 import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
 import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
+import szysz3.planty.ui.widgets.EllipticalBackground
 
 @Composable
 fun PlantAPlantScreen(
@@ -66,12 +64,7 @@ fun PlantAPlantScreen(
                 focusManager.clearFocus()
             }
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.plant_a_plant_screen_bcg), // Replace with your background image
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop // Adjust as needed (Crop, Fit, FillBounds, etc.)
-        )
+        EllipticalBackground(R.drawable.plant_a_plant_screen_bcg)
 
         Column(
             modifier = Modifier

@@ -1,6 +1,5 @@
 package szysz3.planty.screen.tasklist.screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,8 +17,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import szysz3.planty.R
@@ -29,6 +26,7 @@ import szysz3.planty.screen.tasklist.utils.dragContainer
 import szysz3.planty.screen.tasklist.utils.draggableItems
 import szysz3.planty.screen.tasklist.utils.rememberDragDropState
 import szysz3.planty.screen.tasklist.viewmodel.TaskListViewModel
+import szysz3.planty.ui.widgets.EllipticalBackground
 
 @Composable
 fun TaskListScreen(
@@ -50,12 +48,7 @@ fun TaskListScreen(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomEnd // For the Floating Action Button
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.task_screen_bcg), // Replace with your background image
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop // Adjust as needed (Crop, Fit, FillBounds, etc.)
-        )
+        EllipticalBackground(R.drawable.task_screen_bcg)
 
         LazyColumn(
             modifier = Modifier
