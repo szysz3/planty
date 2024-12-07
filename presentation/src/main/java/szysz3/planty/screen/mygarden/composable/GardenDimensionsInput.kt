@@ -1,6 +1,5 @@
 package szysz3.planty.screen.mygarden.composable
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -60,8 +59,7 @@ fun GardenDimensionsInput(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(MaterialTheme.colorScheme.surface),
+                    .clip(RoundedCornerShape(12.dp)),
                 label = { Text("Width (in cells, max $maxDimension)") },
                 singleLine = true,
                 isError = widthError
@@ -83,8 +81,7 @@ fun GardenDimensionsInput(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(MaterialTheme.colorScheme.surface),
+                    .clip(RoundedCornerShape(12.dp)),
                 label = { Text("Height (in cells, max $maxDimension)") },
                 singleLine = true,
                 isError = heightError

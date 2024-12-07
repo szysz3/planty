@@ -1,8 +1,6 @@
 package szysz3.planty.screen.main.composable
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,14 +11,17 @@ import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -42,30 +43,38 @@ fun TopBar(
         NavigationItem.getTitleForRoute(currentRoute ?: "") ?: ""
     }
 
-    AnimatedVisibility(
-        visible = uiState.isTopBarVisible,
-        enter = fadeIn(),
-        exit = fadeOut()
-    ) {
-        TopAppBar(
-            title = { TopBarTitle(title) },
-            navigationIcon = {
-                BackButton(
-                    showBackButton = uiState.showBackButton,
-                    onBackClick = {
-                        mainScreenViewModel.updateShowBackButton(false)
-                        navigationController.popBackStack()
-                    }
-                )
-            },
-            actions = {
-                DeleteButton(
-                    showDeleteButton = uiState.showDeleteButton,
-                    onDeleteClick = { myGardenViewModel.showDeleteDialog(true) }
-                )
-            }
-        )
-    }
+    val alpha by animateFloatAsState(
+        targetValue = if (uiState.isTopBarVisible) 1f else 0f, label = ""
+    )
+    TopAppBar(
+        modifier = Modifier
+            .alpha(alpha),
+        colors = TopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background,
+            scrolledContainerColor = MaterialTheme.colorScheme.background,
+            titleContentColor = MaterialTheme.colorScheme.onBackground,
+            navigationIconContentColor = MaterialTheme.colorScheme.onBackground,
+            actionIconContentColor = MaterialTheme.colorScheme.onBackground
+        ),
+        title = { TopBarTitle(title) },
+        navigationIcon = {
+            BackButton(
+                showBackButton = uiState.showBackButton,
+                onBackClick = {
+                    mainScreenViewModel.updateShowBackButton(false)
+                    navigationController.popBackStack()
+                }
+            )
+        },
+        actions = {
+            DeleteButton(
+                showDeleteButton = uiState.showDeleteButton,
+                onDeleteClick = { myGardenViewModel.showDeleteDialog(true) }
+            )
+        }
+    )
+
+
 }
 
 @Composable

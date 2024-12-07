@@ -19,8 +19,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             PlantyTheme(dynamicColor = false) {
                 enableEdgeToEdge(
-                    statusBarStyle = SystemBarStyle.dark(MaterialTheme.colorScheme.surface.toArgb()),
-                    navigationBarStyle = SystemBarStyle.dark(MaterialTheme.colorScheme.surface.toArgb())
+                    statusBarStyle = SystemBarStyle.dark(MaterialTheme.colorScheme.background.toArgb()),
+                    navigationBarStyle = SystemBarStyle.dark(MaterialTheme.colorScheme.background.toArgb())
                 )
                 AppContent()
             }

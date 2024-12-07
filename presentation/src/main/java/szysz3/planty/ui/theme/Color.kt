@@ -5,9 +5,9 @@ import androidx.compose.ui.graphics.Color
 // Light Theme Colors
 val SoftGreen = Color(0xFFB2D3C2)       // Light, soft green for primary color in light mode
 val AccentGreen = Color(0xFF88C9A1)      // Slightly darker green for accenting the primary color
-val CalmBeige = Color(0xFFF5E8C7)        // Warm, calming beige for background
-val SoftGray = Color(0xFFE7ECEF)         // Very light gray for surface elements
-val DarkGreen = Color(0xFF587D71)        // Muted dark green for text and icons on light backgrounds
+val SoftGrey = Color(0xFFBCBCBC)        // Warm, calming beige for background
+val LightGrey = Color(0xFFE7ECEF)         // Very light gray for surface elements
+val DarkGreen = Color(0xFF384F47)        // Muted dark green for text and icons on light backgrounds
 val ErrorRed = Color(0xFFF28B82)         // Soft red for error messages in light mode
 
 // Dark Theme Colors

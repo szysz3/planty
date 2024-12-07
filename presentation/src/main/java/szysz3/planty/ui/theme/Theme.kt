@@ -9,7 +9,6 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.DarkGray
 import androidx.compose.ui.platform.LocalContext
 
 // Light Theme Colors
@@ -18,9 +17,9 @@ private val LightColorsScheme = lightColorScheme(
     onPrimary = Color.Black,
     secondary = AccentGreen,
     onSecondary = Color.White,
-    background = CalmBeige,
+    background = SoftGrey,
     onBackground = DarkGreen,
-    surface = SoftGray,
+    surface = LightGrey,
     onSurface = Color.Black,
     error = ErrorRed,
     onError = Color.White

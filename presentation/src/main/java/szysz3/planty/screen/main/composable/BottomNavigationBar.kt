@@ -25,8 +25,7 @@ fun BottomNavigationBar(
     val currentRoute = currentBackStackEntry?.destination?.route
 
     BottomNavigation(
-        backgroundColor = MaterialTheme.colorScheme.surface, // Theme's surface color for navigation background
-        contentColor = MaterialTheme.colorScheme.onSurface,  // Theme's color for icons and text
+        backgroundColor = MaterialTheme.colorScheme.background,
     ) {
         items.forEach { item ->
             val isSelected = currentRoute?.contains(item.route) == true
@@ -36,8 +35,8 @@ fun BottomNavigationBar(
                     Icon(
                         item.icon,
                         contentDescription = item.title,
-                        tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(
-                            alpha = 0.6f
+                        tint = if (isSelected) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onBackground.copy(
+                            alpha = 0.4f
                         ) // Primary color for selected
                     )
                 },
@@ -45,8 +44,8 @@ fun BottomNavigationBar(
                     Text(
                         item.title,
                         style = MaterialTheme.typography.labelLarge, // Using theme's label style
-                        color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(
-                            alpha = 0.6f
+                        color = if (isSelected) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onBackground.copy(
+                            alpha = 0.4f
                         )
                     )
                 },
@@ -63,7 +62,7 @@ fun BottomNavigationBar(
                     }
                 },
                 selectedContentColor = MaterialTheme.colorScheme.primary, // Selected item color
-                unselectedContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f) // Unselected item color with reduced opacity
+                unselectedContentColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.4f) // Unselected item color with reduced opacity
             )
         }
     }

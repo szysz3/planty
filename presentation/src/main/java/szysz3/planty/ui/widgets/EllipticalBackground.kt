@@ -42,8 +42,8 @@ fun EllipticalBackground(@DrawableRes backgroundImageId: Int) {
                 brush = Brush.radialGradient(
                     colors = listOf(
                         Color.Transparent,  // Transparent in the center
-                        MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),  // Gradual fade-out effect
-                        MaterialTheme.colorScheme.surface  // Fully solid on the edges
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.5f),  // Gradual fade-out effect
+                        MaterialTheme.colorScheme.background  // Fully solid on the edges
                     ),
                     center = Offset(
                         size.width / 2,
