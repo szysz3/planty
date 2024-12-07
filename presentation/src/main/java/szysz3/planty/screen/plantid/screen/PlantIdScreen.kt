@@ -13,9 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,6 +30,7 @@ import szysz3.planty.R
 import szysz3.planty.screen.plantid.composable.PlantResultCard
 import szysz3.planty.screen.plantid.viewmodel.PlantIdViewModel
 import szysz3.planty.ui.widgets.EllipticalBackground
+import szysz3.planty.ui.widgets.FloatingActionButton
 import szysz3.planty.util.PermissionUtils
 
 @Composable
@@ -66,14 +65,16 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
         }
     }
 
+    EllipticalBackground(R.drawable.plant_id_screen_bcg)
+
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp),
         contentAlignment = Alignment.Center
     ) {
-        EllipticalBackground(R.drawable.plant_id_screen_bcg)
-
         if (uiState.isLoading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.onBackground)
         } else {
             uiState.identifiedPlants?.let { plants ->
                 // List of identification results
@@ -96,6 +97,8 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
 
         if (!uiState.isLoading) {
             FloatingActionButton(
+                icon = Icons.Rounded.Search,
+                contentDescription = "Identify plant",
                 onClick = {
                     if (PermissionUtils.hasCameraPermission(context)) {
                         viewModel.createPhotoFile()
@@ -103,14 +106,8 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
                     } else {
                         permissionLauncher.launch(android.Manifest.permission.CAMERA)
                     }
-                },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp),
-                elevation = FloatingActionButtonDefaults.elevation(8.dp)
-            ) {
-                Icon(Icons.Rounded.Search, contentDescription = "Identify plant")
-            }
+                })
+
         }
     }
 }

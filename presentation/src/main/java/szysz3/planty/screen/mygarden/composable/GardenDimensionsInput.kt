@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -21,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import szysz3.planty.ui.widgets.RoundedButton
 
@@ -53,6 +55,7 @@ fun GardenDimensionsInput(
             // Width Input
             TextField(
                 value = widthInput,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 onValueChange = { input ->
                     widthInput = input
                     widthError = input.toIntOrNull()?.let { it > maxDimension } ?: false
@@ -75,6 +78,7 @@ fun GardenDimensionsInput(
             // Height Input
             TextField(
                 value = heightInput,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 onValueChange = { input ->
                     heightInput = input
                     heightError = input.toIntOrNull()?.let { it > maxDimension } ?: false

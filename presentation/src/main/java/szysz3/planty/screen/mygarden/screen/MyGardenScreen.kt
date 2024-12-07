@@ -1,6 +1,9 @@
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -10,16 +13,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import szysz3.planty.R
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
-import szysz3.planty.screen.mygarden.composable.DeleteGardenDialog
-import szysz3.planty.screen.mygarden.composable.EmptyGardenPlaceholder
 import szysz3.planty.screen.mygarden.composable.GardenDimensionsInput
 import szysz3.planty.screen.mygarden.composable.GardenMap
 import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
 import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
+import szysz3.planty.ui.widgets.DeleteAlertDialog
 import szysz3.planty.ui.widgets.EllipticalBackground
+import szysz3.planty.ui.widgets.FloatingActionButton
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -47,12 +51,14 @@ fun MyGardenScreen(
     val rows = uiState.gardenState.rows
     val columns = uiState.gardenState.columns
 
+    EllipticalBackground(R.drawable.my_garden_screen_bcg)
+
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp),
         contentAlignment = Alignment.Center
     ) {
-        EllipticalBackground(R.drawable.my_garden_screen_bcg)
-
         if (uiState.dataLoaded && rows > 0 && columns > 0) {
             GardenMap(
                 rows = rows,
@@ -68,14 +74,21 @@ fun MyGardenScreen(
                 }
             )
         } else {
-            EmptyGardenPlaceholder(onCreateNewMap = {
-                myGardenViewModel.showBottomSheet(true)
-            })
+            FloatingActionButton(
+                icon = Icons.Rounded.Add,
+                contentDescription = "Add garden",
+                onClick = {
+                    myGardenViewModel.showBottomSheet(true)
+                })
         }
     }
 
     if (uiState.isDeleteDialogVisible) {
-        DeleteGardenDialog(
+        DeleteAlertDialog(
+            title = "Delete Garden",
+            message = "Are you sure you want to delete this garden?",
+            confirmButtonText = "Delete",
+            dismissButtonText = "Cancel",
             onConfirmDelete = {
                 myGardenViewModel.clearGarden()
                 myGardenViewModel.showDeleteDialog(false)

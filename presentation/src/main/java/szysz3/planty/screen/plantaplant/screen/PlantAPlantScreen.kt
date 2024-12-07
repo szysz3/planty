@@ -12,19 +12,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
@@ -54,22 +55,23 @@ fun PlantAPlantScreen(
         mainScreenViewModel.updateShowDeleteButton(false)
     }
 
+    EllipticalBackground(R.drawable.plant_a_plant_screen_bcg)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .padding(8.dp)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
             ) {
                 focusManager.clearFocus()
-            }
+            },
+        contentAlignment = Alignment.Center
     ) {
-        EllipticalBackground(R.drawable.plant_a_plant_screen_bcg)
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
         ) {
             // Search Bar
             OutlinedTextField(
@@ -105,7 +107,7 @@ fun PlantAPlantScreen(
                             )
                         }
                     }
-                }
+                },
             )
 
             // Plant Grid

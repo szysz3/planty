@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 
 // Light Theme Colors
 private val LightColorsScheme = lightColorScheme(
-    primary = SoftGreen,
+    primary = MutedGreen,
     onPrimary = Color.Black,
     secondary = AccentGreen,
     onSecondary = Color.White,
@@ -36,13 +36,12 @@ private val DarkColorsScheme = darkColorScheme(
     surface = DarkBeige,
     onSurface = Color.White,
     error = ErrorRedDark,
-    onError = Color.Black
+    onError = Color.Black,
 )
 
 @Composable
 fun PlantyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
@@ -60,7 +59,6 @@ fun PlantyTheme(
         colorScheme = colorScheme,
         typography = Typography,
         content = content,
-        shapes = Shapes
-
+        shapes = Shapes,
     )
 }

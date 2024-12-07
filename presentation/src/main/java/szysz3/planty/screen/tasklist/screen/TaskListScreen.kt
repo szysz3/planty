@@ -2,16 +2,12 @@ package szysz3.planty.screen.tasklist.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,6 +23,7 @@ import szysz3.planty.screen.tasklist.utils.draggableItems
 import szysz3.planty.screen.tasklist.utils.rememberDragDropState
 import szysz3.planty.screen.tasklist.viewmodel.TaskListViewModel
 import szysz3.planty.ui.widgets.EllipticalBackground
+import szysz3.planty.ui.widgets.FloatingActionButton
 
 @Composable
 fun TaskListScreen(
@@ -44,19 +41,19 @@ fun TaskListScreen(
         }
     )
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomEnd // For the Floating Action Button
-    ) {
-        EllipticalBackground(R.drawable.task_screen_bcg)
+    EllipticalBackground(R.drawable.task_screen_bcg)
 
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp),
+        contentAlignment = Alignment.Center
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .dragContainer(dragDropState)
-                .padding(16.dp), // Adjust padding as needed
+                .dragContainer(dragDropState),
             state = listState,
-            contentPadding = PaddingValues(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             draggableItems(items = tasks, dragDropState = dragDropState) { modifier, task ->
@@ -71,15 +68,10 @@ fun TaskListScreen(
         }
 
         FloatingActionButton(
-            onClick = { taskListViewModel.navigateToAddTaskScreen() },
-            modifier = Modifier
-                .padding(16.dp),
-            elevation = FloatingActionButtonDefaults.elevation(8.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.Add,
-                contentDescription = "Add Task"
-            )
-        }
+            icon = Icons.Rounded.Add,
+            contentDescription = "Add task",
+            onClick = {
+                taskListViewModel.navigateToAddTaskScreen()
+            })
     }
 }

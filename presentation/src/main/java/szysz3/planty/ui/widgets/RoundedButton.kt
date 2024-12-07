@@ -1,5 +1,6 @@
 package szysz3.planty.ui.widgets
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -17,8 +18,10 @@ fun RoundedButton(onClick: () -> Unit, text: String, enabled: Boolean = true) {
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary
         ),
-        shape = MaterialTheme.shapes.medium,
-        modifier = Modifier.padding(8.dp),
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth(),
         enabled = enabled,
         elevation = ButtonDefaults.buttonElevation(
             defaultElevation = 8.dp,
