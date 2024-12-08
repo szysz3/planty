@@ -65,7 +65,7 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
         }
     }
 
-    EllipticalBackground(R.drawable.plant_id_screen_bcg)
+    EllipticalBackground(R.drawable.bcg4)
 
     Box(
         modifier = Modifier

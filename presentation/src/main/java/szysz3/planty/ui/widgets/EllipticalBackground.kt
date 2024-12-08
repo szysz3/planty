@@ -15,14 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.toSize
 
 @Composable
-fun EllipticalBackground(@DrawableRes backgroundImageId: Int) {
+fun EllipticalBackground(@DrawableRes backgroundImageId: Int, tintLevelCenter: Float = 0.3f) {
     var size by remember { mutableStateOf(Size.Zero) }
 
     Image(
@@ -41,8 +40,8 @@ fun EllipticalBackground(@DrawableRes backgroundImageId: Int) {
             .background(
                 brush = Brush.radialGradient(
                     colors = listOf(
-                        Color.Transparent,  // Transparent in the center
-                        MaterialTheme.colorScheme.background.copy(alpha = 0.5f),  // Gradual fade-out effect
+                        MaterialTheme.colorScheme.background.copy(alpha = tintLevelCenter),  // Gradual fade-out effect
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.7f),  // Gradual fade-out effect
                         MaterialTheme.colorScheme.background  // Fully solid on the edges
                     ),
                     center = Offset(

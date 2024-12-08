@@ -41,7 +41,7 @@ fun TaskListScreen(
         }
     )
 
-    EllipticalBackground(R.drawable.task_screen_bcg)
+    EllipticalBackground(R.drawable.bcg5)
 
     Box(
         modifier = Modifier

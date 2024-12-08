@@ -55,7 +55,7 @@ fun PlantAPlantScreen(
         mainScreenViewModel.updateShowDeleteButton(false)
     }
 
-    EllipticalBackground(R.drawable.plant_a_plant_screen_bcg)
+    EllipticalBackground(R.drawable.bcg2)
 
     Box(
         modifier = Modifier

@@ -48,6 +48,12 @@ fun Plant.toDomain(): PlantDomain {
         growthRate = this.growthRate,
         deciduousEvergreen = this.deciduousEvergreen,
         shade = this.shade,
+        moisture = this.moisture,
+        wellDrained = this.wellDrained,
+        poorSoil = this.poorSoil,
+        drought = this.drought,
+        frostTender = this.frostTender,
+        cultivationDetails = this.cultivationDetails,
     )
 }
 

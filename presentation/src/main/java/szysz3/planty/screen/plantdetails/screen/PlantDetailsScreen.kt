@@ -2,7 +2,6 @@ package szysz3.planty.screen.plantdetails.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,6 +32,7 @@ import szysz3.planty.ui.widgets.DeleteAlertDialog
 import szysz3.planty.ui.widgets.EllipticalBackground
 import szysz3.planty.ui.widgets.ImageWithTextHorizontal
 import szysz3.planty.ui.widgets.RoundedButton
+import timber.log.Timber
 
 @Composable
 fun PlantDetailsScreen(
@@ -56,19 +56,19 @@ fun PlantDetailsScreen(
         PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN -> plantUiState.selectedPlant
     }
 
-    EllipticalBackground(R.drawable.plant_a_plant_screen_bcg)
+    EllipticalBackground(R.drawable.bcg3, 0.5f)
 
     selectedPlant?.let { plant ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp),
-            contentAlignment = Alignment.Center
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .weight(1f)
                     .verticalScroll(rememberScrollState())
             ) {
                 Row(
@@ -110,7 +110,6 @@ fun PlantDetailsScreen(
                         plant.width?.let { width ->
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_width,
-//                                        title = width.toString()
                                 title = "15,5m"
                             )
                         }
@@ -118,14 +117,12 @@ fun PlantDetailsScreen(
                         plant.height?.let { height ->
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_height,
-//                                        title = height.toString()
                                 title = "15,5m"
                             )
                         }
                         if (!plant.growthRate.isNullOrEmpty()) {
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_growth_rate,
-//                                title = plant.growthRate
                                 title = "Very fast growing"
                             )
                         }
@@ -144,7 +141,8 @@ fun PlantDetailsScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                 ) {
                     Column(
                         horizontalAlignment = Alignment.Start,
@@ -156,28 +154,24 @@ fun PlantDetailsScreen(
                         if (!plant.soil.isNullOrEmpty()) {
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_soil,
-//                                        title = width.toString()
                                 title = "well drained, feritile"
                             )
                         }
                         if (!plant.deciduousEvergreen.isNullOrEmpty()) {
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_evergreen,
-//                                        title = width.toString()
                                 title = "yes"
                             )
                         }
                         plant.wellDrained?.let { wellDrained ->
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_drain,
-//                                        title = width.toString()
                                 title = "yes"
                             )
                         }
                         plant.frostTender?.let { frostTender ->
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_frost,
-//                                        title = width.toString()
                                 title = "yes"
                             )
                         }
@@ -192,37 +186,31 @@ fun PlantDetailsScreen(
                         if (!plant.shade.isNullOrEmpty()) {
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_shade,
-//                                        title = width.toString()
                                 title = "full sun"
                             )
                         }
                         if (!plant.ph.isNullOrEmpty()) {
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_ph,
-//                                        title = width.toString()
                                 title = "7"
                             )
                         }
                         plant.poorSoil?.let { poorSoil ->
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_poor_soil,
-//                                        title = width.toString()
                                 title = "yes"
                             )
                         }
                         plant.drought?.let { drought ->
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_drought,
-//                                        title = width.toString()
                                 title = "yes"
                             )
                         }
                     }
                 }
 
-                // TODO: rest of the content goes here
-
-
+                Timber.d("----> ${plant.cultivationDetails}")
                 if (!plant.cultivationDetails.isNullOrEmpty()) {
                     Spacer(modifier = Modifier.height(16.dp))
                     ImageWithTextHorizontal(
@@ -241,7 +229,6 @@ fun PlantDetailsScreen(
                         myGardenViewModel.saveCell(plant)
                         onPlantChosen()
                     },
-                    modifier = Modifier.align(Alignment.BottomCenter),
                     text = "Plant!"
                 )
             }

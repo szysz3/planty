@@ -51,7 +51,7 @@ fun MyGardenScreen(
     val rows = uiState.gardenState.rows
     val columns = uiState.gardenState.columns
 
-    EllipticalBackground(R.drawable.my_garden_screen_bcg)
+    EllipticalBackground(R.drawable.bcg1)
 
     Box(
         modifier = Modifier
