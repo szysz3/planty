@@ -71,13 +71,14 @@ dependencies {
 
     // room dependencies
     implementation(libs.room.runtime)
+    implementation(libs.androidx.constraintlayout)
     kapt(libs.room.compiler)
     implementation(libs.room.ktx)
 
     // coroutines dependencies
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
-    
+
     //coil
     implementation(libs.coil)
 

@@ -63,6 +63,12 @@ fun PlantDomain.toPresentationModel(): Plant {
         growthRate = this.growthRate,
         deciduousEvergreen = this.deciduousEvergreen,
         shade = this.shade,
+        moisture = this.moisture,
+        wellDrained = this.wellDrained,
+        poorSoil = this.poorSoil,
+        drought = this.drought,
+        frostTender = this.frostTender,
+        cultivationDetails = this.cultivationDetails,
         // TODO: get plant image from outside
         imageRes = R.drawable.plant_placeholder
     )

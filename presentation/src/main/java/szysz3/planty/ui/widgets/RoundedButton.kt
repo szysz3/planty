@@ -11,7 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun RoundedButton(onClick: () -> Unit, text: String, enabled: Boolean = true) {
+fun RoundedButton(
+    onClick: () -> Unit,
+    text: String,
+    enabled: Boolean = true,
+    modifier: Modifier = Modifier
+) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
@@ -19,7 +24,7 @@ fun RoundedButton(onClick: () -> Unit, text: String, enabled: Boolean = true) {
             contentColor = MaterialTheme.colorScheme.onPrimary
         ),
         shape = MaterialTheme.shapes.large,
-        modifier = Modifier
+        modifier = modifier
             .padding(16.dp)
             .fillMaxWidth(),
         enabled = enabled,

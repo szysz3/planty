@@ -11,5 +11,11 @@ data class Plant(
     val growthRate: String?,
     val deciduousEvergreen: String?,
     val shade: String?,
+    val moisture: String?,
+    val wellDrained: Boolean?,
+    val poorSoil: Boolean?,
+    val drought: Boolean?,
+    val frostTender: Boolean?,
+    val cultivationDetails: String?,
     val imageRes: Int
 )
