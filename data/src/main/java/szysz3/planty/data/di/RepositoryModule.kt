@@ -7,7 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import szysz3.planty.data.repository.GardenRepositoryImpl
 import szysz3.planty.data.repository.LocalFileRepositoryImpl
 import szysz3.planty.data.repository.PlantIdRepositoryImpl
-import szysz3.planty.data.repository.mock.PlantMockRepositoryImpl
+import szysz3.planty.data.repository.PlantRepositoryImpl
 import szysz3.planty.domain.repository.GardenRepository
 import szysz3.planty.domain.repository.LocalFileRepository
 import szysz3.planty.domain.repository.PlantIdRepository
@@ -24,7 +24,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindPlantRepository(impl: PlantMockRepositoryImpl): PlantRepository
+    abstract fun bindPlantRepository(impl: PlantRepositoryImpl): PlantRepository
 
     @Binds
     @Singleton

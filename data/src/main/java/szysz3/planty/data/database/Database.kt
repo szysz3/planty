@@ -34,7 +34,9 @@ abstract class GardenDatabase : RoomDatabase() {
                     context.applicationContext,
                     GardenDatabase::class.java,
                     GARDEN_DATABASE_NAME
-                ).fallbackToDestructiveMigration() // Replace with migrations in production
+                )
+                    .createFromAsset("$GARDEN_DATABASE_NAME.db")
+                    .fallbackToDestructiveMigration() // Replace with migrations in production
                     .build().also { instance = it }
             }
         }
