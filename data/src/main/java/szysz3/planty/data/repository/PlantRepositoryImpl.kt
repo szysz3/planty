@@ -17,8 +17,8 @@ class PlantRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun searchPlants(query: String): List<Plant> {
-        return plantDao.searchPlants(query).toDomain()
+    override suspend fun searchPlants(query: String?, limit: Int, offset: Int): List<Plant> {
+        return plantDao.searchPlants(query, limit, offset).toDomain()
     }
 
     override suspend fun getPlantById(id: Int): Plant? {
@@ -27,9 +27,5 @@ class PlantRepositoryImpl @Inject constructor(
 
     override suspend fun deletePlant(plant: Plant) {
         TODO("Not yet implemented")
-    }
-
-    override suspend fun getPlantsFromRange(startRange: Int, endRange: Int): List<Plant> {
-        return plantDao.getPlantsByRange(startRange, endRange).toDomain()
     }
 }

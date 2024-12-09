@@ -7,8 +7,10 @@ import javax.inject.Inject
 
 class PlantSearchUseCase @Inject constructor(
     private val repository: PlantRepository
-) : BaseUseCase<String, List<Plant>>() {
-    override suspend fun invoke(input: String): List<Plant> {
-        return repository.searchPlants(input)
+) : BaseUseCase<PlantSearchUseCaseParams, List<Plant>>() {
+    override suspend fun invoke(input: PlantSearchUseCaseParams): List<Plant> {
+        return repository.searchPlants(input.query, input.startRange, input.endRange)
     }
 }
+
+data class PlantSearchUseCaseParams(val query: String?, val startRange: Int, val endRange: Int)

@@ -33,10 +33,15 @@ class PlantMockRepositoryImpl @Inject constructor(@ApplicationContext context: C
         TODO("Not yet implemented")
     }
 
-    override suspend fun searchPlants(query: String): List<Plant> {
-        return plantData.filter { plant ->
-            plant.commonName?.lowercase()?.contains(query) == true || plant.latinName.lowercase()
-                .contains(query)
+    override suspend fun searchPlants(query: String?, limit: Int, offset: Int): List<Plant> {
+        return if (query.isNullOrBlank()) {
+            plantData.subList(limit, offset)
+        } else {
+            plantData.filter { plant ->
+                plant.commonName?.lowercase()
+                    ?.contains(query) == true || plant.latinName.lowercase()
+                    .contains(query)
+            }.subList(limit, offset)
         }
     }
 
@@ -46,9 +51,5 @@ class PlantMockRepositoryImpl @Inject constructor(@ApplicationContext context: C
 
     override suspend fun deletePlant(plant: Plant) {
         TODO("Not yet implemented")
-    }
-
-    override suspend fun getPlantsFromRange(startRange: Int, endRange: Int): List<Plant> {
-        return plantData.subList(startRange, endRange)
     }
 }

@@ -21,8 +21,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,6 +29,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.collectAsLazyPagingItems
 import szysz3.planty.R
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.plantaplant.composable.PlantCard
@@ -44,11 +43,9 @@ fun PlantAPlantScreen(
     plantAPlantViewModel: PlantAPlantViewModel,
     onNavigateToPlantDetails: (PlantDetailsScreenOrigin) -> Unit
 ) {
-    val uiState by plantAPlantViewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
-
-    // Local state for managing search query input
-    val localSearchQuery = remember { mutableStateOf(uiState.searchQuery) }
+    val plants = plantAPlantViewModel.pagedPlants.collectAsLazyPagingItems()
+    val localSearchQuery = remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         mainScreenViewModel.updateShowBackButton(true)
@@ -118,14 +115,17 @@ fun PlantAPlantScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(uiState.plants.size) { index ->
-                    PlantCard(
-                        plant = uiState.plants[index],
-                        onPlantSelected = {
-                            plantAPlantViewModel.selectPlant(uiState.plants[index])
-                            onNavigateToPlantDetails(PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN)
-                        }
-                    )
+                items(plants.itemCount) { index ->
+                    val plant = plants[index]
+                    plant?.let {
+                        PlantCard(
+                            plant = plant,
+                            onPlantSelected = {
+                                plantAPlantViewModel.selectPlant(plant)
+                                onNavigateToPlantDetails(PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN)
+                            }
+                        )
+                    }
                 }
             }
         }

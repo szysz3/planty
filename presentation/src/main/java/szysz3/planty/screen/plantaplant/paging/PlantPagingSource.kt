@@ -2,13 +2,14 @@ package szysz3.planty.screen.plantaplant.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import szysz3.planty.domain.usecase.GetPlantsFromRangeParams
-import szysz3.planty.domain.usecase.GetPlantsFromRangeUseCase
+import szysz3.planty.domain.usecase.PlantSearchUseCase
+import szysz3.planty.domain.usecase.PlantSearchUseCaseParams
 import szysz3.planty.screen.plantaplant.model.Plant
 import toPresentationModel
 
 class PlantPagingSource(
-    private val getPlantFromRangeUseCase: GetPlantsFromRangeUseCase,
+    private val searchPlantUseCase: PlantSearchUseCase,
+    private val query: String?
 ) : PagingSource<Int, Plant>() {
     override fun getRefreshKey(state: PagingState<Int, Plant>): Int? {
         return state.anchorPosition?.let { anchor ->
@@ -22,10 +23,11 @@ class PlantPagingSource(
         val startIndex = (page - 1) * 100
         val endIndex = startIndex + 99
         return try {
-            val data = getPlantFromRangeUseCase(
-                GetPlantsFromRangeParams(
-                    startIndex,
-                    endIndex
+            val data = searchPlantUseCase(
+                PlantSearchUseCaseParams(
+                    query,
+                    endIndex,
+                    startIndex
                 )
             ).toPresentationModel()
             LoadResult.Page(

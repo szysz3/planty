@@ -5,8 +5,7 @@ import szysz3.planty.domain.model.Plant
 interface PlantRepository {
     suspend fun insertPlant(plant: Plant)
     suspend fun insertPlants(plants: List<Plant>)
-    suspend fun searchPlants(query: String): List<Plant>
+    suspend fun searchPlants(query: String?, limit: Int, offset: Int): List<Plant>
     suspend fun getPlantById(id: Int): Plant?
     suspend fun deletePlant(plant: Plant)
-    suspend fun getPlantsFromRange(startRange: Int, endRange: Int): List<Plant>
 }
