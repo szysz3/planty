@@ -40,11 +40,11 @@ fun mapSoilToString(soil: String): String {
 @Composable
 fun mapShadeToString(shade: String): String {
     return when (shade) {
-        "SN" -> stringResource(R.string.shade_sun_partial)
-        "FS" -> stringResource(R.string.shade_full_sun)
-        "FSN" -> stringResource(R.string.shade_partial_sun)
-        "N" -> stringResource(R.string.shade_full)
-        else -> stringResource(R.string.moisture_unknown)
+        "SN" -> stringResource(R.string.shade_sun_partial) // Some Shade (Sun-Partial)
+        "FS" -> stringResource(R.string.shade_full_shade)  // Full Shade
+        "FSN" -> stringResource(R.string.shade_full_to_partial) // Full Shade to No Shade
+        "N" -> stringResource(R.string.shade_full_sun)  // Full Sun
+        else -> stringResource(R.string.shade_unknown)  // Unknown shade level
     }
 }
 

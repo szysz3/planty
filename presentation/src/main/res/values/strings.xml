@@ -15,10 +15,11 @@
     <string name="deciduous_evergreen_unknown">Unknown</string>
 
     <!-- Shade Levels -->
-    <string name="shade_sun_partial">Sun-Partial</string>
+    <string name="shade_sun_partial">Partial Shade</string>
+    <string name="shade_full_shade">Full Shade</string>
+    <string name="shade_full_to_partial">Shade to Partial Sun</string>
     <string name="shade_full_sun">Full Sun</string>
-    <string name="shade_partial_sun">Full Sun-Partial</string>
-    <string name="shade_full">Full Shade</string>
+    <string name="shade_unknown">Unknown Shade</string>
 
     <!-- Soil Types -->
     <string name="soil_light">Light</string>
@@ -48,8 +49,6 @@
     <string name="well_drained_yes">Well-Drained</string>
     <string name="well_drained_no">Poorly-Drained</string>
     <string name="well_drained_unknown">Unknown</string>
-    <string name="saline_yes">Saline OK</string>
-    <string name="saline_no">No Saline</string>
 
     <!-- Growth Rate -->
     <string name="growth_rate_slow">Slow</string>
