@@ -21,10 +21,11 @@ fun ImageWithTextHorizontal(
     imageRes: Int,
     title: String,
     iconSize: Int = 36,
-    textStyle: TextStyle = MaterialTheme.typography.titleMedium
+    textStyle: TextStyle = MaterialTheme.typography.titleMedium,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .padding(8.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,

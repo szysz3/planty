@@ -27,12 +27,15 @@ import szysz3.planty.R
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
 import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
+import szysz3.planty.screen.plantdetails.composable.EvenGrid
+import szysz3.planty.screen.plantdetails.model.PlantDetailItem
 import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
 import szysz3.planty.screen.plantdetails.model.mapDeciduousEvergreenToString
 import szysz3.planty.screen.plantdetails.model.mapDroughtToString
 import szysz3.planty.screen.plantdetails.model.mapFrostTenderToString
 import szysz3.planty.screen.plantdetails.model.mapGrowthRateToString
 import szysz3.planty.screen.plantdetails.model.mapHardinessToString
+import szysz3.planty.screen.plantdetails.model.mapMoistureToString
 import szysz3.planty.screen.plantdetails.model.mapPHToString
 import szysz3.planty.screen.plantdetails.model.mapPoorSoilToString
 import szysz3.planty.screen.plantdetails.model.mapShadeToString
@@ -42,6 +45,7 @@ import szysz3.planty.ui.widgets.DeleteAlertDialog
 import szysz3.planty.ui.widgets.EllipticalBackground
 import szysz3.planty.ui.widgets.ImageWithTextHorizontal
 import szysz3.planty.ui.widgets.RoundedButton
+import timber.log.Timber
 
 @Composable
 fun PlantDetailsScreen(
@@ -68,6 +72,41 @@ fun PlantDetailsScreen(
     EllipticalBackground(R.drawable.bcg3, 0.5f)
 
     selectedPlant?.let { plant ->
+        Timber.d("---> ${plant.hardiness}")
+
+        val elements = listOfNotNull(
+            plant.soil?.takeIf { it.isNotEmpty() }?.let {
+                PlantDetailItem(R.drawable.icon_soil, mapSoilToString(it))
+            },
+            plant.deciduousEvergreen?.takeIf { it.isNotEmpty() }?.let {
+                PlantDetailItem(R.drawable.icon_evergreen, mapDeciduousEvergreenToString(it))
+            },
+            plant.wellDrained?.let {
+                PlantDetailItem(R.drawable.icon_drain, mapWellDrainedToString(it))
+            },
+            plant.frostTender?.let {
+                PlantDetailItem(R.drawable.icon_frost, mapFrostTenderToString(it))
+            },
+            plant.moisture?.let {
+                PlantDetailItem(R.drawable.icon_moisture, mapMoistureToString(it))
+            },
+            plant.shade?.takeIf { it.isNotEmpty() }?.let {
+                PlantDetailItem(R.drawable.icon_shade, mapShadeToString(it))
+            },
+            plant.ph?.takeIf { it.isNotEmpty() }?.let {
+                PlantDetailItem(R.drawable.icon_ph, mapPHToString(it))
+            },
+            plant.poorSoil?.let {
+                PlantDetailItem(R.drawable.icon_poor_soil, mapPoorSoilToString(it))
+            },
+            plant.drought?.let {
+                PlantDetailItem(R.drawable.icon_drought, mapDroughtToString(it))
+            },
+            plant.hardiness?.let {
+                PlantDetailItem(R.drawable.icon_temp, mapHardinessToString(it))
+            }
+        )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -139,7 +178,9 @@ fun PlantDetailsScreen(
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
+
                 Text(text = plant.latinName, style = MaterialTheme.typography.headlineMedium)
+
                 plant.commonName?.let { commonName ->
                     Text(
                         text = "($commonName)",
@@ -147,83 +188,23 @@ fun PlantDetailsScreen(
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                     )
                 }
+
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.Start,
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                    ) {
-                        if (!plant.soil.isNullOrEmpty()) {
-                            ImageWithTextHorizontal(
-                                imageRes = R.drawable.icon_soil,
-                                title = mapSoilToString(plant.soil)
-                            )
-                        }
-                        if (!plant.deciduousEvergreen.isNullOrEmpty()) {
-                            ImageWithTextHorizontal(
-                                imageRes = R.drawable.icon_evergreen,
-                                title = mapDeciduousEvergreenToString(plant.deciduousEvergreen)
-                            )
-                        }
-                        plant.wellDrained?.let { wellDrained ->
-                            ImageWithTextHorizontal(
-                                imageRes = R.drawable.icon_drain,
-                                title = mapWellDrainedToString(wellDrained)
-                            )
-                        }
-                        plant.frostTender?.let { frostTender ->
-                            ImageWithTextHorizontal(
-                                imageRes = R.drawable.icon_frost,
-                                title = mapFrostTenderToString(frostTender)
-                            )
-                        }
+                EvenGrid(
+                    items = elements,
+                    columns = 2, // Set the number of columns
+                    modifier = Modifier.fillMaxWidth(),
+                    createItem = { item ->
+                        ImageWithTextHorizontal(
+                            imageRes = item.imageRes,
+                            title = item.title,
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(4.dp)
+                        )
                     }
-                    Column(
-                        horizontalAlignment = Alignment.Start,
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                    ) {
-                        if (!plant.shade.isNullOrEmpty()) {
-                            ImageWithTextHorizontal(
-                                imageRes = R.drawable.icon_shade,
-                                title = mapShadeToString(plant.shade)
-                            )
-                        }
-                        if (!plant.ph.isNullOrEmpty()) {
-                            ImageWithTextHorizontal(
-                                imageRes = R.drawable.icon_ph,
-                                title = mapPHToString(plant.ph)
-                            )
-                        }
-                        plant.poorSoil?.let { poorSoil ->
-                            ImageWithTextHorizontal(
-                                imageRes = R.drawable.icon_poor_soil,
-                                title = mapPoorSoilToString(poorSoil)
-                            )
-                        }
-                        plant.drought?.let { drought ->
-                            ImageWithTextHorizontal(
-                                imageRes = R.drawable.icon_drought,
-                                title = mapDroughtToString(drought)
-                            )
-                        }
-                        plant.hardiness?.let { hardiness ->
-                            ImageWithTextHorizontal(
-                                imageRes = R.drawable.icon_frost,
-                                title = mapHardinessToString(hardiness)
-                            )
-                        }
-                    }
-                }
+                )
 
                 if (!plant.cultivationDetails.isNullOrEmpty()) {
                     Spacer(modifier = Modifier.height(16.dp))
@@ -237,6 +218,7 @@ fun PlantDetailsScreen(
                     Text(text = plant.cultivationDetails, modifier = Modifier.padding(8.dp))
                 }
             }
+
             if (origin == PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN) {
                 RoundedButton(
                     onClick = {
