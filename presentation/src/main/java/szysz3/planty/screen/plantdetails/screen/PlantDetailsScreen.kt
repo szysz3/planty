@@ -28,11 +28,20 @@ import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
 import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
 import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
+import szysz3.planty.screen.plantdetails.model.mapDeciduousEvergreenToString
+import szysz3.planty.screen.plantdetails.model.mapDroughtToString
+import szysz3.planty.screen.plantdetails.model.mapFrostTenderToString
+import szysz3.planty.screen.plantdetails.model.mapGrowthRateToString
+import szysz3.planty.screen.plantdetails.model.mapHardinessToString
+import szysz3.planty.screen.plantdetails.model.mapPHToString
+import szysz3.planty.screen.plantdetails.model.mapPoorSoilToString
+import szysz3.planty.screen.plantdetails.model.mapShadeToString
+import szysz3.planty.screen.plantdetails.model.mapSoilToString
+import szysz3.planty.screen.plantdetails.model.mapWellDrainedToString
 import szysz3.planty.ui.widgets.DeleteAlertDialog
 import szysz3.planty.ui.widgets.EllipticalBackground
 import szysz3.planty.ui.widgets.ImageWithTextHorizontal
 import szysz3.planty.ui.widgets.RoundedButton
-import timber.log.Timber
 
 @Composable
 fun PlantDetailsScreen(
@@ -110,20 +119,20 @@ fun PlantDetailsScreen(
                         plant.width?.let { width ->
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_width,
-                                title = "15,5m"
+                                title = width.toString()
                             )
                         }
 
                         plant.height?.let { height ->
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_height,
-                                title = "15,5m"
+                                title = height.toString()
                             )
                         }
                         if (!plant.growthRate.isNullOrEmpty()) {
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_growth_rate,
-                                title = "Very fast growing"
+                                title = mapGrowthRateToString(plant.growthRate)
                             )
                         }
                     }
@@ -154,25 +163,25 @@ fun PlantDetailsScreen(
                         if (!plant.soil.isNullOrEmpty()) {
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_soil,
-                                title = "well drained, feritile"
+                                title = mapSoilToString(plant.soil)
                             )
                         }
                         if (!plant.deciduousEvergreen.isNullOrEmpty()) {
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_evergreen,
-                                title = "yes"
+                                title = mapDeciduousEvergreenToString(plant.deciduousEvergreen)
                             )
                         }
                         plant.wellDrained?.let { wellDrained ->
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_drain,
-                                title = "yes"
+                                title = mapWellDrainedToString(wellDrained)
                             )
                         }
                         plant.frostTender?.let { frostTender ->
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_frost,
-                                title = "yes"
+                                title = mapFrostTenderToString(frostTender)
                             )
                         }
                     }
@@ -186,31 +195,36 @@ fun PlantDetailsScreen(
                         if (!plant.shade.isNullOrEmpty()) {
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_shade,
-                                title = "full sun"
+                                title = mapShadeToString(plant.shade)
                             )
                         }
                         if (!plant.ph.isNullOrEmpty()) {
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_ph,
-                                title = "7"
+                                title = mapPHToString(plant.ph)
                             )
                         }
                         plant.poorSoil?.let { poorSoil ->
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_poor_soil,
-                                title = "yes"
+                                title = mapPoorSoilToString(poorSoil)
                             )
                         }
                         plant.drought?.let { drought ->
                             ImageWithTextHorizontal(
                                 imageRes = R.drawable.icon_drought,
-                                title = "yes"
+                                title = mapDroughtToString(drought)
+                            )
+                        }
+                        plant.hardiness?.let { hardiness ->
+                            ImageWithTextHorizontal(
+                                imageRes = R.drawable.icon_frost,
+                                title = mapHardinessToString(hardiness)
                             )
                         }
                     }
                 }
 
-                Timber.d("----> ${plant.cultivationDetails}")
                 if (!plant.cultivationDetails.isNullOrEmpty()) {
                     Spacer(modifier = Modifier.height(16.dp))
                     ImageWithTextHorizontal(

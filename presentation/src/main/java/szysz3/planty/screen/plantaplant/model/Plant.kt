@@ -16,6 +16,7 @@ data class Plant(
     val poorSoil: Boolean?,
     val drought: Boolean?,
     val frostTender: Boolean?,
+    val hardiness: Int?,
     val cultivationDetails: String?,
     val imageRes: Int
 )

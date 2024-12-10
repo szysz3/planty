@@ -1,3 +1,75 @@
 <resources>
     <string name="app_name">Planty</string>
+
+    <!-- PLANT DETAILS SCREEN -->
+
+    <!-- Moisture -->
+    <string name="moisture_medium">Medium</string>
+    <string name="moisture_dry_to_medium">Dry-Medium</string>
+    <string name="moisture_medium_with_wetness">Medium-Wet</string>
+    <string name="moisture_unknown">Unknown</string>
+
+    <!-- Deciduous/Evergreen -->
+    <string name="deciduous">Deciduous</string>
+    <string name="evergreen">Evergreen</string>
+    <string name="deciduous_evergreen_unknown">Unknown</string>
+
+    <!-- Shade Levels -->
+    <string name="shade_sun_partial">Sun-Partial</string>
+    <string name="shade_full_sun">Full Sun</string>
+    <string name="shade_partial_sun">Full Sun-Partial</string>
+    <string name="shade_full">Full Shade</string>
+
+    <!-- Soil Types -->
+    <string name="soil_light">Light</string>
+    <string name="soil_loamy">Loamy</string>
+    <string name="soil_loamy_heavy">Heavy</string>
+    <string name="soil_unknown">Unknown</string>
+
+    <!-- pH Levels -->
+    <string name="ph_acidic">pH &lt; 7</string>
+    <string name="ph_neutral">pH &#61; 7</string>
+    <string name="ph_alkaline">pH &gt; 7</string>
+    <string name="ph_acidic_to_neutral">pH 5-7</string>
+    <string name="ph_neutral_to_alkaline">pH 7-9</string>
+    <string name="ph_all_levels">pH 5-9</string>
+    <string name="ph_unknown">Unknown</string>
+
+    <!-- Frost Tender -->
+    <string name="frost_tender_yes">Tender</string>
+    <string name="frost_tender_no">Tolerant</string>
+
+    <!-- Soil Tolerances -->
+    <string name="heavy_clay_yes">Clay OK</string>
+    <string name="heavy_clay_no">No Clay</string>
+    <string name="poor_soil_yes">Poor OK</string>
+    <string name="poor_soil_no">Needs Rich</string>
+    <string name="poor_soil_unknown">Unknown</string>
+    <string name="well_drained_yes">Well-Drained</string>
+    <string name="well_drained_no">Poorly-Drained</string>
+    <string name="well_drained_unknown">Unknown</string>
+    <string name="saline_yes">Saline OK</string>
+    <string name="saline_no">No Saline</string>
+
+    <!-- Growth Rate -->
+    <string name="growth_rate_slow">Slow</string>
+    <string name="growth_rate_medium">Medium</string>
+    <string name="growth_rate_fast">Fast</string>
+    <string name="growth_rate_unknown">Unknown</string>
+
+    <!-- Hardiness Levels (Temperature Ranges in Celsius) -->
+    <string name="hardiness_zone_3">-40°C to -34°C</string>
+    <string name="hardiness_zone_4">-34°C to -29°C</string>
+    <string name="hardiness_zone_5">-29°C to -23°C</string>
+    <string name="hardiness_zone_6">-23°C to -18°C</string>
+    <string name="hardiness_zone_7">-18°C to -12°C</string>
+    <string name="hardiness_zone_8">-12°C to -7°C</string>
+    <string name="hardiness_zone_10">-1°C to +4°C</string>
+    <string name="hardiness_unknown">Unknown</string>
+
+    <!-- Drought Tolerance -->
+    <string name="drought_yes">Tolerant</string>
+    <string name="drought_no">Sensitive</string>
+    <string name="drought_unknown">Unknown</string>
+
 </resources>

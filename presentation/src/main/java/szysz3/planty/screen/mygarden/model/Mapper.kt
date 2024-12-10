@@ -75,6 +75,7 @@ fun PlantDomain.toPresentationModel(): Plant {
         drought = this.drought,
         frostTender = this.frostTender,
         cultivationDetails = this.cultivationDetails,
+        hardiness = this.ukHardiness,
         // TODO: get plant image from outside
         imageRes = R.drawable.plant_placeholder
     )
