@@ -4,9 +4,11 @@
     <!-- PLANT DETAILS SCREEN -->
 
     <!-- Moisture -->
-    <string name="moisture_medium">Medium</string>
-    <string name="moisture_dry_to_medium">Dry-Medium</string>
-    <string name="moisture_medium_with_wetness">Medium-Wet</string>
+    <string name="moisture_medium">Moist</string>
+    <string name="moisture_dry_to_medium">Dry-Moist</string>
+    <string name="moisture_medium_with_wetness">Moist-Wet</string>
+    <string name="moisture_dry_to_medium_to_wet">Dry-Moist-Wet</string>
+    <string name="moisture_wet">Wet</string>
     <string name="moisture_unknown">Unknown</string>
 
     <!-- Deciduous/Evergreen -->
@@ -15,21 +17,22 @@
     <string name="deciduous_evergreen_unknown">Unknown</string>
 
     <!-- Shade Levels -->
-    <string name="shade_sun_partial">Partial Shade</string>
+    <string name="shade_sun_partial">Sun-Partial</string>
     <string name="shade_full_shade">Full Shade</string>
-    <string name="shade_full_to_partial">Shade to Partial Sun</string>
+    <string name="shade_full_to_partial">Full Shade-Partial Sun</string>
+    <string name="shade_partial">Partial Shade</string>
     <string name="shade_full_sun">Full Sun</string>
     <string name="shade_unknown">Unknown Shade</string>
 
     <!-- Soil Types -->
-    <string name="soil_light">Light</string>
+    <string name="soil_light">Light (Sandy)</string>
     <string name="soil_loamy">Loamy</string>
-    <string name="soil_loamy_heavy">Heavy</string>
+    <string name="soil_loamy_heavy">Light-Medium-Heavy</string>
     <string name="soil_unknown">Unknown</string>
 
     <!-- pH Levels -->
     <string name="ph_acidic">pH &lt; 7</string>
-    <string name="ph_neutral">pH &#61; 7</string>
+    <string name="ph_neutral">pH = 7</string>
     <string name="ph_alkaline">pH &gt; 7</string>
     <string name="ph_acidic_to_neutral">pH 5-7</string>
     <string name="ph_neutral_to_alkaline">pH 7-9</string>
@@ -39,12 +42,13 @@
     <!-- Frost Tender -->
     <string name="frost_tender_yes">Tender</string>
     <string name="frost_tender_no">Tolerant</string>
-
+    <string name="frost_tender_unknown">Unknown</string>
+    
     <!-- Soil Tolerances -->
     <string name="heavy_clay_yes">Clay OK</string>
     <string name="heavy_clay_no">No Clay</string>
-    <string name="poor_soil_yes">Poor OK</string>
-    <string name="poor_soil_no">Needs Rich</string>
+    <string name="poor_soil_yes">Poor Soil OK</string>
+    <string name="poor_soil_no">Needs Rich Soil</string>
     <string name="poor_soil_unknown">Unknown</string>
     <string name="well_drained_yes">Well-Drained</string>
     <string name="well_drained_no">Poorly-Drained</string>
@@ -52,17 +56,19 @@
 
     <!-- Growth Rate -->
     <string name="growth_rate_slow">Slow</string>
-    <string name="growth_rate_medium">Medium</string>
+    <string name="growth_rate_medium">Moderate</string>
     <string name="growth_rate_fast">Fast</string>
     <string name="growth_rate_unknown">Unknown</string>
 
     <!-- Hardiness Levels (Temperature Ranges in Celsius) -->
+    <string name="hardiness_zone_2">-45°C to -40°C</string>
     <string name="hardiness_zone_3">-40°C to -34°C</string>
     <string name="hardiness_zone_4">-34°C to -29°C</string>
     <string name="hardiness_zone_5">-29°C to -23°C</string>
     <string name="hardiness_zone_6">-23°C to -18°C</string>
     <string name="hardiness_zone_7">-18°C to -12°C</string>
     <string name="hardiness_zone_8">-12°C to -7°C</string>
+    <string name="hardiness_zone_9">-7°C to -1°C</string>
     <string name="hardiness_zone_10">-1°C to +4°C</string>
     <string name="hardiness_unknown">Unknown</string>
 
