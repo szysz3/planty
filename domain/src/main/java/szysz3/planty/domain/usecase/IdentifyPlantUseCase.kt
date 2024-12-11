@@ -5,11 +5,13 @@ import android.net.Uri
 import dagger.hilt.android.qualifiers.ApplicationContext
 import szysz3.planty.domain.model.remote.PlantIdResponse
 import szysz3.planty.domain.repository.PlantIdRepository
+import szysz3.planty.domain.repository.PlantRepository
 import szysz3.planty.domain.usecase.base.BaseUseCase
 import javax.inject.Inject
 
 class IdentifyPlantUseCase @Inject constructor(
     private val idRepo: PlantIdRepository,
+    private val plantRepository: PlantRepository,
     @ApplicationContext private val context: Context
 ) : BaseUseCase<IdentifyPlantsParams, PlantIdResponse?>() {
     override suspend fun invoke(input: IdentifyPlantsParams): PlantIdResponse? {
@@ -19,7 +21,19 @@ class IdentifyPlantUseCase @Inject constructor(
                     ?: throw IllegalArgumentException("Failed to read image data from Uri")
             }
 
-        return idRepo.identifyPlant(imageData, input.apiKey)
+        val plantIdResponse = idRepo.identifyPlant(imageData, input.apiKey)
+        if (plantIdResponse.results.isNotEmpty()) {
+            val localPlant = plantRepository.searchPlants(
+                plantIdResponse.results.first().species.scientificNameWithoutAuthor,
+                1,
+                0
+            )
+            if (localPlant.isNotEmpty()) {
+                return plantIdResponse.copy(plant = localPlant.first())
+            }
+        }
+
+        return plantIdResponse
     }
 }
 

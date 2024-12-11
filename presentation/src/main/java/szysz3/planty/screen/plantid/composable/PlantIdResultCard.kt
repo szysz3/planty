@@ -2,12 +2,15 @@ package szysz3.planty.screen.plantid.composable
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -20,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -32,6 +36,7 @@ import szysz3.planty.screen.plantid.model.PlantResult
 
 @Composable
 fun PlantResultCard(plantResult: PlantResult) {
+    val markAlpha = if (plantResult.plant != null) 0.1f else 0.0f
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -40,59 +45,70 @@ fun PlantResultCard(plantResult: PlantResult) {
         elevation = CardDefaults.cardElevation(4.dp),
         shape = MaterialTheme.shapes.medium
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            Row(
+        Box(modifier = Modifier.fillMaxSize()) {
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(top = 16.dp, start = 16.dp, end = 16.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.plant_placeholder),
-                    contentDescription = "plant image placeholder",
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape)
-                        .align(Alignment.CenterVertically)
-                )
+                    .align(Alignment.TopEnd)
+                    .size(48.dp)
+                    .rotate(45f)
+                    .offset(y = (-48).dp)
+                    .background(color = MaterialTheme.colorScheme.primary)
+            )
 
-                Column(
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                Row(
                     modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(start = 16.dp)
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(top = 16.dp, start = 16.dp, end = 16.dp)
                 ) {
-                    plantResult.name?.let {
-                        Text(
-                            text = it,
-                            style = MaterialTheme.typography.titleMedium,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                    plantResult.scientificName?.let {
-                        Text(
-                            text = "($it)",
-                            style = MaterialTheme.typography.bodyMedium,
-                            overflow = TextOverflow.Ellipsis,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-                        )
+                    Image(
+                        painter = painterResource(id = R.drawable.plant_placeholder),
+                        contentDescription = "plant image placeholder",
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(CircleShape)
+                            .align(Alignment.CenterVertically)
+                    )
+
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(start = 16.dp)
+                    ) {
+                        plantResult.name?.let {
+                            Text(
+                                text = it,
+                                style = MaterialTheme.typography.titleMedium,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                        plantResult.scientificName?.let {
+                            Text(
+                                text = "($it)",
+                                style = MaterialTheme.typography.bodyMedium,
+                                overflow = TextOverflow.Ellipsis,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                            )
+                        }
                     }
                 }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                PlantMatchingBar(
+                    matchLevel = plantResult.confidence.toFloat(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp)
+                        .align(Alignment.CenterHorizontally),
+                    startColor = MaterialTheme.colorScheme.surface,
+                    endColor = MaterialTheme.colorScheme.secondary
+                )
             }
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            PlantMatchingBar(
-                matchLevel = plantResult.confidence.toFloat(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp)
-                    .align(Alignment.CenterHorizontally),
-                startColor = MaterialTheme.colorScheme.surface,
-                endColor = MaterialTheme.colorScheme.secondary
-            )
         }
     }
 }
