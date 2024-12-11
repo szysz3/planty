@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import szysz3.planty.R
 import szysz3.planty.screen.plantaplant.model.Plant
 
 @Composable
@@ -43,7 +44,7 @@ fun PlantCard(
         ) {
             // Placeholder image
             Image(
-                painter = painterResource(id = plant.imageRes),
+                painter = painterResource(id = R.drawable.plant_placeholder),
                 contentDescription = plant.commonName,
                 modifier = Modifier
                     .size(100.dp)

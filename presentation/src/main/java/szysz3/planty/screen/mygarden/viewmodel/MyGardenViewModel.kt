@@ -14,10 +14,10 @@ import szysz3.planty.domain.usecase.base.NoParams
 import szysz3.planty.screen.mygarden.model.GardenCell
 import szysz3.planty.screen.mygarden.model.GardenState
 import szysz3.planty.screen.mygarden.model.MyGardenScreenState
+import szysz3.planty.screen.mygarden.model.toDomainModel
+import szysz3.planty.screen.mygarden.model.toPresentationModel
 import szysz3.planty.screen.plantaplant.model.Plant
 import timber.log.Timber
-import toDomainModel
-import toPresentationModel
 import javax.inject.Inject
 
 @HiltViewModel

@@ -18,5 +18,4 @@ data class Plant(
     val frostTender: Boolean? = null,
     val hardiness: Int? = null,
     val cultivationDetails: String? = null,
-    val imageRes: Int
 )

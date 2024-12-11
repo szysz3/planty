@@ -139,7 +139,7 @@ fun PlantDetailsScreen(
                                 .fillMaxSize(),
                         ) {
                             Image(
-                                painter = painterResource(id = plant.imageRes),
+                                painter = painterResource(id = R.drawable.plant_placeholder),
                                 contentDescription = plant.latinName,
                                 modifier = Modifier
                                     .fillMaxSize(),

@@ -1,6 +1,5 @@
-import szysz3.planty.R
-import szysz3.planty.screen.mygarden.model.GardenCell
-import szysz3.planty.screen.mygarden.model.GardenState
+package szysz3.planty.screen.mygarden.model
+
 import szysz3.planty.screen.plantaplant.model.Plant
 import szysz3.planty.domain.model.GardenCell as GardenCellDomain
 import szysz3.planty.domain.model.GardenState as GardenStateDomain
@@ -54,6 +53,7 @@ fun Plant.toDomain(): PlantDomain {
         drought = this.drought,
         frostTender = this.frostTender,
         cultivationDetails = this.cultivationDetails,
+        ukHardiness = this.hardiness
     )
 }
 
@@ -76,8 +76,6 @@ fun PlantDomain.toPresentationModel(): Plant {
         frostTender = this.frostTender,
         cultivationDetails = this.cultivationDetails,
         hardiness = this.ukHardiness,
-        // TODO: get plant image from outside
-        imageRes = R.drawable.plant_placeholder
     )
 }
 
