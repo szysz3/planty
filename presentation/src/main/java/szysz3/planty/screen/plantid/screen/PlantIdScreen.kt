@@ -77,16 +77,15 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
             CircularProgressIndicator(color = MaterialTheme.colorScheme.onBackground)
         } else {
             uiState.identifiedPlants?.let { plants ->
-                // List of identification results
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp),
                     contentPadding = PaddingValues(vertical = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(plants) { plant ->
-                        PlantResultCard(plantName = plant.name, confidence = plant.confidence)
+                        PlantResultCard(plantResult = plant)
                     }
                 }
             } ?: uiState.errorMessage?.let { error ->

@@ -8,10 +8,12 @@ fun PlantIdResponse.toPresentationModel(): List<PlantResult> {
 }
 
 fun Result.toPresentationModel(): PlantResult {
-    val commonName = species.commonNames?.joinToString(", ") ?: "Unknown"
+    val commonName = species.commonNames?.joinToString(", ")
+    val scientificName = species.scientificName
 
     return PlantResult(
         name = commonName,
+        scientificName = scientificName,
         confidence = score,
     )
 }
