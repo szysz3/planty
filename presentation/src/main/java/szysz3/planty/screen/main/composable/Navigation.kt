@@ -42,8 +42,11 @@ fun NavigationGraph(
                 onNavigateToPlantAPlant = {
                     navigate(navController, NavigationItem.PlantAPlant)
                 },
-                onNavigateToPlantDetails = { origin ->
-                    navigate(navController, NavigationItem.PlantDetails.withArgs(origin.value))
+                onNavigateToPlantDetails = { origin, plantId ->
+                    navigate(
+                        navController,
+                        NavigationItem.PlantDetails.withArgs(origin.value, plantId)
+                    )
                 }
             )
         }
@@ -53,27 +56,43 @@ fun NavigationGraph(
             )
         }
         composable(BottomNavItem.PlantId.route) {
-            PlantIdScreen()
+            PlantIdScreen(mainScreenViewModel = mainScreenViewModel) { plant ->
+                navigate(
+                    navController,
+                    NavigationItem.PlantDetails.withArgs(
+                        PlantDetailsScreenOrigin.PLANT_ID_SCREEN.value,
+                        plant?.id ?: -1
+                    )
+                )
+
+            }
         }
         composable(
             route = NavigationItem.PlantDetails.route,
             arguments = listOf(
-                navArgument(NavigationItem.PLANT_DETAILS_ARG_NAME) {
+                navArgument(NavigationItem.PLANT_DETAILS_ORIGIN_ARG_NAME) {
+                    type = NavType.IntType
+                    nullable = false
+                },
+                navArgument(NavigationItem.PLANT_DETAILS_PLANT_ID_ARG_NAME) {
                     type = NavType.IntType
                     nullable = false
                 }
             )
         ) { backStackEntry ->
             val origin =
-                backStackEntry.arguments?.getInt(NavigationItem.PLANT_DETAILS_ARG_NAME) ?: 0
+                backStackEntry.arguments?.getInt(NavigationItem.PLANT_DETAILS_ORIGIN_ARG_NAME) ?: -1
+            val plantId =
+                backStackEntry.arguments?.getInt(NavigationItem.PLANT_DETAILS_PLANT_ID_ARG_NAME)
+                    ?: -1
             PlantDetailsScreen(
                 mainScreenViewModel = mainScreenViewModel,
-                plantAPlantViewModel = plantAPlantViewModel,
                 myGardenViewModel = myGardenViewModel,
                 origin = PlantDetailsScreenOrigin.fromValue(origin),
                 onPlantChosen = {
                     navController.popBackStack(BottomNavItem.Home.route, false)
                 },
+                plantId = plantId,
                 onNavigateBack = {
                     navController.popBackStack()
                 }
@@ -83,8 +102,8 @@ fun NavigationGraph(
             PlantAPlantScreen(
                 mainScreenViewModel = mainScreenViewModel,
                 plantAPlantViewModel = plantAPlantViewModel,
-            ) { origin ->
-                navigate(navController, NavigationItem.PlantDetails.withArgs(origin.value))
+            ) { origin, plantId ->
+                navigate(navController, NavigationItem.PlantDetails.withArgs(origin.value, plantId))
             }
         }
     }
@@ -100,19 +119,28 @@ fun navigate(navController: NavHostController, navigationItem: NavigationItem) {
 open class NavigationItem(val route: String, val title: String) {
     object PlantAPlant : NavigationItem("/myGarden/plantAPlant", "Plant a plant")
     object PlantDetails :
-        NavigationItem("/myGarden/plantDetails/{${PLANT_DETAILS_ARG_NAME}}", "Plant details") {
-        fun withArgs(origin: Int): NavigationItem {
+        NavigationItem(
+            "/plantDetails/{${PLANT_DETAILS_ORIGIN_ARG_NAME}}/{${PLANT_DETAILS_PLANT_ID_ARG_NAME}}",
+            "Plant details"
+        ) {
+        fun withArgs(origin: Int, plantId: Int): NavigationItem {
             return NavigationItem(
                 route.replace(
-                    "{${PLANT_DETAILS_ARG_NAME}}",
+                    "{${PLANT_DETAILS_ORIGIN_ARG_NAME}}",
                     origin.toString()
-                ), title
+                ).replace(
+                    "{${PLANT_DETAILS_PLANT_ID_ARG_NAME}}",
+                    plantId.toString()
+                ),
+
+                title
             )
         }
     }
 
     companion object {
-        const val PLANT_DETAILS_ARG_NAME = "origin"
+        const val PLANT_DETAILS_ORIGIN_ARG_NAME = "origin"
+        const val PLANT_DETAILS_PLANT_ID_ARG_NAME = "plantId"
 
         fun getTitleForRoute(route: String): String? {
             return when {

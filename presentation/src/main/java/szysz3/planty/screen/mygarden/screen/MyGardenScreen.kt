@@ -31,7 +31,7 @@ fun MyGardenScreen(
     mainScreenViewModel: MainScreenViewModel,
     myGardenViewModel: MyGardenViewModel,
     onNavigateToPlantAPlant: () -> Unit,
-    onNavigateToPlantDetails: (origin: PlantDetailsScreenOrigin) -> Unit
+    onNavigateToPlantDetails: (origin: PlantDetailsScreenOrigin, plantId: Int) -> Unit
 ) {
     val uiState by myGardenViewModel.uiState.collectAsState()
     val bottomSheetState = rememberModalBottomSheetState()
@@ -66,10 +66,14 @@ fun MyGardenScreen(
                 state = uiState.gardenState,
                 onPlantSelected = { row, col ->
                     myGardenViewModel.updateSelectedCell(row, col)
-                    if (myGardenViewModel.getPlantForSelectedCell() == null) {
+                    val plantForSelectedCell = myGardenViewModel.getPlantForSelectedCell()
+                    if (plantForSelectedCell == null) {
                         onNavigateToPlantAPlant()
                     } else {
-                        onNavigateToPlantDetails(PlantDetailsScreenOrigin.HOME_SCREEN)
+                        onNavigateToPlantDetails(
+                            PlantDetailsScreenOrigin.HOME_SCREEN,
+                            plantForSelectedCell.id
+                        )
                     }
                 }
             )

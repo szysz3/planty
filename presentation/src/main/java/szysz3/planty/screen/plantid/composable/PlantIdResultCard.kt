@@ -32,28 +32,33 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import szysz3.planty.R
+import szysz3.planty.screen.plantaplant.model.Plant
 import szysz3.planty.screen.plantid.model.PlantResult
 
 @Composable
-fun PlantResultCard(plantResult: PlantResult) {
-    val markAlpha = if (plantResult.plant != null) 0.1f else 0.0f
+fun PlantResultCard(plantResult: PlantResult, onCardClick: (plant: Plant?) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(140.dp)
             .clip(MaterialTheme.shapes.medium),
         elevation = CardDefaults.cardElevation(4.dp),
-        shape = MaterialTheme.shapes.medium
+        shape = MaterialTheme.shapes.medium,
+        onClick = {
+            onCardClick(plantResult.plant)
+        }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Box(
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .size(48.dp)
-                    .rotate(45f)
-                    .offset(y = (-48).dp)
-                    .background(color = MaterialTheme.colorScheme.primary)
-            )
+            if (plantResult.plant != null) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .size(48.dp)
+                        .rotate(45f)
+                        .offset(y = (-48).dp)
+                        .background(color = MaterialTheme.colorScheme.primary)
+                )
+            }
 
             Column(
                 modifier = Modifier

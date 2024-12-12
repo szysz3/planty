@@ -22,18 +22,16 @@ class IdentifyPlantUseCase @Inject constructor(
             }
 
         val plantIdResponse = idRepo.identifyPlant(imageData, input.apiKey)
-        if (plantIdResponse.results.isNotEmpty()) {
-            val localPlant = plantRepository.searchPlants(
-                plantIdResponse.results.first().species.scientificNameWithoutAuthor,
+
+        val localMatchingResults = plantIdResponse.results.map { result ->
+            val matchingLocalPlant = plantRepository.searchPlants(
+                result.species.scientificNameWithoutAuthor,
                 1,
                 0
-            )
-            if (localPlant.isNotEmpty()) {
-                return plantIdResponse.copy(plant = localPlant.first())
-            }
+            ).firstOrNull()
+            result.copy(plant = matchingLocalPlant)
         }
-
-        return plantIdResponse
+        return plantIdResponse.copy(results = localMatchingResults)
     }
 }
 

@@ -23,10 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import szysz3.planty.R
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
-import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
 import szysz3.planty.screen.plantdetails.composable.EvenGrid
 import szysz3.planty.screen.plantdetails.model.PlantDetailItem
 import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
@@ -41,39 +41,36 @@ import szysz3.planty.screen.plantdetails.model.mapPoorSoilToString
 import szysz3.planty.screen.plantdetails.model.mapShadeToString
 import szysz3.planty.screen.plantdetails.model.mapSoilToString
 import szysz3.planty.screen.plantdetails.model.mapWellDrainedToString
+import szysz3.planty.screen.plantdetails.viewmodel.PlantDetailsViewModel
 import szysz3.planty.ui.widgets.DeleteAlertDialog
 import szysz3.planty.ui.widgets.EllipticalBackground
 import szysz3.planty.ui.widgets.ImageWithTextHorizontal
 import szysz3.planty.ui.widgets.RoundedButton
-import timber.log.Timber
 
 @Composable
 fun PlantDetailsScreen(
     mainScreenViewModel: MainScreenViewModel,
-    plantAPlantViewModel: PlantAPlantViewModel,
     myGardenViewModel: MyGardenViewModel,
     origin: PlantDetailsScreenOrigin,
+    plantId: Int,
     onNavigateBack: () -> Unit,
-    onPlantChosen: () -> Unit
+    onPlantChosen: () -> Unit,
+    plantDetailsViewMode: PlantDetailsViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(Unit) {
+        plantDetailsViewMode.updatePlantId(plantId)
+
         mainScreenViewModel.updateShowBackButton(true)
+        mainScreenViewModel.updateTopBarVisibility(true)
         mainScreenViewModel.updateShowDeleteButton(origin == PlantDetailsScreenOrigin.HOME_SCREEN)
     }
 
-    val uiState by myGardenViewModel.uiState.collectAsState()
-    val plantUiState by plantAPlantViewModel.uiState.collectAsState()
-
-    val selectedPlant = when (origin) {
-        PlantDetailsScreenOrigin.HOME_SCREEN -> myGardenViewModel.getPlantForSelectedCell()
-        PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN -> plantUiState.selectedPlant
-    }
+    val uiState by plantDetailsViewMode.uiState.collectAsState()
+    val myGardenUiState by myGardenViewModel.uiState.collectAsState()
 
     EllipticalBackground(R.drawable.bcg3, 0.5f)
 
-    selectedPlant?.let { plant ->
-        Timber.d("---> ${plant.hardiness}")
-
+    uiState.selectedPlant?.let { plant ->
         val elements = listOfNotNull(
             plant.soil?.takeIf { it.isNotEmpty() }?.let {
                 PlantDetailItem(R.drawable.icon_soil, mapSoilToString(it))
@@ -231,7 +228,7 @@ fun PlantDetailsScreen(
         }
     }
 
-    if (uiState.isDeleteDialogVisible) {
+    if (myGardenUiState.isDeleteDialogVisible) {
         DeleteAlertDialog(
             title = "Delete Plant",
             message = "Are you sure you want to delete this plant?",

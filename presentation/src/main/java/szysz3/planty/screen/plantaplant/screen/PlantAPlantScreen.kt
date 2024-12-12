@@ -41,7 +41,7 @@ import szysz3.planty.ui.widgets.EllipticalBackground
 fun PlantAPlantScreen(
     mainScreenViewModel: MainScreenViewModel,
     plantAPlantViewModel: PlantAPlantViewModel,
-    onNavigateToPlantDetails: (PlantDetailsScreenOrigin) -> Unit
+    onNavigateToPlantDetails: (PlantDetailsScreenOrigin, Int) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val plants = plantAPlantViewModel.pagedPlants.collectAsLazyPagingItems()
@@ -122,7 +122,10 @@ fun PlantAPlantScreen(
                             plant = plant,
                             onPlantSelected = {
                                 plantAPlantViewModel.selectPlant(plant)
-                                onNavigateToPlantDetails(PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN)
+                                onNavigateToPlantDetails(
+                                    PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN,
+                                    plant.id
+                                )
                             }
                         )
                     }

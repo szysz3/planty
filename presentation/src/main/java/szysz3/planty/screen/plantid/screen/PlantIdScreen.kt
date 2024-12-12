@@ -27,6 +27,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import szysz3.planty.R
+import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
+import szysz3.planty.screen.plantaplant.model.Plant
 import szysz3.planty.screen.plantid.composable.PlantResultCard
 import szysz3.planty.screen.plantid.viewmodel.PlantIdViewModel
 import szysz3.planty.ui.widgets.EllipticalBackground
@@ -34,7 +36,11 @@ import szysz3.planty.ui.widgets.FloatingActionButton
 import szysz3.planty.util.PermissionUtils
 
 @Composable
-fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
+fun PlantIdScreen(
+    mainScreenViewModel: MainScreenViewModel,
+    viewModel: PlantIdViewModel = hiltViewModel(),
+    onCardClicked: (plant: Plant?) -> Unit
+) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
     var shouldLaunchCamera by remember { mutableStateOf(false) }
@@ -54,6 +60,10 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
         if (success) {
             viewModel.identifyPlant()
         }
+    }
+
+    LaunchedEffect(Unit) {
+        mainScreenViewModel.updateTopBarVisibility(false)
     }
 
     LaunchedEffect(uiState.photoUri, shouldLaunchCamera) {
@@ -85,7 +95,11 @@ fun PlantIdScreen(viewModel: PlantIdViewModel = hiltViewModel()) {
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(plants) { plant ->
-                        PlantResultCard(plantResult = plant)
+                        PlantResultCard(plantResult = plant) { plant ->
+                            plant?.let { plant ->
+                                onCardClicked(plant)
+                            }
+                        }
                     }
                 }
             } ?: uiState.errorMessage?.let { error ->

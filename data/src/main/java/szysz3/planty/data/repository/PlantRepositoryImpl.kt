@@ -22,7 +22,7 @@ class PlantRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPlantById(id: Int): Plant? {
-        TODO("Not yet implemented")
+        return plantDao.getPlantById(id)?.toDomain()
     }
 
     override suspend fun deletePlant(plant: Plant) {
