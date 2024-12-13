@@ -56,15 +56,16 @@ fun NavigationGraph(
             )
         }
         composable(BottomNavItem.PlantId.route) {
-            PlantIdScreen(mainScreenViewModel = mainScreenViewModel) { plant ->
-                navigate(
-                    navController,
-                    NavigationItem.PlantDetails.withArgs(
-                        PlantDetailsScreenOrigin.PLANT_ID_SCREEN.value,
-                        plant?.id ?: -1
+            PlantIdScreen(mainScreenViewModel = mainScreenViewModel) { localMatchingPlant ->
+                localMatchingPlant?.let {
+                    navigate(
+                        navController,
+                        NavigationItem.PlantDetails.withArgs(
+                            PlantDetailsScreenOrigin.PLANT_ID_SCREEN.value,
+                            localMatchingPlant.id
+                        )
                     )
-                )
-
+                }
             }
         }
         composable(

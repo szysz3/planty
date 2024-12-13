@@ -34,12 +34,13 @@ import szysz3.planty.screen.plantid.viewmodel.PlantIdViewModel
 import szysz3.planty.ui.widgets.EllipticalBackground
 import szysz3.planty.ui.widgets.FloatingActionButton
 import szysz3.planty.util.PermissionUtils
+import szysz3.planty.util.openWebSearch
 
 @Composable
 fun PlantIdScreen(
     mainScreenViewModel: MainScreenViewModel,
     viewModel: PlantIdViewModel = hiltViewModel(),
-    onCardClicked: (plant: Plant?) -> Unit
+    onOpenPlantDetails: (plant: Plant?) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -94,10 +95,12 @@ fun PlantIdScreen(
                     contentPadding = PaddingValues(vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    items(plants) { plant ->
-                        PlantResultCard(plantResult = plant) { plant ->
-                            plant?.let { plant ->
-                                onCardClicked(plant)
+                    items(plants) { plantIdResult ->
+                        PlantResultCard(plantResult = plantIdResult) { plant ->
+                            if (plant != null) {
+                                onOpenPlantDetails(plant)
+                            } else {
+                                openWebSearch(plantIdResult.scientificName, context)
                             }
                         }
                     }

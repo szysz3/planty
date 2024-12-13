@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,8 +47,10 @@ import szysz3.planty.screen.plantdetails.model.mapWellDrainedToString
 import szysz3.planty.screen.plantdetails.viewmodel.PlantDetailsViewModel
 import szysz3.planty.ui.widgets.DeleteAlertDialog
 import szysz3.planty.ui.widgets.EllipticalBackground
+import szysz3.planty.ui.widgets.ImageButton
 import szysz3.planty.ui.widgets.ImageWithTextHorizontal
 import szysz3.planty.ui.widgets.RoundedButton
+import szysz3.planty.util.openWebSearch
 
 @Composable
 fun PlantDetailsScreen(
@@ -67,6 +72,7 @@ fun PlantDetailsScreen(
 
     val uiState by plantDetailsViewMode.uiState.collectAsState()
     val myGardenUiState by myGardenViewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     EllipticalBackground(R.drawable.bcg3, 0.5f)
 
@@ -213,6 +219,16 @@ fun PlantDetailsScreen(
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(text = plant.cultivationDetails, modifier = Modifier.padding(8.dp))
+                }
+
+                ImageButton(
+                    icon = Icons.Rounded.Search,
+                    text = "More details",
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .padding(8.dp)
+                ) {
+                    openWebSearch(plant.latinName, context)
                 }
             }
 
