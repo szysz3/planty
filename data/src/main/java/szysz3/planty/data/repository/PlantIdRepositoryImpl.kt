@@ -18,9 +18,8 @@ import javax.inject.Inject
 class PlantIdRepositoryImpl @Inject constructor(
     private val client: OkHttpClient
 ) : PlantIdRepository {
-    
-    private val moshi by lazy { Moshi.Builder().add(KotlinJsonAdapterFactory()).build() }
-    private val responseAdapter by lazy { moshi.adapter(PlantIdResponse::class.java) }
+    private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+    private val responseAdapter = moshi.adapter(PlantIdResponse::class.java)
 
     override suspend fun identifyPlant(
         image: ByteArray,

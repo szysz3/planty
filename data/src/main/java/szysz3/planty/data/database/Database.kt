@@ -7,12 +7,19 @@ import androidx.room.RoomDatabase
 import szysz3.planty.data.database.dao.GardenCellDao
 import szysz3.planty.data.database.dao.GardenPlantDao
 import szysz3.planty.data.database.dao.PlantDao
+import szysz3.planty.data.database.dao.PlantImageDao
 import szysz3.planty.data.database.entity.GardenCellEntity
 import szysz3.planty.data.database.entity.GardenPlantEntity
 import szysz3.planty.data.database.entity.PlantEntity
+import szysz3.planty.data.database.entity.PlantImageEntity
 
 @Database(
-    entities = [GardenCellEntity::class, PlantEntity::class, GardenPlantEntity::class],
+    entities = [
+        GardenCellEntity::class,
+        PlantEntity::class,
+        GardenPlantEntity::class,
+        PlantImageEntity::class,
+    ],
     version = 4
 )
 abstract class GardenDatabase : RoomDatabase() {
@@ -21,6 +28,8 @@ abstract class GardenDatabase : RoomDatabase() {
     abstract fun plantDao(): PlantDao
 
     abstract fun gardenPlantDao(): GardenPlantDao
+
+    abstract fun plantImageDao(): PlantImageDao
 
     companion object {
         private const val GARDEN_DATABASE_NAME = "garden_db"

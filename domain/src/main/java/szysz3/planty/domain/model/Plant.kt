@@ -41,4 +41,5 @@ data class Plant(
     val frostTender: Boolean? = null,
     val scented: Boolean? = null,
     val medicinalRating: Int? = null,
+    val imageUrls: List<String>? = null
 )
