@@ -13,6 +13,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import szysz3.planty.screen.imagegallery.screen.ImageGalleryScreen
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
 import szysz3.planty.screen.plantaplant.screen.PlantAPlantScreen
@@ -69,6 +70,23 @@ fun NavigationGraph(
             }
         }
         composable(
+            route = NavigationItem.ImageGallery.route,
+            arguments = listOf(
+                navArgument(NavigationItem.IMAGE_GALLERY_PLANT_ID_ARG_NAME) {
+                    type = NavType.IntType
+                    nullable = false
+                }
+            )
+        ) { backStackEntry ->
+            val plantId =
+                backStackEntry.arguments?.getInt(NavigationItem.IMAGE_GALLERY_PLANT_ID_ARG_NAME)
+                    ?: -1
+            ImageGalleryScreen(plantId = plantId) {
+                // on close action
+            }
+        }
+
+        composable(
             route = NavigationItem.PlantDetails.route,
             arguments = listOf(
                 navArgument(NavigationItem.PLANT_DETAILS_ORIGIN_ARG_NAME) {
@@ -94,6 +112,9 @@ fun NavigationGraph(
                     navController.popBackStack(BottomNavItem.Home.route, false)
                 },
                 plantId = plantId,
+                onPlantImageClicked = { plantId ->
+                    navigate(navController, NavigationItem.ImageGallery.withArgs(plantId))
+                },
                 onNavigateBack = {
                     navController.popBackStack()
                 }
@@ -139,9 +160,26 @@ open class NavigationItem(val route: String, val title: String) {
         }
     }
 
+    object ImageGallery :
+        NavigationItem(
+            "/imageGallery/{${IMAGE_GALLERY_PLANT_ID_ARG_NAME}}",
+            "Image gallery"
+        ) {
+        fun withArgs(plantId: Int): NavigationItem {
+            return NavigationItem(
+                route.replace(
+                    "{${IMAGE_GALLERY_PLANT_ID_ARG_NAME}}",
+                    plantId.toString()
+                ),
+                title
+            )
+        }
+    }
+
     companion object {
         const val PLANT_DETAILS_ORIGIN_ARG_NAME = "origin"
         const val PLANT_DETAILS_PLANT_ID_ARG_NAME = "plantId"
+        const val IMAGE_GALLERY_PLANT_ID_ARG_NAME = "plantId"
 
         fun getTitleForRoute(route: String): String? {
             return when {

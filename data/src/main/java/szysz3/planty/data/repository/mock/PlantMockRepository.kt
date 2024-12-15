@@ -25,14 +25,6 @@ class PlantMockRepositoryImpl @Inject constructor(@ApplicationContext context: C
         plants
     }
 
-    override suspend fun insertPlant(plant: Plant) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun insertPlants(plants: List<Plant>) {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun searchPlants(query: String?, limit: Int, offset: Int): List<Plant> {
         return if (query.isNullOrBlank()) {
             plantData.subList(limit, offset)
@@ -46,10 +38,6 @@ class PlantMockRepositoryImpl @Inject constructor(@ApplicationContext context: C
     }
 
     override suspend fun getPlantById(id: Int): Plant? {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun deletePlant(plant: Plant) {
         TODO("Not yet implemented")
     }
 }

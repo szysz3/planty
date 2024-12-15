@@ -1,31 +1,40 @@
 package szysz3.planty.data.repository
 
 import szysz3.planty.data.database.dao.PlantDao
+import szysz3.planty.data.database.dao.PlantImageDao
 import szysz3.planty.data.database.entity.toDomain
 import szysz3.planty.domain.model.Plant
 import szysz3.planty.domain.repository.PlantRepository
 import javax.inject.Inject
 
 class PlantRepositoryImpl @Inject constructor(
-    private val plantDao: PlantDao
+    private val plantDao: PlantDao,
+    private val plantImagesDao: PlantImageDao
 ) : PlantRepository {
-    override suspend fun insertPlant(plant: Plant) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun insertPlants(plants: List<Plant>) {
-        TODO("Not yet implemented")
-    }
 
     override suspend fun searchPlants(query: String?, limit: Int, offset: Int): List<Plant> {
-        return plantDao.searchPlants(query, limit, offset).toDomain()
+//        return plantDao.searchPlants(query, limit, offset).map { plantEntity ->
+//            val images = plantImagesDao.getImagesByPlantId(plantEntity.id).map { it.imageUrl }
+//            plantEntity.toDomain(images)
+//        }
+
+        return plantDao.searchPlants(query, limit, offset).map { plantEntity ->
+            plantEntity.toDomain(null)
+        }
     }
 
     override suspend fun getPlantById(id: Int): Plant? {
-        return plantDao.getPlantById(id)?.toDomain()
-    }
+//        val plant = plantDao.getPlantById(id)
+//        plant?.let {
+//            val images = plantImagesDao.getImagesByPlantId(plant.id).map { it.imageUrl }
+//            return plant.toDomain(images)
+//        }
 
-    override suspend fun deletePlant(plant: Plant) {
-        TODO("Not yet implemented")
+        val plant = plantDao.getPlantById(id)
+        plant?.let {
+            return plant.toDomain(null)
+        }
+
+        return null
     }
 }

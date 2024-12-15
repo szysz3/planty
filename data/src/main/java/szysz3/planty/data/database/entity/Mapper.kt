@@ -21,7 +21,7 @@ fun GardenCell.toEntity(plantId: Long?): GardenCellEntity {
     )
 }
 
-fun PlantEntity.toDomain(): Plant {
+fun PlantEntity.toDomain(imageUrls: List<String?>?): Plant {
     return Plant(
         id = this.id,
         latinName = this.latinName,
@@ -62,7 +62,8 @@ fun PlantEntity.toDomain(): Plant {
         edibilityRating = this.edibilityRating,
         frostTender = this.frostTender,
         scented = this.scented,
-        medicinalRating = this.medicinalRating
+        medicinalRating = this.medicinalRating,
+        imageUrls = imageUrls
     )
 }
 
@@ -200,13 +201,4 @@ fun Plant.toEntity(): PlantEntity {
         medicinalRating = this.medicinalRating,
         author = ""
     )
-}
-
-
-fun List<PlantEntity>.toDomain(): List<Plant> {
-    return this.map { it.toDomain() }
-}
-
-fun List<Plant>.toEntity(): List<PlantEntity> {
-    return this.map { it.toEntity() }
 }

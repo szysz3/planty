@@ -60,19 +60,20 @@ fun PlantDetailsScreen(
     plantId: Int,
     onNavigateBack: () -> Unit,
     onPlantChosen: () -> Unit,
-    plantDetailsViewMode: PlantDetailsViewModel = hiltViewModel(),
+    onPlantImageClicked: (Int) -> Unit,
+    plantDetailsViewModel: PlantDetailsViewModel = hiltViewModel(),
 ) {
+    val uiState by plantDetailsViewModel.uiState.collectAsState()
+    val myGardenUiState by myGardenViewModel.uiState.collectAsState()
+    val context = LocalContext.current
+
     LaunchedEffect(Unit) {
-        plantDetailsViewMode.updatePlantId(plantId)
+        plantDetailsViewModel.updatePlantId(plantId)
 
         mainScreenViewModel.updateShowBackButton(true)
         mainScreenViewModel.updateTopBarVisibility(true)
         mainScreenViewModel.updateShowDeleteButton(origin == PlantDetailsScreenOrigin.HOME_SCREEN)
     }
-
-    val uiState by plantDetailsViewMode.uiState.collectAsState()
-    val myGardenUiState by myGardenViewModel.uiState.collectAsState()
-    val context = LocalContext.current
 
     EllipticalBackground(R.drawable.bcg3, 0.5f)
 
@@ -140,6 +141,9 @@ fun PlantDetailsScreen(
                         Card(
                             modifier = Modifier
                                 .fillMaxSize(),
+                            onClick = {
+                                onPlantImageClicked(plant.id)
+                            }
                         ) {
                             Image(
                                 painter = painterResource(id = R.drawable.plant_placeholder),

@@ -20,7 +20,7 @@ import szysz3.planty.data.database.entity.PlantImageEntity
         GardenPlantEntity::class,
         PlantImageEntity::class,
     ],
-    version = 4
+    version = 5
 )
 abstract class GardenDatabase : RoomDatabase() {
     abstract fun gardenCellDao(): GardenCellDao
@@ -45,7 +45,7 @@ abstract class GardenDatabase : RoomDatabase() {
                     GARDEN_DATABASE_NAME
                 )
                     .createFromAsset("$GARDEN_DATABASE_NAME.db")
-                    .fallbackToDestructiveMigration() // Replace with migrations in production
+                    .fallbackToDestructiveMigration()
                     .build().also { instance = it }
             }
         }

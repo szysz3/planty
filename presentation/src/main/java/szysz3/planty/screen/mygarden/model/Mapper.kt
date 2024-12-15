@@ -53,7 +53,8 @@ fun Plant.toDomain(): PlantDomain {
         drought = this.drought,
         frostTender = this.frostTender,
         cultivationDetails = this.cultivationDetails,
-        ukHardiness = this.hardiness
+        ukHardiness = this.hardiness,
+        imageUrls = this.imageUrls
     )
 }
 
@@ -76,6 +77,7 @@ fun PlantDomain.toPresentationModel(): Plant {
         frostTender = this.frostTender,
         cultivationDetails = this.cultivationDetails,
         hardiness = this.ukHardiness,
+        imageUrls = this.imageUrls
     )
 }
 
