@@ -13,26 +13,18 @@ class PlantRepositoryImpl @Inject constructor(
 ) : PlantRepository {
 
     override suspend fun searchPlants(query: String?, limit: Int, offset: Int): List<Plant> {
-//        return plantDao.searchPlants(query, limit, offset).map { plantEntity ->
-//            val images = plantImagesDao.getImagesByPlantId(plantEntity.id).map { it.imageUrl }
-//            plantEntity.toDomain(images)
-//        }
-
         return plantDao.searchPlants(query, limit, offset).map { plantEntity ->
-            plantEntity.toDomain(null)
+            val images =
+                plantImagesDao.getImagesByPlantId(plantEntity.id)?.map { it.imageUrl }.orEmpty()
+            plantEntity.toDomain(images)
         }
     }
 
     override suspend fun getPlantById(id: Int): Plant? {
-//        val plant = plantDao.getPlantById(id)
-//        plant?.let {
-//            val images = plantImagesDao.getImagesByPlantId(plant.id).map { it.imageUrl }
-//            return plant.toDomain(images)
-//        }
-
         val plant = plantDao.getPlantById(id)
         plant?.let {
-            return plant.toDomain(null)
+            val images = plantImagesDao.getImagesByPlantId(plant.id)?.map { it.imageUrl }
+            return plant.toDomain(images)
         }
 
         return null

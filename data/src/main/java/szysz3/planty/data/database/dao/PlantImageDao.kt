@@ -8,9 +8,9 @@ import szysz3.planty.data.database.entity.PlantImageEntity
 interface PlantImageDao {
 
     @Query("SELECT * FROM plant_images WHERE plantId = :plantId")
-    suspend fun getImagesByPlantId(plantId: Int): List<PlantImageEntity>
+    suspend fun getImagesByPlantId(plantId: Int): List<PlantImageEntity>?
 
     @Query("SELECT * FROM plant_images")
-    suspend fun getAllPlantImages(): List<PlantImageEntity>
+    suspend fun getAllPlantImages(): List<PlantImageEntity>?
 
 }

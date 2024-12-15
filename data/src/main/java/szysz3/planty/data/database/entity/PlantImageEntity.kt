@@ -17,6 +17,6 @@ import androidx.room.PrimaryKey
 )
 data class PlantImageEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val plantId: Int? = null,
+    val plantId: Int,
     val imageUrl: String? = null
 )
