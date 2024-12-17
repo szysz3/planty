@@ -30,7 +30,7 @@ class PlantAPlantViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val pagedPlants = _searchQuery.flatMapLatest { query ->
         Pager(
-            config = PagingConfig(pageSize = 100, enablePlaceholders = false),
+            config = PagingConfig(pageSize = 20, enablePlaceholders = false),
             pagingSourceFactory = { PlantPagingSource(plantSearchUseCase, query) }
         ).flow.cachedIn(viewModelScope)
     }

@@ -20,8 +20,8 @@ class PlantPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Plant> {
         val page = params.key ?: 1
-        val startIndex = (page - 1) * 100
-        val endIndex = startIndex + 99
+        val startIndex = (page - 1) * 20
+        val endIndex = startIndex + 19
         return try {
             val data = searchPlantUseCase(
                 PlantSearchUseCaseParams(
