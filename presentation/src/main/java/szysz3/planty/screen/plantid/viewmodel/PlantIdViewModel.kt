@@ -58,6 +58,11 @@ class PlantIdViewModel @Inject constructor(
         }
     }
 
+    fun clearResults() {
+        _uiState.value = _uiState.value.copy(identifiedPlants = null)
+        clearErrorMessage()
+    }
+
     fun clearErrorMessage() {
         _uiState.value = _uiState.value.copy(errorMessage = null)
     }

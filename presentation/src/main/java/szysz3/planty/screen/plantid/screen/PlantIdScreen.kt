@@ -3,6 +3,7 @@ package szysz3.planty.screen.plantid.screen
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -111,7 +113,9 @@ fun PlantIdScreen(
             }
         }
 
-        if (!uiState.isLoading) {
+        AnimatedVisibility(
+            visible = uiState.identifiedPlants?.isEmpty() == true || !uiState.isLoading,
+        ) {
             FloatingActionButton(
                 icon = Icons.Rounded.Search,
                 contentDescription = "Identify plant",
@@ -123,7 +127,19 @@ fun PlantIdScreen(
                         permissionLauncher.launch(android.Manifest.permission.CAMERA)
                     }
                 })
-
         }
+
+        AnimatedVisibility(
+            visible = uiState.identifiedPlants?.isNotEmpty() == true,
+        ) {
+            FloatingActionButton(
+                icon = Icons.Rounded.Clear, // Replace with your desired icon
+                contentDescription = "Second action",
+                onClick = {
+                    viewModel.clearResults()
+                }
+            )
+        }
+
     }
 }

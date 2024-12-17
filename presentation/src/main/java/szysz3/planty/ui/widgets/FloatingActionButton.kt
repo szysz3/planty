@@ -21,7 +21,7 @@ fun FloatingActionButton(
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomEnd // For the Floating Action Button
+        contentAlignment = Alignment.BottomEnd
     ) {
         FloatingActionButton(
             onClick = { onClick() },
