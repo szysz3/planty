@@ -31,11 +31,12 @@ import szysz3.planty.screen.plantaplant.model.Plant
 
 @Composable
 fun PlantCard(
+    modifier: Modifier = Modifier,
     plant: Plant? = null,
     onPlantSelected: (() -> Unit)? = null
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .aspectRatio(0.8f)
             .clickable {

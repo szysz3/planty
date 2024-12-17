@@ -25,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -46,7 +47,8 @@ fun PlantAPlantScreen(
 ) {
     val focusManager = LocalFocusManager.current
     val plants = plantAPlantViewModel.pagedPlants.collectAsLazyPagingItems()
-    val localSearchQuery = remember { mutableStateOf("") }
+    val localSearchQuery =
+        remember { mutableStateOf(plantAPlantViewModel.searchQuery.value) }
 
     LaunchedEffect(Unit) {
         mainScreenViewModel.updateShowBackButton(true)
@@ -76,7 +78,7 @@ fun PlantAPlantScreen(
                 value = localSearchQuery.value,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Search
+                    imeAction = ImeAction.Done,
                 ),
                 maxLines = 1,
                 onValueChange = { value ->
@@ -120,7 +122,7 @@ fun PlantAPlantScreen(
                     when (loadState.refresh) {
                         is LoadState.Loading -> {
                             items(10) {
-                                PlantCard()
+                                PlantCard(modifier = Modifier.alpha(0.7f))
                             }
                         }
 
