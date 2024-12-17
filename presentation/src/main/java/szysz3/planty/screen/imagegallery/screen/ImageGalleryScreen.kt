@@ -27,7 +27,6 @@ fun ImageGalleryScreen(
     plantId: Int,
     onClose: () -> Unit
 ) {
-
     val uiState by imageGalleryViewModel.uiState.collectAsState()
     val pagerState = rememberPagerState(initialPage = 0) {
         uiState.imageUrls?.size ?: 0
@@ -41,10 +40,12 @@ fun ImageGalleryScreen(
         uiState.imageUrls?.let { imageUrls ->
             HorizontalPager(
                 state = pagerState,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             ) { page ->
                 imageUrls[page]?.let { url ->
-                    ZoomableImage(imageUrl = url)
+                    ZoomableImage(
+                        imageUrl = url
+                    )
                 }
             }
         }

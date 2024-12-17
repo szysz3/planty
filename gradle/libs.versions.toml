@@ -24,6 +24,7 @@ moshi = "1.15.0"
 constraintlayout = "2.2.0"
 paging-runtime = "3.1.1"
 paging-compose = "1.0.0-alpha20"
+zoomable = "1.6.2"
 
 [libraries]
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
@@ -62,6 +63,7 @@ moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "mosh
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging-runtime" }
 paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging-compose" }
+zoomable = { group = "net.engawapg.lib", name = "zoomable", version.ref = "zoomable" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
