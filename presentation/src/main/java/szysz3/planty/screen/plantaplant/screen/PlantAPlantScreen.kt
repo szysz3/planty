@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import szysz3.planty.R
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
@@ -115,19 +116,31 @@ fun PlantAPlantScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(plants.itemCount) { index ->
-                    val plant = plants[index]
-                    plant?.let {
-                        PlantCard(
-                            plant = plant,
-                            onPlantSelected = {
-                                plantAPlantViewModel.selectPlant(plant)
-                                onNavigateToPlantDetails(
-                                    PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN,
-                                    plant.id
+                plants.apply {
+                    when (loadState.refresh) {
+                        is LoadState.Loading -> {
+                            items(10) {
+                                PlantCard()
+                            }
+                        }
+
+                        else -> {
+                            items(plants.itemCount) { index ->
+                                val plant = plants[index]
+                                PlantCard(
+                                    plant = plant,
+                                    onPlantSelected = {
+                                        plant?.let {
+                                            plantAPlantViewModel.selectPlant(plant)
+                                            onNavigateToPlantDetails(
+                                                PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN,
+                                                plant.id
+                                            )
+                                        }
+                                    }
                                 )
                             }
-                        )
+                        }
                     }
                 }
             }

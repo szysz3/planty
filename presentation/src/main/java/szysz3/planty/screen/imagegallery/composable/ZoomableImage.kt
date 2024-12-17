@@ -8,6 +8,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import net.engawapg.lib.zoomable.rememberZoomState
 import net.engawapg.lib.zoomable.zoomable
+import szysz3.planty.R
 
 @Composable
 fun ZoomableImage(
@@ -18,8 +19,8 @@ fun ZoomableImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(imageUrl)
             .crossfade(true)
-            .placeholder(android.R.drawable.progress_indeterminate_horizontal)
-            .error(android.R.drawable.stat_notify_error)
+            .placeholder(R.drawable.plant_placeholder)
+            .error(R.drawable.plant_placeholder)
             .build(),
         contentDescription = null,
         modifier = Modifier

@@ -31,14 +31,18 @@ import szysz3.planty.screen.plantaplant.model.Plant
 
 @Composable
 fun PlantCard(
-    plant: Plant,
-    onPlantSelected: () -> Unit
+    plant: Plant? = null,
+    onPlantSelected: (() -> Unit)? = null
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(0.8f)
-            .clickable { onPlantSelected() },
+            .clickable {
+                if (onPlantSelected != null) {
+                    onPlantSelected()
+                }
+            },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(
@@ -50,13 +54,13 @@ fun PlantCard(
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(plant.imageUrls?.firstOrNull())
+                    .data(plant?.imageUrls?.firstOrNull())
                     .crossfade(true)
                     .placeholder(R.drawable.plant_placeholder)
                     .error(R.drawable.plant_placeholder)
                     .build(),
                 contentScale = ContentScale.Crop,
-                contentDescription = plant.commonName,
+                contentDescription = plant?.commonName,
                 modifier = Modifier
                     .fillMaxHeight(0.7f)
                     .aspectRatio(1f)
@@ -64,7 +68,7 @@ fun PlantCard(
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = plant.latinName,
+                text = plant?.latinName ?: "Lorem ipsum",
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.titleMedium,
@@ -72,7 +76,7 @@ fun PlantCard(
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth()
             )
-            if (plant.commonName?.isNotBlank() == true) {
+            if (plant?.commonName?.isNotBlank() == true) {
                 Text(
                     text = plant.commonName,
                     style = MaterialTheme.typography.bodySmall,
