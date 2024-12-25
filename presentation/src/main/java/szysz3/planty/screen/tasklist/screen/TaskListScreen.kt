@@ -59,10 +59,10 @@ fun TaskListScreen(
             draggableItems(items = tasks, dragDropState = dragDropState) { modifier, task ->
                 TaskCard(
                     task = task,
-                    modifier = modifier,
-                    onTaskCheckedChanged = { task, isChecked ->
-                        taskListViewModel.toggleTaskCompletion(task, isChecked)
-                    }
+                    onSubTaskCheckedChanged = { task, subtask, isChecked ->
+                        taskListViewModel.toggleSubTaskCompletion(task, subtask, isChecked)
+                    },
+                    onEditClicked = {}
                 )
             }
         }

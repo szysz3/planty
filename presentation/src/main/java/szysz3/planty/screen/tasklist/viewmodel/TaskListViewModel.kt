@@ -42,6 +42,30 @@ class TaskListViewModel @Inject constructor() : ViewModel() {
     fun navigateToAddTaskScreen() {
     }
 
+    fun toggleSubTaskCompletion(task: Task, subTask: SubTask, isCompleted: Boolean) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                tasks = currentState.tasks.map { existingTask ->
+                    if (existingTask == task) {
+                        val updatedSubTasks = existingTask.tasks
+                            .map { if (it == subTask) it.copy(isCompleted = isCompleted) else it }
+                            .sortedWith(
+                                compareBy(
+                                    { it.isCompleted },
+                                    { existingTask.tasks.indexOf(it) })
+                            )
+                        existingTask.copy(
+                            tasks = updatedSubTasks,
+                            isCompleted = updatedSubTasks.all { it.isCompleted }
+                        )
+                    } else {
+                        existingTask
+                    }
+                }
+            )
+        }
+    }
+
     fun toggleTaskCompletion(task: Task, isCompleted: Boolean) {
         _uiState.update {
             it.copy(tasks = it.tasks.map { t ->
@@ -56,7 +80,9 @@ class TaskListViewModel @Inject constructor() : ViewModel() {
                 title = "Watering Plants",
                 tasks = listOf(
                     SubTask(description = "Water the roses", isCompleted = false, cost = 5),
-                    SubTask(description = "Water the tulips", isCompleted = true, cost = 3)
+                    SubTask(description = "Water the tulips", isCompleted = true, cost = 3),
+                    SubTask(description = "Water the pinus", isCompleted = false, cost = 0),
+                    SubTask(description = "Water the maple", isCompleted = true, cost = 1)
                 ),
                 isCompleted = false
             ),
@@ -80,11 +106,6 @@ class TaskListViewModel @Inject constructor() : ViewModel() {
                         isCompleted = true,
                         cost = 0
                     ),
-                    SubTask(
-                        description = "Remove weeds from flower beds",
-                        isCompleted = false,
-                        cost = 15
-                    )
                 ),
                 isCompleted = false
             )
