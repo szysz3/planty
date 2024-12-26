@@ -16,27 +16,3 @@ val DarkGray = Color(0xFF121212)         // Dark gray for background in dark mod
 val DarkBeige = Color(0xFF3E3A39)        // Dark beige for surface elements in dark mode
 val LightGray = Color(0xFFDADADA)        // Light gray for text and icons on dark backgrounds
 val ErrorRedDark = Color(0xFFCF6679)     // Soft red for error messages in dark mode
-
-val EarthyBrown = Color(0xFF443533)
-val CharcoalGrey = Color(0xFF484848)
-val Rosewood = Color(0xFF61494B)
-val SlateGrey = Color(0xFF626262)
-val BlushRose = Color(0xFF7E5F67)
-val CoolGrey = Color(0xFF7B7B7B)
-val LavenderBlush = Color(0xFF997786)
-val AshGrey = Color(0xFF959595)
-val PaleLilac = Color(0xFFAF94A4)
-val SilverGrey = Color(0xFFAEAEAE)
-
-val CardColors = listOf(
-    EarthyBrown,
-    CharcoalGrey,
-    Rosewood,
-    SlateGrey,
-    BlushRose,
-    CoolGrey,
-    LavenderBlush,
-    AshGrey,
-    PaleLilac,
-    SilverGrey
-)
