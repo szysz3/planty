@@ -1,6 +1,6 @@
 package szysz3.planty.screen.mygarden.model
 
-import szysz3.planty.screen.plantaplant.model.Plant
+import szysz3.planty.screen.plantcatalog.model.Plant
 
 data class GardenCell(
     val id: Int,

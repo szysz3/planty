@@ -4,6 +4,7 @@ import MyGardenScreen
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,8 +17,8 @@ import androidx.navigation.navArgument
 import szysz3.planty.screen.imagegallery.screen.ImageGalleryScreen
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
-import szysz3.planty.screen.plantaplant.screen.PlantAPlantScreen
-import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
+import szysz3.planty.screen.plantcatalog.screen.PlantCatalogScreen
+import szysz3.planty.screen.plantcatalog.viewmodel.PlantCatalogViewModel
 import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
 import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreen
 import szysz3.planty.screen.plantid.screen.PlantIdScreen
@@ -29,7 +30,7 @@ fun NavigationGraph(
     navController: NavHostController,
     mainScreenViewModel: MainScreenViewModel,
     myGardenViewModel: MyGardenViewModel,
-    plantAPlantViewModel: PlantAPlantViewModel,
+    plantCatalogViewModel: PlantCatalogViewModel,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -42,7 +43,7 @@ fun NavigationGraph(
                 mainScreenViewModel = mainScreenViewModel,
                 myGardenViewModel = myGardenViewModel,
                 onNavigateToPlantAPlant = {
-                    navigate(navController, NavigationItem.PlantAPlant)
+                    navigate(navController, BottomNavItem.Catalog)
                 },
                 onNavigateToPlantDetails = { origin, plantId ->
                     navigate(
@@ -57,6 +58,14 @@ fun NavigationGraph(
                 mainScreenViewModel = mainScreenViewModel
             ) {
                 navigate(navController, NavigationItem.TaskDetails)
+            }
+        }
+        composable(BottomNavItem.Catalog.route) {
+            PlantCatalogScreen(
+                mainScreenViewModel = mainScreenViewModel,
+                plantCatalogViewModel = plantCatalogViewModel,
+            ) { origin, plantId ->
+                navigate(navController, NavigationItem.PlantDetails.withArgs(origin.value, plantId))
             }
         }
         composable(BottomNavItem.PlantId.route) {
@@ -123,15 +132,6 @@ fun NavigationGraph(
                 }
             )
         }
-        composable(NavigationItem.PlantAPlant.route) {
-            PlantAPlantScreen(
-                mainScreenViewModel = mainScreenViewModel,
-                plantAPlantViewModel = plantAPlantViewModel,
-            ) { origin, plantId ->
-                navigate(navController, NavigationItem.PlantDetails.withArgs(origin.value, plantId))
-            }
-        }
-
         composable(NavigationItem.TaskDetails.route) {
             TaskDetailsScreen(
                 mainScreenViewModel = mainScreenViewModel,
@@ -149,7 +149,8 @@ fun navigate(navController: NavHostController, navigationItem: NavigationItem) {
 
 open class NavigationItem(val route: String, val title: String) {
     object TaskDetails : NavigationItem("/taskList/taskDetails", "Task details")
-    object PlantAPlant : NavigationItem("/myGarden/plantAPlant", "Plant a plant")
+
+    //    object PlantCatalog : NavigationItem("/myGarden/plantCatalog", "Plant catalog")
     object PlantDetails :
         NavigationItem(
             "/plantDetails/{${PLANT_DETAILS_ORIGIN_ARG_NAME}}/{${PLANT_DETAILS_PLANT_ID_ARG_NAME}}",
@@ -194,7 +195,7 @@ open class NavigationItem(val route: String, val title: String) {
         fun getTitleForRoute(route: String): String? {
             return when {
                 route.startsWith(PlantDetails.route.substringBefore("/{")) -> PlantDetails.title
-                route == PlantAPlant.route -> PlantAPlant.title
+                route == BottomNavItem.Catalog.route -> BottomNavItem.Catalog.title
                 route == BottomNavItem.Home.route -> BottomNavItem.Home.title
                 route == BottomNavItem.TaskList.route -> BottomNavItem.TaskList.title
                 route == BottomNavItem.PlantId.route -> BottomNavItem.PlantId.title
@@ -208,6 +209,7 @@ open class BottomNavItem(route: String, title: String, val icon: ImageVector) :
     NavigationItem(route, title) {
     object Home : BottomNavItem("myGarden", "My Garden", Icons.Rounded.Home)
     object TaskList : BottomNavItem("taskList", "Tasks", Icons.Rounded.Done)
+    object Catalog : BottomNavItem("catalog", "Catalog", Icons.Rounded.Info)
     object PlantId :
         BottomNavItem("plantId", "Id", Icons.Rounded.Search)
 }

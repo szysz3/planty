@@ -1,4 +1,4 @@
-package szysz3.planty.screen.plantaplant.model
+package szysz3.planty.screen.plantcatalog.model
 
 data class Plant(
     val id: Int,

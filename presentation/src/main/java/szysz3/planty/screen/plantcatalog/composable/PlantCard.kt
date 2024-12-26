@@ -1,4 +1,4 @@
-package szysz3.planty.screen.plantaplant.composable
+package szysz3.planty.screen.plantcatalog.composable
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import szysz3.planty.R
-import szysz3.planty.screen.plantaplant.model.Plant
+import szysz3.planty.screen.plantcatalog.model.Plant
 
 @Composable
 fun PlantCard(

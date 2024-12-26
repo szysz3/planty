@@ -1,6 +1,6 @@
 package szysz3.planty.screen.mygarden.model
 
-import szysz3.planty.screen.plantaplant.model.Plant
+import szysz3.planty.screen.plantcatalog.model.Plant
 import szysz3.planty.domain.model.GardenCell as GardenCellDomain
 import szysz3.planty.domain.model.GardenState as GardenStateDomain
 import szysz3.planty.domain.model.Plant as PlantDomain

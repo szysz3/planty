@@ -1,4 +1,4 @@
-package szysz3.planty.screen.plantaplant.screen
+package szysz3.planty.screen.plantcatalog.screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -34,21 +34,21 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import szysz3.planty.R
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
-import szysz3.planty.screen.plantaplant.composable.PlantCard
-import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
+import szysz3.planty.screen.plantcatalog.composable.PlantCard
+import szysz3.planty.screen.plantcatalog.viewmodel.PlantCatalogViewModel
 import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
 import szysz3.planty.ui.widgets.EllipticalBackground
 
 @Composable
-fun PlantAPlantScreen(
+fun PlantCatalogScreen(
     mainScreenViewModel: MainScreenViewModel,
-    plantAPlantViewModel: PlantAPlantViewModel,
+    plantCatalogViewModel: PlantCatalogViewModel,
     onNavigateToPlantDetails: (PlantDetailsScreenOrigin, Int) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
-    val plants = plantAPlantViewModel.pagedPlants.collectAsLazyPagingItems()
+    val plants = plantCatalogViewModel.pagedPlants.collectAsLazyPagingItems()
     val localSearchQuery =
-        remember { mutableStateOf(plantAPlantViewModel.searchQuery.value) }
+        remember { mutableStateOf(plantCatalogViewModel.searchQuery.value) }
 
     LaunchedEffect(Unit) {
         mainScreenViewModel.updateShowBackButton(true)
@@ -83,7 +83,7 @@ fun PlantAPlantScreen(
                 maxLines = 1,
                 onValueChange = { value ->
                     localSearchQuery.value = value
-                    plantAPlantViewModel.updateSearchQuery(value)
+                    plantCatalogViewModel.updateSearchQuery(value)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -99,7 +99,7 @@ fun PlantAPlantScreen(
                     if (localSearchQuery.value.isNotEmpty()) {
                         IconButton(onClick = {
                             localSearchQuery.value = ""
-                            plantAPlantViewModel.updateSearchQuery("")
+                            plantCatalogViewModel.updateSearchQuery("")
                         }) {
                             Icon(
                                 imageVector = Icons.Rounded.Clear,
@@ -133,7 +133,7 @@ fun PlantAPlantScreen(
                                     plant = plant,
                                     onPlantSelected = {
                                         plant?.let {
-                                            plantAPlantViewModel.selectPlant(plant)
+                                            plantCatalogViewModel.selectPlant(plant)
                                             onNavigateToPlantDetails(
                                                 PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN,
                                                 plant.id

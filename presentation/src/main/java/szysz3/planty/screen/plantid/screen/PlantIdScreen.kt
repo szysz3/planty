@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import szysz3.planty.R
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
-import szysz3.planty.screen.plantaplant.model.Plant
+import szysz3.planty.screen.plantcatalog.model.Plant
 import szysz3.planty.screen.plantid.composable.PlantResultCard
 import szysz3.planty.screen.plantid.viewmodel.PlantIdViewModel
 import szysz3.planty.ui.widgets.EllipticalBackground

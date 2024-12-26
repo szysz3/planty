@@ -1,4 +1,4 @@
-package szysz3.planty.screen.plantaplant.viewmodel
+package szysz3.planty.screen.plantcatalog.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,18 +14,18 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 import szysz3.planty.domain.usecase.PlantSearchUseCase
-import szysz3.planty.screen.plantaplant.model.Plant
-import szysz3.planty.screen.plantaplant.model.PlantAPlantScreenState
-import szysz3.planty.screen.plantaplant.paging.PlantPagingSource
+import szysz3.planty.screen.plantcatalog.model.Plant
+import szysz3.planty.screen.plantcatalog.model.PlantCatalogScreenState
+import szysz3.planty.screen.plantcatalog.paging.PlantPagingSource
 import javax.inject.Inject
 
 @HiltViewModel
-class PlantAPlantViewModel @Inject constructor(
+class PlantCatalogViewModel @Inject constructor(
     private val plantSearchUseCase: PlantSearchUseCase,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(PlantAPlantScreenState())
-    val uiState: StateFlow<PlantAPlantScreenState> = _uiState
+    private val _uiState = MutableStateFlow(PlantCatalogScreenState())
+    val uiState: StateFlow<PlantCatalogScreenState> = _uiState
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
