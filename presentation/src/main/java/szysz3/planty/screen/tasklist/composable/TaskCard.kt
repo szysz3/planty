@@ -26,7 +26,8 @@ import szysz3.planty.ui.theme.CardColors
 @Composable
 fun TaskCardView(
     task: Task,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClicked: (Task?) -> Unit,
 ) {
     val completedSubTasks = task.tasks.count { it.isCompleted }
     val totalSubTasks = task.tasks.size
@@ -40,12 +41,13 @@ fun TaskCardView(
             .padding(8.dp)
             .clip(MaterialTheme.shapes.medium),
         shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        onClick = { onClicked(task) }
     ) {
 
         Row(modifier = Modifier.fillMaxSize()) {
             Box(
-                modifier
+                Modifier
                     .fillMaxHeight()
                     .fillMaxWidth(0.25f)
                     .background(color = CardColors.random())

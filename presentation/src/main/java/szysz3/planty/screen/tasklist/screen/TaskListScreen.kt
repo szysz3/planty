@@ -18,6 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import szysz3.planty.R
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.tasklist.composable.TaskCardView
+import szysz3.planty.screen.tasklist.model.Task
 import szysz3.planty.screen.tasklist.utils.dragContainer
 import szysz3.planty.screen.tasklist.utils.draggableItems
 import szysz3.planty.screen.tasklist.utils.rememberDragDropState
@@ -28,7 +29,8 @@ import szysz3.planty.ui.widgets.FloatingActionButton
 @Composable
 fun TaskListScreen(
     mainScreenViewModel: MainScreenViewModel,
-    taskListViewModel: TaskListViewModel = hiltViewModel()
+    taskListViewModel: TaskListViewModel = hiltViewModel(),
+    onNavigateToTaskDetails: (Task?) -> Unit
 ) {
     val uiState by taskListViewModel.uiState.collectAsState()
     val tasks = uiState.tasks
@@ -60,6 +62,7 @@ fun TaskListScreen(
                 TaskCardView(
                     task = task,
                     modifier = modifier,
+                    onClicked = { task -> onNavigateToTaskDetails(task) }
                 )
             }
         }
@@ -68,7 +71,7 @@ fun TaskListScreen(
             icon = Icons.Rounded.Add,
             contentDescription = "Add task",
             onClick = {
-                taskListViewModel.navigateToAddTaskScreen()
+                onNavigateToTaskDetails(null)
             })
     }
 }

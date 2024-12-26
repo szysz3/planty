@@ -21,6 +21,7 @@ import szysz3.planty.screen.plantaplant.viewmodel.PlantAPlantViewModel
 import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
 import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreen
 import szysz3.planty.screen.plantid.screen.PlantIdScreen
+import szysz3.planty.screen.taskdetails.screen.TaskDetailsScreen
 import szysz3.planty.screen.tasklist.screen.TaskListScreen
 
 @Composable
@@ -54,7 +55,9 @@ fun NavigationGraph(
         composable(BottomNavItem.TaskList.route) {
             TaskListScreen(
                 mainScreenViewModel = mainScreenViewModel
-            )
+            ) {
+                navigate(navController, NavigationItem.TaskDetails)
+            }
         }
         composable(BottomNavItem.PlantId.route) {
             PlantIdScreen(mainScreenViewModel = mainScreenViewModel) { localMatchingPlant ->
@@ -128,6 +131,12 @@ fun NavigationGraph(
                 navigate(navController, NavigationItem.PlantDetails.withArgs(origin.value, plantId))
             }
         }
+
+        composable(NavigationItem.TaskDetails.route) {
+            TaskDetailsScreen(
+                mainScreenViewModel = mainScreenViewModel,
+            )
+        }
     }
 }
 
@@ -139,6 +148,7 @@ fun navigate(navController: NavHostController, navigationItem: NavigationItem) {
 }
 
 open class NavigationItem(val route: String, val title: String) {
+    object TaskDetails : NavigationItem("/taskList/taskDetails", "Task details")
     object PlantAPlant : NavigationItem("/myGarden/plantAPlant", "Plant a plant")
     object PlantDetails :
         NavigationItem(
