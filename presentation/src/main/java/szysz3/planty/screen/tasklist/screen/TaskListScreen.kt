@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import szysz3.planty.R
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
-import szysz3.planty.screen.tasklist.composable.TaskCard
+import szysz3.planty.screen.tasklist.composable.TaskCardView
 import szysz3.planty.screen.tasklist.utils.dragContainer
 import szysz3.planty.screen.tasklist.utils.draggableItems
 import szysz3.planty.screen.tasklist.utils.rememberDragDropState
@@ -57,12 +57,9 @@ fun TaskListScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             draggableItems(items = tasks, dragDropState = dragDropState) { modifier, task ->
-                TaskCard(
+                TaskCardView(
                     task = task,
                     modifier = modifier,
-                    onTaskCheckedChanged = { task, isChecked ->
-                        taskListViewModel.toggleTaskCompletion(task, isChecked)
-                    }
                 )
             }
         }
