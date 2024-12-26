@@ -1,6 +1,5 @@
 package szysz3.planty.screen.tasklist.viewmodel
 
-import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,38 +15,12 @@ class TaskListViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState = MutableStateFlow(TaskListScreenState(tasks = mockInitialTasks()))
     val uiState: StateFlow<TaskListScreenState> = _uiState
-
-    fun addTaskCard(task: Task) {
-        _uiState.update { it.copy(tasks = it.tasks + task) }
-    }
-
+    
     fun moveTask(fromIndex: Int, toIndex: Int) {
         val updatedTasks = _uiState.value.tasks.toMutableList()
         val task = updatedTasks.removeAt(fromIndex)
         updatedTasks.add(toIndex, task)
         _uiState.update { it.copy(tasks = updatedTasks) }
-    }
-
-    fun deleteTask(task: Task) {
-        _uiState.update { it.copy(tasks = it.tasks.filterNot { it == task }) }
-    }
-
-    fun reorderTasks(draggedIndex: Int?, dragOffset: Offset) {
-        if (draggedIndex == null) return
-    }
-
-    fun openTaskDetails(task: Task) {
-    }
-
-    fun navigateToAddTaskScreen() {
-    }
-
-    fun toggleTaskCompletion(task: Task, isCompleted: Boolean) {
-        _uiState.update {
-            it.copy(tasks = it.tasks.map { t ->
-                if (t == task) t.copy(isCompleted = isCompleted) else t
-            })
-        }
     }
 
     private fun mockInitialTasks(): List<Task> {
