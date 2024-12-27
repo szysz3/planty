@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import szysz3.planty.domain.usecase.task.AddTaskUseCase
+import szysz3.planty.domain.usecase.task.AddOrUpdateTaskUseCase
 import szysz3.planty.domain.usecase.task.GetTaskByIdUseCase
 import szysz3.planty.screen.taskdetails.model.TaskDetailsScreenState
 import szysz3.planty.screen.tasklist.model.SubTask
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TaskDetailsViewModel @Inject constructor(
     private val getTaskByIdUseCase: GetTaskByIdUseCase,
-    private val addTaskUseCase: AddTaskUseCase
+    private val addOrUpdateTaskUseCase: AddOrUpdateTaskUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TaskDetailsScreenState())
@@ -71,7 +71,7 @@ class TaskDetailsViewModel @Inject constructor(
     fun saveNewTask() {
         val taskToSave = _uiState.value.task ?: return
         viewModelScope.launch {
-            addTaskUseCase(taskToSave.toDomain())
+            addOrUpdateTaskUseCase(taskToSave.toDomain())
         }
     }
 

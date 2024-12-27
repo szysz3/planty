@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -39,6 +40,13 @@ fun TaskCardView(
             .fillMaxWidth()
             .height(120.dp)
             .padding(8.dp)
+            .alpha(
+                if (completedSubTasks == totalSubTasks) {
+                    0.4f
+                } else {
+                    1f
+                }
+            )
             .clip(MaterialTheme.shapes.medium),
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
