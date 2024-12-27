@@ -3,12 +3,9 @@ package szysz3.planty.screen.taskdetails.screen
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
@@ -78,8 +75,6 @@ fun TaskDetailsScreen(
             )
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
         // Active SubTasks
         Column(
             modifier = Modifier
@@ -103,7 +98,7 @@ fun TaskDetailsScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp)
+                    .padding(vertical = 16.dp)
             ) {
                 Text(
                     "+ New subtask",
@@ -116,11 +111,17 @@ fun TaskDetailsScreen(
 
             // Divider
             if (completedSubTasks.isNotEmpty()) {
-                Divider(modifier = Modifier.padding(vertical = 8.dp))
+                Divider(
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                )
 
                 // Completed SubTasks
                 completedSubTasks.forEach { subTask ->
-                    SubTaskRow(subTask = subTask, enabled = false)
+                    SubTaskRow(
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        subTask = subTask,
+                    )
                 }
             }
         }
@@ -138,23 +139,22 @@ fun TaskDetailsScreen(
 
 @Composable
 fun SubTaskRow(
+    modifier: Modifier = Modifier,
     subTask: SubTask,
-    enabled: Boolean = true,
     onCheckedChange: ((Boolean) -> Unit)? = null,
     onDescriptionChange: ((String) -> Unit)? = null
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
     ) {
         Checkbox(
             checked = subTask.isCompleted,
             onCheckedChange = onCheckedChange,
-            enabled = enabled
+            enabled = !subTask.isCompleted
         )
-        Spacer(modifier = Modifier.width(8.dp))
         TextField(
             value = subTask.description,
             onValueChange = { newText -> onDescriptionChange?.invoke(newText) },
@@ -164,10 +164,9 @@ fun SubTaskRow(
             ), placeholder = {
                 Text(
                     text = "Sub task title",
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                 )
             },
-            modifier = Modifier.padding(16.dp),
             singleLine = true,
             colors = TextFieldDefaults.colors(
                 unfocusedContainerColor = Color.Transparent,
