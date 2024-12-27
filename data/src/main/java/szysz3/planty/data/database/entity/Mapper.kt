@@ -2,6 +2,8 @@ package szysz3.planty.data.database.entity
 
 import szysz3.planty.domain.model.GardenCell
 import szysz3.planty.domain.model.Plant
+import szysz3.planty.domain.model.SubTask
+import szysz3.planty.domain.model.Task
 
 fun GardenCellEntity.toDomain(plant: Plant?): GardenCell {
     return GardenCell(
@@ -201,4 +203,40 @@ fun Plant.toEntity(): PlantEntity {
         medicinalRating = this.medicinalRating,
         author = ""
     )
+}
+
+fun TaskWithSubTasks.toDomain(): Task {
+    return Task(
+        id = task.id,
+        title = task.title,
+        tasks = subTasks.map { subTask ->
+            SubTask(
+                id = subTask.id,
+                description = subTask.description,
+                isCompleted = subTask.isCompleted,
+                cost = subTask.cost
+            )
+        },
+        isCompleted = task.isCompleted,
+        color = task.color
+    )
+}
+
+fun Task.toEntity(): Pair<TaskEntity, List<SubTaskEntity>> {
+    val taskEntity = TaskEntity(
+        id = id,
+        title = title,
+        isCompleted = isCompleted,
+        color = color
+    )
+    val subTaskEntities = tasks.map { subTask ->
+        SubTaskEntity(
+            id = subTask.id,
+            taskId = 0, // Will be set when TaskEntity is inserted
+            description = subTask.description,
+            isCompleted = subTask.isCompleted,
+            cost = subTask.cost
+        )
+    }
+    return taskEntity to subTaskEntities
 }
