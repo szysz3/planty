@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -42,6 +43,10 @@ fun TaskListScreen(
             taskListViewModel.moveTask(fromIndex, toIndex)
         }
     )
+
+    LaunchedEffect(Unit) {
+        taskListViewModel.loadTasks()
+    }
 
     EllipticalBackground(R.drawable.bcg5)
 

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import szysz3.planty.domain.usecase.base.NoParams
-import szysz3.planty.domain.usecase.task.ObserveTasksUseCase
+import szysz3.planty.domain.usecase.task.GetAllTasksUseCase
 import szysz3.planty.domain.usecase.task.UpdateTaskOrderUseCase
 import szysz3.planty.screen.tasklist.model.TaskListScreenState
 import szysz3.planty.screen.tasklist.model.toDomain
@@ -16,22 +16,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TaskListViewModel @Inject constructor(
-    private val getTasksUseCase: ObserveTasksUseCase,
+    private val getTasksUseCase: GetAllTasksUseCase,
     private val updateTaskOrderUseCase: UpdateTaskOrderUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TaskListScreenState())
     val uiState: StateFlow<TaskListScreenState> = _uiState
 
-    init {
-        loadTasks()
-    }
-
-    private fun loadTasks() {
+    fun loadTasks() {
         viewModelScope.launch {
-            getTasksUseCase(NoParams()).collect { tasks ->
-                _uiState.value = TaskListScreenState(tasks = tasks.toPresentation())
-            }
+            _uiState.value =
+                TaskListScreenState(tasks = getTasksUseCase(NoParams()).toPresentation())
         }
     }
 

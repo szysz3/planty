@@ -56,8 +56,8 @@ fun NavigationGraph(
         composable(BottomNavItem.TaskList.route) {
             TaskListScreen(
                 mainScreenViewModel = mainScreenViewModel
-            ) {
-                navigate(navController, NavigationItem.TaskDetails)
+            ) { task ->
+                navigate(navController, NavigationItem.TaskDetails.withArgs(task?.id?.toInt()))
             }
         }
         composable(BottomNavItem.Catalog.route) {
@@ -132,10 +132,22 @@ fun NavigationGraph(
                 }
             )
         }
-        composable(NavigationItem.TaskDetails.route) {
+        composable(route = NavigationItem.TaskDetails.route,
+            arguments = listOf(
+                navArgument(NavigationItem.TASK_DETAILS_TASK_ID_ARG_NAME) {
+                    type = NavType.StringType
+                    nullable = true
+                }
+            )) { backStackEntry ->
+            val taskId =
+                backStackEntry.arguments?.getString(NavigationItem.TASK_DETAILS_TASK_ID_ARG_NAME)
+                    ?.toIntOrNull()
             TaskDetailsScreen(
                 mainScreenViewModel = mainScreenViewModel,
-            )
+                taskId = taskId
+            ) {
+                navController.popBackStack()
+            }
         }
     }
 }
@@ -148,7 +160,18 @@ fun navigate(navController: NavHostController, navigationItem: NavigationItem) {
 }
 
 open class NavigationItem(val route: String, val title: String) {
-    object TaskDetails : NavigationItem("/taskList/taskDetails", "Task details")
+    object TaskDetails :
+        NavigationItem("/taskList/taskDetails/{${TASK_DETAILS_TASK_ID_ARG_NAME}}", "Task details") {
+        fun withArgs(taskId: Int?): NavigationItem {
+            return NavigationItem(
+                route.replace(
+                    "{${TASK_DETAILS_TASK_ID_ARG_NAME}}",
+                    taskId.toString()
+                ),
+                title
+            )
+        }
+    }
 
     //    object PlantCatalog : NavigationItem("/myGarden/plantCatalog", "Plant catalog")
     object PlantDetails :
@@ -191,6 +214,7 @@ open class NavigationItem(val route: String, val title: String) {
         const val PLANT_DETAILS_ORIGIN_ARG_NAME = "origin"
         const val PLANT_DETAILS_PLANT_ID_ARG_NAME = "plantId"
         const val IMAGE_GALLERY_PLANT_ID_ARG_NAME = "plantId"
+        const val TASK_DETAILS_TASK_ID_ARG_NAME = "taskId"
 
         fun getTitleForRoute(route: String): String? {
             return when {

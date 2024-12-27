@@ -1,7 +1,5 @@
 package szysz3.planty.data.repository
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import szysz3.planty.data.database.dao.TaskDao
 import szysz3.planty.data.database.entity.SubTaskEntity
 import szysz3.planty.data.database.entity.TaskEntity
@@ -10,13 +8,20 @@ import szysz3.planty.data.database.entity.toEntity
 import szysz3.planty.domain.model.SubTask
 import szysz3.planty.domain.model.Task
 import szysz3.planty.domain.repository.TaskRepository
+import timber.log.Timber
 import javax.inject.Inject
 
 class TaskRepositoryImpl @Inject constructor(private val taskDao: TaskDao) : TaskRepository {
 
-    override val tasksFlow: Flow<List<Task>> = flow {
+    override suspend fun getTasks(): List<Task> {
         val tasksWithSubTasks = taskDao.getTasksWithSubTasks()
-        emit(tasksWithSubTasks.map { it.toDomain() })
+        return tasksWithSubTasks.map { it.toDomain() }
+    }
+
+    override suspend fun getTaskById(taskId: Long): Task? {
+        val taskWithSubTasks = taskDao.getTasksWithSubTasks(taskId)
+        Timber.d("---> getTaskById: $taskWithSubTasks")
+        return taskWithSubTasks?.toDomain()
     }
 
     override suspend fun saveTask(task: Task) {

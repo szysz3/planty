@@ -22,6 +22,10 @@ interface TaskDao {
     @Query("SELECT * FROM tasks")
     suspend fun getTasksWithSubTasks(): List<TaskWithSubTasks>
 
+    @Transaction
+    @Query("SELECT * FROM tasks WHERE id = :taskId")
+    suspend fun getTasksWithSubTasks(taskId: Long): TaskWithSubTasks?
+
     @Delete
     suspend fun deleteTask(task: TaskEntity)
 

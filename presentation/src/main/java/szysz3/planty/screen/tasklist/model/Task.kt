@@ -9,4 +9,13 @@ data class Task(
     val tasks: List<SubTask>,
     val isCompleted: Boolean = false,
     val color: Color = EarthyBrown,
-)
+) {
+    companion object {
+        fun empty(): Task {
+            return Task(
+                title = "",
+                tasks = emptyList()
+            )
+        }
+    }
+}
