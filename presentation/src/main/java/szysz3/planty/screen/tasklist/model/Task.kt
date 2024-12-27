@@ -9,6 +9,7 @@ data class Task(
     val tasks: List<SubTask>,
     val isCompleted: Boolean = false,
     val color: Color = EarthyBrown,
+    val index: Int = 0,
 ) {
     companion object {
         fun empty(): Task {

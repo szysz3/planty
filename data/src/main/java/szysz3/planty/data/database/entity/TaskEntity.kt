@@ -8,5 +8,6 @@ data class TaskEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val title: String,
     val isCompleted: Boolean = false,
-    val color: Long? = null
+    val color: Long? = null,
+    val index: Int = 0,
 )

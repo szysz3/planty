@@ -5,5 +5,6 @@ data class Task(
     val title: String,
     val tasks: List<SubTask>,
     val isCompleted: Boolean = false,
-    val color: Long? = null
+    val color: Long? = null,
+    val index: Int,
 )

@@ -218,7 +218,8 @@ fun TaskWithSubTasks.toDomain(): Task {
             )
         },
         isCompleted = task.isCompleted,
-        color = task.color
+        color = task.color,
+        index = task.index
     )
 }
 
@@ -227,7 +228,8 @@ fun Task.toEntity(): Pair<TaskEntity, List<SubTaskEntity>> {
         id = id,
         title = title,
         isCompleted = isCompleted,
-        color = color
+        color = color,
+        index = index
     )
     val subTaskEntities = tasks.map { subTask ->
         SubTaskEntity(

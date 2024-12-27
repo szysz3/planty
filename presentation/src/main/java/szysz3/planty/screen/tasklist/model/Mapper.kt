@@ -20,7 +20,8 @@ fun TaskDomain.toPresentation(): Task {
         title = this.title,
         tasks = this.tasks.map { it.toPresentation() },
         isCompleted = this.isCompleted,
-        color = Color(color ?: 0)
+        color = Color(color ?: 0),
+        index = this.index
     )
 }
 
@@ -47,6 +48,7 @@ fun Task.toDomain(): TaskDomain {
         title = this.title,
         tasks = this.tasks.map { it.toDomain() },
         isCompleted = this.isCompleted,
-        color = this.color.value.toLong()
+        color = this.color.value.toLong(),
+        index = this.index
     )
 }

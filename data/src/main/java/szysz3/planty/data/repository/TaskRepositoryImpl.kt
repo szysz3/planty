@@ -2,13 +2,11 @@ package szysz3.planty.data.repository
 
 import szysz3.planty.data.database.dao.TaskDao
 import szysz3.planty.data.database.entity.SubTaskEntity
-import szysz3.planty.data.database.entity.TaskEntity
 import szysz3.planty.data.database.entity.toDomain
 import szysz3.planty.data.database.entity.toEntity
 import szysz3.planty.domain.model.SubTask
 import szysz3.planty.domain.model.Task
 import szysz3.planty.domain.repository.TaskRepository
-import timber.log.Timber
 import javax.inject.Inject
 
 class TaskRepositoryImpl @Inject constructor(private val taskDao: TaskDao) : TaskRepository {
@@ -20,7 +18,6 @@ class TaskRepositoryImpl @Inject constructor(private val taskDao: TaskDao) : Tas
 
     override suspend fun getTaskById(taskId: Long): Task? {
         val taskWithSubTasks = taskDao.getTasksWithSubTasks(taskId)
-        Timber.d("---> getTaskById: $taskWithSubTasks")
         return taskWithSubTasks?.toDomain()
     }
 
@@ -32,13 +29,7 @@ class TaskRepositoryImpl @Inject constructor(private val taskDao: TaskDao) : Tas
     }
 
     override suspend fun deleteTask(task: Task) {
-        val taskEntity = TaskEntity(
-            id = task.id,
-            title = task.title,
-            isCompleted = task.isCompleted,
-            color = task.color
-        )
-        taskDao.deleteTask(taskEntity)
+        taskDao.deleteTask(task.toEntity().first)
     }
 
     override suspend fun updateSubTaskCompletion(
