@@ -10,7 +10,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -21,12 +20,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
+import szysz3.planty.screen.taskdetails.composable.SubTaskRow
 import szysz3.planty.screen.taskdetails.viewmodel.TaskDetailsViewModel
-import szysz3.planty.screen.tasklist.model.SubTask
 import szysz3.planty.ui.widgets.RoundedButton
 
 @Composable
@@ -38,7 +36,7 @@ fun TaskDetailsScreen(
 ) {
     val uiState by taskDetailsViewModel.uiState.collectAsState()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(taskId) {
         taskDetailsViewModel.loadTask(taskId)
     }
 
@@ -81,14 +79,14 @@ fun TaskDetailsScreen(
                 .weight(1f)
                 .verticalScroll(rememberScrollState())
         ) {
-            activeSubTasks.forEachIndexed { index, subTask ->
+            activeSubTasks.forEach { subTask ->
                 SubTaskRow(
                     subTask = subTask,
                     onCheckedChange = { isChecked ->
-                        taskDetailsViewModel.toggleSubTaskCompletion(index, isChecked)
+                        taskDetailsViewModel.toggleSubTaskCompletion(subTask.id, isChecked)
                     },
                     onDescriptionChange = { newDescription ->
-                        taskDetailsViewModel.updateSubTaskDescription(index, newDescription)
+                        taskDetailsViewModel.updateSubTaskDescription(subTask.id, newDescription)
                     }
                 )
             }
@@ -129,52 +127,10 @@ fun TaskDetailsScreen(
         // Save Button
         RoundedButton(
             onClick = {
-                taskDetailsViewModel.saveNewTask(task)
+                taskDetailsViewModel.saveNewTask() // Save all changes at once
                 onNavigateBack()
             },
             text = if (taskId == null) "Add" else "Update"
-        )
-    }
-}
-
-@Composable
-fun SubTaskRow(
-    modifier: Modifier = Modifier,
-    subTask: SubTask,
-    onCheckedChange: ((Boolean) -> Unit)? = null,
-    onDescriptionChange: ((String) -> Unit)? = null
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp)
-    ) {
-        Checkbox(
-            checked = subTask.isCompleted,
-            onCheckedChange = onCheckedChange,
-            enabled = !subTask.isCompleted
-        )
-        TextField(
-            value = subTask.description,
-            onValueChange = { newText -> onDescriptionChange?.invoke(newText) },
-            textStyle = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.onSurface,
-                textDecoration = if (subTask.isCompleted) TextDecoration.LineThrough else null
-            ), placeholder = {
-                Text(
-                    text = "Sub task title",
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-                )
-            },
-            singleLine = true,
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Color.Transparent,
-                focusedContainerColor = Color.Transparent,
-                disabledContainerColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            )
         )
     }
 }

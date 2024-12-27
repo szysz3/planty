@@ -35,10 +35,10 @@ class TaskDetailsViewModel @Inject constructor(
         }
     }
 
-    fun updateSubTaskDescription(subTaskIndex: Int, newDescription: String) {
+    fun updateSubTaskDescription(subTaskId: Long, newDescription: String) {
         val updatedTask = _uiState.value.task?.let { task ->
-            val updatedSubTasks = task.tasks.toMutableList().apply {
-                this[subTaskIndex] = this[subTaskIndex].copy(description = newDescription)
+            val updatedSubTasks = task.tasks.map {
+                if (it.id == subTaskId) it.copy(description = newDescription) else it
             }
             task.copy(tasks = updatedSubTasks)
         }
@@ -50,10 +50,10 @@ class TaskDetailsViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(task = updatedTask)
     }
 
-    fun toggleSubTaskCompletion(subTaskIndex: Int, isCompleted: Boolean) {
+    fun toggleSubTaskCompletion(subTaskId: Long, isCompleted: Boolean) {
         val updatedTask = _uiState.value.task?.let { task ->
-            val updatedSubTasks = task.tasks.toMutableList().apply {
-                this[subTaskIndex] = this[subTaskIndex].copy(isCompleted = isCompleted)
+            val updatedSubTasks = task.tasks.map {
+                if (it.id == subTaskId) it.copy(isCompleted = isCompleted) else it
             }
             task.copy(tasks = updatedSubTasks)
         }
@@ -62,15 +62,20 @@ class TaskDetailsViewModel @Inject constructor(
 
     fun addNewSubTask() {
         val updatedTask = _uiState.value.task?.let { task ->
-            val updatedSubTasks = task.tasks + SubTask()
-            task.copy(tasks = updatedSubTasks)
+            val newSubTask = SubTask(id = generateUniqueId(), description = "", isCompleted = false)
+            task.copy(tasks = task.tasks + newSubTask)
         }
         _uiState.value = _uiState.value.copy(task = updatedTask)
     }
 
-    fun saveNewTask(task: Task) {
+    fun saveNewTask() {
+        val taskToSave = _uiState.value.task ?: return
         viewModelScope.launch {
-            addTaskUseCase(task.toDomain())
+            addTaskUseCase(taskToSave.toDomain())
         }
+    }
+
+    private fun generateUniqueId(): Long {
+        return System.currentTimeMillis()
     }
 }
