@@ -1,4 +1,4 @@
-package szysz3.planty.domain.usecase
+package szysz3.planty.domain.usecase.photo
 
 import android.net.Uri
 import szysz3.planty.domain.repository.LocalFileRepository

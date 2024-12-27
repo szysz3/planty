@@ -9,10 +9,13 @@ import szysz3.planty.data.database.dao.GardenCellDao
 import szysz3.planty.data.database.dao.GardenPlantDao
 import szysz3.planty.data.database.dao.PlantDao
 import szysz3.planty.data.database.dao.PlantImageDao
+import szysz3.planty.data.database.dao.TaskDao
 import szysz3.planty.data.database.entity.GardenCellEntity
 import szysz3.planty.data.database.entity.GardenPlantEntity
 import szysz3.planty.data.database.entity.PlantEntity
 import szysz3.planty.data.database.entity.PlantImageEntity
+import szysz3.planty.data.database.entity.SubTaskEntity
+import szysz3.planty.data.database.entity.TaskEntity
 
 @Database(
     entities = [
@@ -20,6 +23,8 @@ import szysz3.planty.data.database.entity.PlantImageEntity
         PlantEntity::class,
         GardenPlantEntity::class,
         PlantImageEntity::class,
+        TaskEntity::class,
+        SubTaskEntity::class,
     ],
     version = 4
 )
@@ -31,6 +36,8 @@ abstract class GardenDatabase : RoomDatabase() {
     abstract fun gardenPlantDao(): GardenPlantDao
 
     abstract fun plantImageDao(): PlantImageDao
+
+    abstract fun taskDao(): TaskDao
 
     companion object {
         private const val GARDEN_DATABASE_NAME = "garden_db"
@@ -52,7 +59,6 @@ abstract class GardenDatabase : RoomDatabase() {
                         }
                     })
                     .createFromAsset("$GARDEN_DATABASE_NAME.db")
-//                    .fallbackToDestructiveMigration()
                     .build().also { instance = it }
             }
         }

@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import szysz3.planty.ui.theme.EarthyBrown
 
 data class Task(
+    val id: Long = 0,
     val title: String,
     val tasks: List<SubTask>,
     val isCompleted: Boolean = false,

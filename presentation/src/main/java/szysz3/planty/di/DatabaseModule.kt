@@ -11,6 +11,7 @@ import szysz3.planty.data.database.dao.GardenCellDao
 import szysz3.planty.data.database.dao.GardenPlantDao
 import szysz3.planty.data.database.dao.PlantDao
 import szysz3.planty.data.database.dao.PlantImageDao
+import szysz3.planty.data.database.dao.TaskDao
 import javax.inject.Singleton
 
 @Module
@@ -45,5 +46,11 @@ object DatabaseModule {
     @Singleton
     fun providePlantImageDao(database: GardenDatabase): PlantImageDao {
         return database.plantImageDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideTaskDao(database: GardenDatabase): TaskDao {
+        return database.taskDao()
     }
 }

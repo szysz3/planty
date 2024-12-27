@@ -1,4 +1,4 @@
-package szysz3.planty.domain.usecase
+package szysz3.planty.domain.usecase.task
 
 import kotlinx.coroutines.flow.Flow
 import szysz3.planty.domain.model.Task

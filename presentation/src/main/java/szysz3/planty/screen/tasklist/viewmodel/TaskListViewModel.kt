@@ -1,66 +1,51 @@
 package szysz3.planty.screen.tasklist.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
-import szysz3.planty.screen.tasklist.model.SubTask
-import szysz3.planty.screen.tasklist.model.Task
+import kotlinx.coroutines.launch
+import szysz3.planty.domain.usecase.base.NoParams
+import szysz3.planty.domain.usecase.task.ObserveTasksUseCase
+import szysz3.planty.domain.usecase.task.UpdateTaskOrderUseCase
 import szysz3.planty.screen.tasklist.model.TaskListScreenState
+import szysz3.planty.screen.tasklist.model.toDomain
+import szysz3.planty.screen.tasklist.model.toPresentation
 import javax.inject.Inject
 
 @HiltViewModel
-class TaskListViewModel @Inject constructor() : ViewModel() {
+class TaskListViewModel @Inject constructor(
+    private val getTasksUseCase: ObserveTasksUseCase,
+    private val updateTaskOrderUseCase: UpdateTaskOrderUseCase
+) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(TaskListScreenState(tasks = mockInitialTasks()))
+    private val _uiState = MutableStateFlow(TaskListScreenState())
     val uiState: StateFlow<TaskListScreenState> = _uiState
-    
-    fun moveTask(fromIndex: Int, toIndex: Int) {
-        val updatedTasks = _uiState.value.tasks.toMutableList()
-        val task = updatedTasks.removeAt(fromIndex)
-        updatedTasks.add(toIndex, task)
-        _uiState.update { it.copy(tasks = updatedTasks) }
+
+    init {
+        loadTasks()
     }
 
-    private fun mockInitialTasks(): List<Task> {
-        return listOf(
-            Task(
-                title = "Watering Plants",
-                tasks = listOf(
-                    SubTask(description = "Water the roses", isCompleted = false, cost = 5),
-                    SubTask(description = "Water the tulips", isCompleted = true, cost = 3)
-                ),
-                isCompleted = false
-            ),
-            Task(
-                title = "Fertilizing",
-                tasks = listOf(
-                    SubTask(
-                        description = "Apply fertilizer to lawn",
-                        isCompleted = false,
-                        cost = 20
-                    ),
-                    SubTask(description = "Fertilize potted plants", isCompleted = false, cost = 10)
-                ),
-                isCompleted = false
-            ),
-            Task(
-                title = "Weeding",
-                tasks = listOf(
-                    SubTask(
-                        description = "Remove weeds from vegetable patch",
-                        isCompleted = true,
-                        cost = 0
-                    ),
-                    SubTask(
-                        description = "Remove weeds from flower beds",
-                        isCompleted = false,
-                        cost = 15
-                    )
-                ),
-                isCompleted = false
-            )
-        )
+    private fun loadTasks() {
+        viewModelScope.launch {
+            getTasksUseCase(NoParams()).collect { tasks ->
+                _uiState.value = TaskListScreenState(tasks = tasks.toPresentation())
+            }
+        }
+    }
+
+    fun moveTask(fromIndex: Int, toIndex: Int) {
+        val currentTasks = _uiState.value.tasks
+        val updatedTasks = currentTasks.toMutableList().apply {
+            val task = removeAt(fromIndex)
+            add(toIndex, task)
+        }
+        _uiState.value = _uiState.value.copy(tasks = updatedTasks)
+
+        // Persist the updated order
+        viewModelScope.launch {
+            updateTaskOrderUseCase(updatedTasks.toDomain())
+        }
     }
 }
