@@ -55,7 +55,9 @@ class TaskDetailsViewModel @Inject constructor(
             val updatedSubTasks = task.tasks.map {
                 if (it.id == subTaskId) it.copy(isCompleted = isCompleted) else it
             }
-            task.copy(tasks = updatedSubTasks)
+            task.copy(
+                tasks = updatedSubTasks,
+                isCompleted = updatedSubTasks.all { it.isCompleted })
         }
         _uiState.value = _uiState.value.copy(task = updatedTask)
     }

@@ -11,5 +11,9 @@ class GetAllTasksUseCase @Inject constructor(
 ) : BaseUseCase<NoParams, List<Task>>() {
     override suspend fun invoke(input: NoParams): List<Task> {
         return repository.getTasks()
+            .sortedWith(
+                compareBy<Task> { it.isCompleted }
+                    .thenBy { it.index }
+            )
     }
 }

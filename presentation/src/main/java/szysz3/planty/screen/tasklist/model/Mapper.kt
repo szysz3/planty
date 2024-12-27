@@ -4,7 +4,6 @@ import androidx.compose.ui.graphics.Color
 import szysz3.planty.domain.model.SubTask as SubTaskDomain
 import szysz3.planty.domain.model.Task as TaskDomain
 
-
 fun SubTaskDomain.toPresentation(): SubTask {
     return SubTask(
         id = this.id,

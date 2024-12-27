@@ -38,7 +38,6 @@ class TaskListViewModel @Inject constructor(
         }
         _uiState.value = _uiState.value.copy(tasks = updatedTasks)
 
-        // Persist the updated order
         viewModelScope.launch {
             updateTaskOrderUseCase(updatedTasks.toDomain())
         }
