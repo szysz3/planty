@@ -18,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TaskDetailsViewModel @Inject constructor(
     private val getTaskByIdUseCase: GetTaskByIdUseCase,
-    private val addTaskUseCase: AddTaskUseCase
+    private val addTaskUseCase: AddTaskUseCase,
+    private val updateTaskUseCase: AddTaskUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TaskDetailsScreenState())
@@ -74,6 +75,13 @@ class TaskDetailsViewModel @Inject constructor(
         val taskToSave = _uiState.value.task ?: return
         viewModelScope.launch {
             addTaskUseCase(taskToSave.toDomain())
+        }
+    }
+
+    fun updateTask() {
+        val taskToUpdate = _uiState.value.task ?: return
+        viewModelScope.launch {
+            updateTaskUseCase(taskToUpdate.toDomain())
         }
     }
 

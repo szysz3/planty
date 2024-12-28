@@ -45,7 +45,7 @@ fun TaskListScreen(
     )
 
     LaunchedEffect(Unit) {
-        taskListViewModel.loadTasks()
+        taskListViewModel.observeTasks()
     }
 
     EllipticalBackground(R.drawable.bcg5)

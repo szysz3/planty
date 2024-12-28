@@ -5,28 +5,32 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import szysz3.planty.domain.usecase.base.NoParams
-import szysz3.planty.domain.usecase.task.GetAllTasksUseCase
+import szysz3.planty.domain.usecase.task.ObserveTasksUseCase
 import szysz3.planty.domain.usecase.task.UpdateTaskOrderUseCase
 import szysz3.planty.screen.tasklist.model.TaskListScreenState
 import szysz3.planty.screen.tasklist.model.toDomain
 import szysz3.planty.screen.tasklist.model.toPresentation
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class TaskListViewModel @Inject constructor(
-    private val getTasksUseCase: GetAllTasksUseCase,
+    private val observeTasksUseCase: ObserveTasksUseCase,
     private val updateTaskOrderUseCase: UpdateTaskOrderUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TaskListScreenState())
     val uiState: StateFlow<TaskListScreenState> = _uiState
-
-    fun loadTasks() {
+    
+    fun observeTasks() {
         viewModelScope.launch {
-            _uiState.value =
-                TaskListScreenState(tasks = getTasksUseCase(NoParams()).toPresentation())
+            observeTasksUseCase(NoParams()).distinctUntilChanged().collect { tasks ->
+                Timber.d("--> observe tasks: $tasks")
+                _uiState.value = _uiState.value.copy(tasks = tasks.toPresentation())
+            }
         }
     }
 

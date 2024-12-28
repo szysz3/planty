@@ -127,7 +127,12 @@ fun TaskDetailsScreen(
         // Save Button
         RoundedButton(
             onClick = {
-                taskDetailsViewModel.saveNewTask() // Save all changes at once
+                if (taskId != null) {
+                    taskDetailsViewModel.saveNewTask()
+                } else {
+                    taskDetailsViewModel.updateTask()
+                }
+
                 onNavigateBack()
             },
             text = if (taskId == null) "Add" else "Update"

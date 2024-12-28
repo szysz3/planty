@@ -1,5 +1,7 @@
 package szysz3.planty.data.repository
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import szysz3.planty.data.database.dao.TaskDao
 import szysz3.planty.data.database.entity.SubTaskEntity
 import szysz3.planty.data.database.entity.toDomain
@@ -10,6 +12,12 @@ import szysz3.planty.domain.repository.TaskRepository
 import javax.inject.Inject
 
 class TaskRepositoryImpl @Inject constructor(private val taskDao: TaskDao) : TaskRepository {
+
+    override suspend fun getTasksWithSubTasksFlow(): Flow<List<Task>> =
+        taskDao.getTasksWithSubTasksFlow()
+            .map { taskWithSubTasksList ->
+                taskWithSubTasksList.map { it.toDomain() }
+            }
 
     override suspend fun getTasks(): List<Task> {
         val tasksWithSubTasks = taskDao.getTasksWithSubTasks()
@@ -26,6 +34,25 @@ class TaskRepositoryImpl @Inject constructor(private val taskDao: TaskDao) : Tas
         val taskId = taskDao.insertTask(taskEntity)
         val updatedSubTaskEntities = subTaskEntities.map { it.copy(taskId = taskId) }
         taskDao.insertSubTasks(updatedSubTaskEntities)
+    }
+
+    override suspend fun saveTasks(tasks: List<Task>) {
+        val taskEntities = tasks.map { it.toEntity().first }
+        val taskIds = taskDao.insertTasks(taskEntities)
+
+        val allSubTaskEntities = tasks.flatMapIndexed { index, task ->
+            task.tasks.map { subTask ->
+                SubTaskEntity(
+                    id = subTask.id,
+                    taskId = taskIds[index],
+                    description = subTask.description,
+                    isCompleted = subTask.isCompleted,
+                    cost = subTask.cost
+                )
+            }
+        }
+
+        taskDao.insertSubTasks(allSubTaskEntities)
     }
 
     override suspend fun deleteTask(task: Task) {
