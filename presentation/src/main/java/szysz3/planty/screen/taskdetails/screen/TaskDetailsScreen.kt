@@ -15,11 +15,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -37,9 +41,14 @@ fun TaskDetailsScreen(
 ) {
     val uiState by taskDetailsViewModel.uiState.collectAsState()
     val isDarkMode = isSystemInDarkTheme()
-    
-    LaunchedEffect(taskId) {
+    val focusRequester = remember { FocusRequester() }
+
+    // Update theme and load task
+    LaunchedEffect(isDarkMode) {
         taskDetailsViewModel.updateTheme(isDarkMode)
+    }
+
+    LaunchedEffect(taskId) {
         taskDetailsViewModel.loadTask(taskId)
     }
 
@@ -63,7 +72,9 @@ fun TaskDetailsScreen(
                     color = MaterialTheme.colorScheme.onSurface
                 )
             },
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .padding(16.dp)
+                .focusRequester(focusRequester),
             singleLine = true,
             colors = TextFieldDefaults.colors(
                 unfocusedContainerColor = Color.Transparent,
@@ -76,6 +87,11 @@ fun TaskDetailsScreen(
             )
         )
 
+        DisposableEffect(Unit) {
+            focusRequester.requestFocus()
+            onDispose { }
+        }
+
         // Active SubTasks
         Column(
             modifier = Modifier
@@ -84,6 +100,7 @@ fun TaskDetailsScreen(
         ) {
             activeSubTasks.forEach { subTask ->
                 SubTaskRow(
+                    modifier = Modifier.focusRequester(focusRequester),
                     subTask = subTask,
                     onCheckedChange = { isChecked ->
                         taskDetailsViewModel.toggleSubTaskCompletion(subTask.id, isChecked)
@@ -92,6 +109,11 @@ fun TaskDetailsScreen(
                         taskDetailsViewModel.updateSubTaskDescription(subTask.id, newDescription)
                     }
                 )
+
+                DisposableEffect(Unit) {
+                    focusRequester.requestFocus()
+                    onDispose { }
+                }
             }
 
             // Add New SubTask
@@ -130,7 +152,7 @@ fun TaskDetailsScreen(
         // Save Button
         RoundedButton(
             onClick = {
-                if (taskId != null) {
+                if (taskId == null) {
                     taskDetailsViewModel.saveNewTask()
                 } else {
                     taskDetailsViewModel.updateTask()
