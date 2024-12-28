@@ -209,7 +209,7 @@ fun TaskWithSubTasks.toDomain(): Task {
     return Task(
         id = task.id,
         title = task.title,
-        tasks = subTasks.map { subTask ->
+        subTasks = subTasks.map { subTask ->
             SubTask(
                 id = subTask.id,
                 description = subTask.description,
@@ -231,7 +231,7 @@ fun Task.toEntity(): Pair<TaskEntity, List<SubTaskEntity>> {
         color = color,
         index = index
     )
-    val subTaskEntities = tasks.map { subTask ->
+    val subTaskEntities = subTasks.map { subTask ->
         SubTaskEntity(
             id = subTask.id,
             taskId = 0, // Will be set when TaskEntity is inserted

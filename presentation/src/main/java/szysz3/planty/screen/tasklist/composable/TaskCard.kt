@@ -22,7 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import szysz3.planty.screen.tasklist.model.Task
-import szysz3.planty.ui.theme.CardColors
 
 @Composable
 fun TaskCardView(
@@ -58,7 +57,7 @@ fun TaskCardView(
                 Modifier
                     .fillMaxHeight()
                     .fillMaxWidth(0.25f)
-                    .background(color = CardColors.random())
+                    .background(color = task.color)
                     .clip(MaterialTheme.shapes.medium)
             )
 

@@ -41,7 +41,7 @@ class TaskRepositoryImpl @Inject constructor(private val taskDao: TaskDao) : Tas
         val taskIds = taskDao.insertTasks(taskEntities)
 
         val allSubTaskEntities = tasks.flatMapIndexed { index, task ->
-            task.tasks.map { subTask ->
+            task.subTasks.map { subTask ->
                 SubTaskEntity(
                     id = subTask.id,
                     taskId = taskIds[index],

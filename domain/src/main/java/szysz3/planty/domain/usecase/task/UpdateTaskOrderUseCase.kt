@@ -7,8 +7,22 @@ import javax.inject.Inject
 
 class UpdateTaskOrderUseCase @Inject constructor(
     private val repository: TaskRepository
-) : BaseUseCase<List<Task>, Unit>() {
-    override suspend fun invoke(input: List<Task>) {
-        // TODO: implement
+) : BaseUseCase<UpdateTaskOrderUseCaseParams, List<Task>>() {
+    override suspend fun invoke(input: UpdateTaskOrderUseCaseParams): List<Task> {
+        return input.tasks
+            .toMutableList()
+            .apply {
+                val task = removeAt(input.fromIndex)
+                add(input.toIndex, task)
+            }
+            .mapIndexed { index, task ->
+                task.copy(index = index)
+            }
     }
 }
+
+data class UpdateTaskOrderUseCaseParams(
+    val tasks: List<Task>,
+    val fromIndex: Int,
+    val toIndex: Int
+)

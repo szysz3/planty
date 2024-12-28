@@ -60,13 +60,15 @@ fun Modifier.dragContainer(dragDropState: DragDropState): Modifier {
 fun rememberDragDropState(
     lazyListState: LazyListState,
     onMove: (Int, Int) -> Unit,
+    onDragEnd: () -> Unit = {},
     draggableItemsNum: Int
 ): DragDropState {
     val state = remember(lazyListState) {
         DragDropState(
             draggableItemsNum = draggableItemsNum,
             stateList = lazyListState,
-            onMove = onMove
+            onMove = onMove,
+            onDragEnd = onDragEnd
         )
     }
     LaunchedEffect(state) {
@@ -82,6 +84,7 @@ class DragDropState(
     private val draggableItemsNum: Int,
     private val stateList: LazyListState,
     private val onMove: (Int, Int) -> Unit,
+    private val onDragEnd: () -> Unit
 ) {
     var draggingItemIndex: Int? by mutableStateOf(null)
     var delta by mutableFloatStateOf(0f)
@@ -103,6 +106,8 @@ class DragDropState(
         draggingItem = null
         draggingItemIndex = null
         delta = 0f
+        
+        onDragEnd()
     }
 
     internal fun onDrag(offset: Offset) {

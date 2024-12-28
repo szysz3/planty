@@ -41,7 +41,8 @@ fun TaskListScreen(
         draggableItemsNum = tasks.size,
         onMove = { fromIndex, toIndex ->
             taskListViewModel.moveTask(fromIndex, toIndex)
-        }
+        },
+        onDragEnd = { taskListViewModel.onPersistTaskOrder() }
     )
 
     LaunchedEffect(Unit) {

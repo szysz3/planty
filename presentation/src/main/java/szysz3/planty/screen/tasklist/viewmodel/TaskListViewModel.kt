@@ -10,40 +10,50 @@ import kotlinx.coroutines.launch
 import szysz3.planty.domain.usecase.base.NoParams
 import szysz3.planty.domain.usecase.task.ObserveTasksUseCase
 import szysz3.planty.domain.usecase.task.UpdateTaskOrderUseCase
+import szysz3.planty.domain.usecase.task.UpdateTaskOrderUseCaseParams
+import szysz3.planty.domain.usecase.task.UpdateTasksUseCase
 import szysz3.planty.screen.tasklist.model.TaskListScreenState
 import szysz3.planty.screen.tasklist.model.toDomain
 import szysz3.planty.screen.tasklist.model.toPresentation
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class TaskListViewModel @Inject constructor(
     private val observeTasksUseCase: ObserveTasksUseCase,
-    private val updateTaskOrderUseCase: UpdateTaskOrderUseCase
+    private val updateTaskOrderUseCase: UpdateTaskOrderUseCase,
+    private val updateTasksUseCase: UpdateTasksUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TaskListScreenState())
     val uiState: StateFlow<TaskListScreenState> = _uiState
-    
+
     fun observeTasks() {
         viewModelScope.launch {
-            observeTasksUseCase(NoParams()).distinctUntilChanged().collect { tasks ->
-                Timber.d("--> observe tasks: $tasks")
-                _uiState.value = _uiState.value.copy(tasks = tasks.toPresentation())
-            }
+            observeTasksUseCase(NoParams())
+                .distinctUntilChanged()
+                .collect { tasks ->
+                    _uiState.value = _uiState.value.copy(tasks = tasks.toPresentation())
+                }
+        }
+    }
+
+    fun onPersistTaskOrder() {
+        viewModelScope.launch {
+            updateTasksUseCase(_uiState.value.tasks.toDomain())
         }
     }
 
     fun moveTask(fromIndex: Int, toIndex: Int) {
-        val currentTasks = _uiState.value.tasks
-        val updatedTasks = currentTasks.toMutableList().apply {
-            val task = removeAt(fromIndex)
-            add(toIndex, task)
-        }
-        _uiState.value = _uiState.value.copy(tasks = updatedTasks)
-
         viewModelScope.launch {
-            updateTaskOrderUseCase(updatedTasks.toDomain())
+            val updatedTasks = updateTaskOrderUseCase(
+                UpdateTaskOrderUseCaseParams(
+                    _uiState.value.tasks.toDomain(),
+                    fromIndex,
+                    toIndex
+                )
+            )
+
+            _uiState.value = _uiState.value.copy(tasks = updatedTasks.toPresentation())
         }
     }
 }
