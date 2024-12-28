@@ -1,21 +1,27 @@
 package szysz3.planty.screen.tasklist.model
 
 import androidx.compose.ui.graphics.Color
-import szysz3.planty.ui.theme.EarthyBrown
+import szysz3.planty.ui.theme.DarkCardColors
+import szysz3.planty.ui.theme.LightCardColors
 
 data class Task(
     val id: Long = 0,
     val title: String,
     val tasks: List<SubTask>,
     val isCompleted: Boolean = false,
-    val color: Color = EarthyBrown,
+    val color: Color = Color.Transparent,
     val index: Int = 0,
 ) {
     companion object {
-        fun empty(): Task {
+        fun empty(isDarkMode: Boolean): Task {
             return Task(
                 title = "",
-                tasks = emptyList()
+                tasks = emptyList(),
+                color = if (isDarkMode) {
+                    DarkCardColors.random()
+                } else {
+                    LightCardColors.random()
+                }
             )
         }
     }

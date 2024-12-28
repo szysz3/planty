@@ -25,15 +25,21 @@ class TaskDetailsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(TaskDetailsScreenState())
     val uiState: StateFlow<TaskDetailsScreenState> = _uiState
 
+    private var isDarkMode: Boolean = false
+
     fun loadTask(taskId: Int?) {
         if (taskId == null) {
-            _uiState.value = TaskDetailsScreenState(task = Task.empty())
+            _uiState.value = TaskDetailsScreenState(task = Task.empty(isDarkMode))
         } else {
             viewModelScope.launch {
                 val task = getTaskByIdUseCase(taskId)?.toPresentation()
                 _uiState.value = TaskDetailsScreenState(task = task)
             }
         }
+    }
+
+    fun updateTheme(isDarkMode: Boolean) {
+        this.isDarkMode = isDarkMode
     }
 
     fun updateSubTaskDescription(subTaskId: Long, newDescription: String) {

@@ -1,6 +1,7 @@
 package szysz3.planty.screen.tasklist.model
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import szysz3.planty.domain.model.SubTask as SubTaskDomain
 import szysz3.planty.domain.model.Task as TaskDomain
 
@@ -19,7 +20,7 @@ fun TaskDomain.toPresentation(): Task {
         title = this.title,
         tasks = this.subTasks.map { it.toPresentation() },
         isCompleted = this.isCompleted,
-        color = Color(color ?: 0),
+        color = Color(color),
         index = this.index
     )
 }
@@ -47,7 +48,7 @@ fun Task.toDomain(): TaskDomain {
         title = this.title,
         subTasks = this.tasks.map { it.toDomain() },
         isCompleted = this.isCompleted,
-        color = this.color.value.toLong(),
+        color = this.color.toArgb(),
         index = this.index
     )
 }

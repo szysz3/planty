@@ -1,6 +1,7 @@
 package szysz3.planty.screen.taskdetails.screen
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,8 +36,10 @@ fun TaskDetailsScreen(
     onNavigateBack: () -> Unit,
 ) {
     val uiState by taskDetailsViewModel.uiState.collectAsState()
-
+    val isDarkMode = isSystemInDarkTheme()
+    
     LaunchedEffect(taskId) {
+        taskDetailsViewModel.updateTheme(isDarkMode)
         taskDetailsViewModel.loadTask(taskId)
     }
 
