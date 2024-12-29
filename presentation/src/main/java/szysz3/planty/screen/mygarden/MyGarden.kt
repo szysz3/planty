@@ -1,6 +1,7 @@
 package szysz3.planty.screen.mygarden
 
 import MyGardenScreen
+import androidx.compose.animation.fadeIn
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -13,7 +14,15 @@ object MyGardenFeature {
 }
 
 fun NavGraphBuilder.addMyGardenScreen(navController: NavHostController) {
-    composable(MyGardenFeature.route()) {
+    composable(
+        route = MyGardenFeature.route(),
+        enterTransition = {
+            fadeIn()
+        },
+        exitTransition = {
+            null
+        },
+    ) {
         MyGardenScreen(
             title = MyGardenFeature.TITLE,
             navController = navController

@@ -1,5 +1,6 @@
 package szysz3.planty.screen.taskdetails
 
+import androidx.compose.animation.fadeIn
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -28,6 +29,12 @@ fun NavGraphBuilder.addTaskDetailsScreen(
     navController: NavHostController,
 ) {
     composable(
+        enterTransition = {
+            fadeIn()
+        },
+        exitTransition = {
+            null
+        },
         route = TaskDetailsFeature.route(),
         arguments = listOf(
             navArgument(TASK_DETAILS_TASK_ID_ARG_NAME) {
