@@ -9,15 +9,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import szysz3.planty.navigation.Screens
+import szysz3.planty.navigation.BottomBarNavigation
 
 @Composable
 fun BottomNavigationBar(
     navController: NavHostController
 ) {
     val items = listOf(
-        Screens.MyGarden,
-        Screens.TaskList,
+        BottomBarNavigation.MyGarden,
+        BottomBarNavigation.TaskList,
 //        BottomNavItem.TaskList,
 //        BottomNavItem.Catalog,
 //        BottomNavItem.PlantId

@@ -27,13 +27,13 @@ class TaskDetailsViewModel @Inject constructor(
 
     private var isDarkMode: Boolean = false
 
-    fun loadTask(taskId: Int?) {
+    fun loadTask(taskId: Long?) {
         if (taskId == null) {
             _uiState.value = TaskDetailsScreenState(task = Task.empty(isDarkMode))
         } else {
             viewModelScope.launch {
                 val task = getTaskByIdUseCase(taskId)?.toPresentation()
-                _uiState.value = TaskDetailsScreenState(task = task)
+                _uiState.value = refreshState(task)
             }
         }
     }
@@ -49,12 +49,12 @@ class TaskDetailsViewModel @Inject constructor(
             }
             task.copy(tasks = updatedSubTasks)
         }
-        _uiState.value = _uiState.value.copy(task = updatedTask)
+        _uiState.value = refreshState(updatedTask)
     }
 
     fun updateTaskTitle(newTitle: String) {
         val updatedTask = _uiState.value.task?.copy(title = newTitle)
-        _uiState.value = _uiState.value.copy(task = updatedTask)
+        _uiState.value = refreshState(updatedTask)
     }
 
     fun toggleSubTaskCompletion(subTaskId: Long, isCompleted: Boolean) {
@@ -66,7 +66,7 @@ class TaskDetailsViewModel @Inject constructor(
                 tasks = updatedSubTasks,
                 isCompleted = updatedSubTasks.all { it.isCompleted })
         }
-        _uiState.value = _uiState.value.copy(task = updatedTask)
+        _uiState.value = refreshState(updatedTask)
     }
 
     fun updateSubTaskCost(subTaskId: Long, cost: String) {
@@ -79,7 +79,7 @@ class TaskDetailsViewModel @Inject constructor(
                 tasks = updatedSubTasks
             )
         }
-        _uiState.value = _uiState.value.copy(task = updatedTask)
+        _uiState.value = refreshState(updatedTask)
     }
 
     fun addNewSubTask() {
@@ -87,7 +87,7 @@ class TaskDetailsViewModel @Inject constructor(
             val newSubTask = SubTask(id = generateUniqueId(), description = "", isCompleted = false)
             task.copy(tasks = task.tasks + newSubTask)
         }
-        _uiState.value = _uiState.value.copy(task = updatedTask)
+        _uiState.value = refreshState(updatedTask)
     }
 
     fun saveNewTask() {
@@ -106,5 +106,20 @@ class TaskDetailsViewModel @Inject constructor(
 
     private fun generateUniqueId(): Long {
         return System.currentTimeMillis()
+    }
+
+    private fun refreshState(task: Task?): TaskDetailsScreenState {
+        val activeSubTasks = task?.tasks?.filter { !it.isCompleted }
+        val completedSubTasks = task?.tasks?.filter { it.isCompleted }
+        val completedSubTasksCost = completedSubTasks?.sumOf { it.cost.toDouble() }
+        val totalCost = task?.tasks?.sumOf { it.cost.toDouble() }
+
+        return _uiState.value.copy(
+            task = task ?: Task.empty(false),
+            activeSubTasks = activeSubTasks ?: emptyList(),
+            completedSubTasks = completedSubTasks ?: emptyList(),
+            completedSubTaskCost = completedSubTasksCost ?: 0.0,
+            totalCost = totalCost ?: 0.0
+        )
     }
 }

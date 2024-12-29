@@ -6,8 +6,10 @@ import androidx.navigation.compose.composable
 import szysz3.planty.screen.tasklist.screen.TaskListScreen
 
 object TaskListFeature {
-    const val ROUTE = "taskList"
     const val TITLE = "Task List"
+    private const val ROUTE = "taskList"
+
+    fun route() = ROUTE
 }
 
 fun NavGraphBuilder.addTaskListScreen(
@@ -15,7 +17,7 @@ fun NavGraphBuilder.addTaskListScreen(
     onShowTaskDetails: (Long) -> Unit,
     onAddNewTask: () -> Unit
 ) {
-    composable(TaskListFeature.ROUTE) {
+    composable(TaskListFeature.route()) {
         TaskListScreen(
             title = TaskListFeature.TITLE,
             navController = navController,

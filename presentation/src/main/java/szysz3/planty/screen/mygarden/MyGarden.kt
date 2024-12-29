@@ -6,12 +6,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 
 object MyGardenFeature {
-    const val ROUTE = "myGarden"
     const val TITLE = "My Garden"
+    private const val ROUTE = "myGarden"
+
+    fun route() = ROUTE
 }
 
 fun NavGraphBuilder.addMyGardenScreen(navController: NavHostController) {
-    composable(MyGardenFeature.ROUTE) {
+    composable(MyGardenFeature.route()) {
         MyGardenScreen(
             title = MyGardenFeature.TITLE,
             navController = navController

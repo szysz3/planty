@@ -6,8 +6,7 @@ import androidx.compose.material.icons.rounded.Home
 import szysz3.planty.screen.mygarden.MyGardenFeature
 import szysz3.planty.screen.tasklist.TaskListFeature
 
-object Screens {
-    val MyGarden = BottomNavItem(MyGardenFeature.ROUTE, MyGardenFeature.TITLE, Icons.Rounded.Home)
-    val TaskList = BottomNavItem(TaskListFeature.ROUTE, TaskListFeature.TITLE, Icons.Rounded.Done)
-
+object BottomBarNavigation {
+    val MyGarden = BottomNavItem(MyGardenFeature.route(), MyGardenFeature.TITLE, Icons.Rounded.Home)
+    val TaskList = BottomNavItem(TaskListFeature.route(), TaskListFeature.TITLE, Icons.Rounded.Done)
 }

@@ -31,9 +31,9 @@ import szysz3.planty.ui.widgets.FloatingActionButton
 fun TaskListScreen(
     title: String,
     navController: NavHostController,
-    taskListViewModel: TaskListViewModel = hiltViewModel(),
     onShowTaskDetails: (Long) -> Unit,
-    onAddNewTask: () -> Unit
+    onAddNewTask: () -> Unit,
+    taskListViewModel: TaskListViewModel = hiltViewModel(),
 ) {
     val uiState by taskListViewModel.uiState.collectAsState()
     val tasks = uiState.tasks
