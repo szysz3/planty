@@ -16,9 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import szysz3.planty.R
+import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.tasklist.composable.TaskCardView
-import szysz3.planty.screen.tasklist.model.Task
 import szysz3.planty.screen.tasklist.utils.dragContainer
 import szysz3.planty.screen.tasklist.utils.draggableItems
 import szysz3.planty.screen.tasklist.utils.rememberDragDropState
@@ -28,8 +29,11 @@ import szysz3.planty.ui.widgets.FloatingActionButton
 
 @Composable
 fun TaskListScreen(
+    title: String,
+    navController: NavHostController,
     taskListViewModel: TaskListViewModel = hiltViewModel(),
-    onNavigateToTaskDetails: (Task?) -> Unit
+    onShowTaskDetails: (Long) -> Unit,
+    onAddNewTask: () -> Unit
 ) {
     val uiState by taskListViewModel.uiState.collectAsState()
     val tasks = uiState.tasks
@@ -47,35 +51,47 @@ fun TaskListScreen(
         taskListViewModel.observeTasks()
     }
 
-    EllipticalBackground(R.drawable.bcg5)
+    BaseScreen(
+        title = title,
+        showTopBar = true,
+        showBottomBar = true,
+        navController = navController
+    ) { padding ->
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        LazyColumn(
+        EllipticalBackground(R.drawable.bcg5)
+
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .dragContainer(dragDropState),
-            state = listState,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(padding),
+            contentAlignment = Alignment.Center
         ) {
-            draggableItems(items = tasks, dragDropState = dragDropState) { modifier, task ->
-                TaskCardView(
-                    task = task,
-                    modifier = modifier,
-                    onClicked = { task -> onNavigateToTaskDetails(task) }
-                )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .dragContainer(dragDropState),
+                state = listState,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                draggableItems(items = tasks, dragDropState = dragDropState) { modifier, task ->
+                    TaskCardView(
+                        task = task,
+                        modifier = modifier,
+                        onClicked = { task ->
+                            task?.let {
+                                onShowTaskDetails(task.id)
+                            }
+                        }
+                    )
+                }
             }
-        }
 
-        FloatingActionButton(
-            icon = Icons.Rounded.Add,
-            contentDescription = "Add task",
-            onClick = {
-                onNavigateToTaskDetails(null)
-            })
+            FloatingActionButton(
+                icon = Icons.Rounded.Add,
+                contentDescription = "Add task",
+                onClick = {
+                    onAddNewTask()
+                })
+        }
     }
 }
