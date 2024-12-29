@@ -100,6 +100,7 @@ fun GardenDimensionsInput(
 
             Spacer(modifier = Modifier.height(16.dp))
             RoundedButton(
+                modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     val width = widthInput.toIntOrNull() ?: 1
                     val height = heightInput.toIntOrNull() ?: 1

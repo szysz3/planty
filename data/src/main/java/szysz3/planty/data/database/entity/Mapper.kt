@@ -214,12 +214,32 @@ fun TaskWithSubTasks.toDomain(): Task {
                 id = subTask.id,
                 description = subTask.description,
                 isCompleted = subTask.isCompleted,
-                cost = subTask.cost
+                cost = subTask.cost / 100f
             )
         },
         isCompleted = task.isCompleted,
         color = task.color,
         index = task.index
+    )
+}
+
+fun SubTask.toEntity(taskId: Long): SubTaskEntity {
+    return SubTaskEntity(
+        id = id,
+        taskId = taskId,
+        description = description,
+        isCompleted = isCompleted,
+        cost = cost.times(100).toInt()
+    )
+}
+
+fun SubTask.toEntity(taskId: Long, isCompleted: Boolean): SubTaskEntity {
+    return SubTaskEntity(
+        id = id,
+        taskId = taskId,
+        description = description,
+        isCompleted = isCompleted,
+        cost = cost.times(100).toInt()
     )
 }
 
@@ -237,7 +257,7 @@ fun Task.toEntity(): Pair<TaskEntity, List<SubTaskEntity>> {
             taskId = 0, // Will be set when TaskEntity is inserted
             description = subTask.description,
             isCompleted = subTask.isCompleted,
-            cost = subTask.cost
+            cost = subTask.cost.times(100).toInt()
         )
     }
     return taskEntity to subTaskEntities

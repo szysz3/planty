@@ -32,8 +32,8 @@ fun TaskCardView(
 ) {
     val completedSubTasks = task.tasks.count { it.isCompleted }
     val totalSubTasks = task.tasks.size
-    val completedCost = task.tasks.filter { it.isCompleted }.sumOf { it.cost }
-    val totalCost = task.tasks.sumOf { it.cost }
+    val completedCost = task.tasks.filter { it.isCompleted }.sumOf { it.cost.toDouble() }
+    val totalCost = task.tasks.sumOf { it.cost.toDouble() }
 
     Card(
         modifier = modifier
@@ -42,7 +42,7 @@ fun TaskCardView(
             .padding(8.dp)
             .alpha(
                 if (completedSubTasks == totalSubTasks) {
-                    0.4f
+                    0.6f
                 } else {
                     1f
                 }
@@ -109,30 +109,34 @@ fun TaskCardView(
                 }
             }
 
-            // Completed Cost Text
-            Row(
-                modifier = Modifier
-                    .align(Alignment.Bottom)
-                    .padding(end = 16.dp, bottom = 8.dp)
-            ) {
-                Text(
-                    text = String.format("%.2f", completedCost.toDouble()),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                    textAlign = TextAlign.End
-                )
-                Text(
-                    text = " / ",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                    textAlign = TextAlign.End
-                )
-                Text(
-                    text = String.format("%.2f", totalCost.toDouble()),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
-                    textAlign = TextAlign.End
-                )
+            if (totalCost > 0) {
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(end = 16.dp)
+                ) {
+                    Text(
+                        text = String.format("%.2f", completedCost),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                    Text(
+                        text = " out of ",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                    Text(
+                        text = String.format("%.2f", totalCost),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
             }
         }
     }

@@ -69,6 +69,19 @@ class TaskDetailsViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(task = updatedTask)
     }
 
+    fun updateSubTaskCost(subTaskId: Long, cost: String) {
+        val updatedTask = _uiState.value.task?.let { task ->
+            val updatedSubTasks = task.tasks.map {
+                val parsedCost = cost.toFloatOrNull() ?: 0f
+                if (it.id == subTaskId) it.copy(cost = parsedCost) else it
+            }
+            task.copy(
+                tasks = updatedSubTasks
+            )
+        }
+        _uiState.value = _uiState.value.copy(task = updatedTask)
+    }
+
     fun addNewSubTask() {
         val updatedTask = _uiState.value.task?.let { task ->
             val newSubTask = SubTask(id = generateUniqueId(), description = "", isCompleted = false)

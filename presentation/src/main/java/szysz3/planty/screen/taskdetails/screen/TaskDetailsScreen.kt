@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
@@ -52,9 +54,17 @@ fun TaskDetailsScreen(
         taskDetailsViewModel.loadTask(taskId)
     }
 
+    LaunchedEffect(Unit) {
+        mainScreenViewModel.updateShowBackButton(true)
+        mainScreenViewModel.updateShowDeleteButton(true)
+        mainScreenViewModel.updateTopBarVisibility(true)
+    }
+
     val task = uiState.task ?: return // Exit early if task is null
     val activeSubTasks = task.tasks.filter { !it.isCompleted }
     val completedSubTasks = task.tasks.filter { it.isCompleted }
+    val completedSubTasksCost = completedSubTasks.sumOf { it.cost.toDouble() }
+    val totalCost = task.tasks.sumOf { it.cost.toDouble() }
 
     Column(
         modifier = Modifier
@@ -109,6 +119,9 @@ fun TaskDetailsScreen(
                     },
                     onDescriptionChange = { newDescription ->
                         taskDetailsViewModel.updateSubTaskDescription(subTask.id, newDescription)
+                    },
+                    onCostChange = { cost ->
+                        taskDetailsViewModel.updateSubTaskCost(subTask.id, cost)
                     }
                 )
 
@@ -146,25 +159,66 @@ fun TaskDetailsScreen(
                 // Completed SubTasks
                 completedSubTasks.forEach { subTask ->
                     SubTaskRow(
-                        modifier = Modifier.padding(vertical = 8.dp),
                         subTask = subTask,
                     )
                 }
             }
         }
 
-        // Save Button
-        RoundedButton(
-            onClick = {
-                if (taskId == null) {
-                    taskDetailsViewModel.saveNewTask()
-                } else {
-                    taskDetailsViewModel.updateTask()
-                }
+        Row(modifier = Modifier.fillMaxWidth()) {
+            // Save Button
+            RoundedButton(
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .align(Alignment.Bottom),
+                onClick = {
+                    if (taskId == null) {
+                        taskDetailsViewModel.saveNewTask()
+                    } else {
+                        taskDetailsViewModel.updateTask()
+                    }
 
-                onNavigateBack()
-            },
-            text = if (taskId == null) "Add" else "Update"
-        )
+                    onNavigateBack()
+                },
+                text = if (taskId == null) "Add" else "Update"
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            if (totalCost > 0) {
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.Bottom)
+                        .padding(end = 16.dp, bottom = 16.dp)
+                ) {
+                    Text(
+                        text = String.format(
+                            "%.2f", completedSubTasksCost
+                        ),
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                    Text(
+                        text = " out of ",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                    Text(
+                        text = String.format(
+                            "%.2f",
+                            totalCost
+                        ),
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
+            }
+        }
     }
 }

@@ -42,13 +42,7 @@ class TaskRepositoryImpl @Inject constructor(private val taskDao: TaskDao) : Tas
 
         val allSubTaskEntities = tasks.flatMapIndexed { index, task ->
             task.subTasks.map { subTask ->
-                SubTaskEntity(
-                    id = subTask.id,
-                    taskId = taskIds[index],
-                    description = subTask.description,
-                    isCompleted = subTask.isCompleted,
-                    cost = subTask.cost
-                )
+                subTask.toEntity(taskIds[index])
             }
         }
 
@@ -64,14 +58,7 @@ class TaskRepositoryImpl @Inject constructor(private val taskDao: TaskDao) : Tas
         subTask: SubTask,
         isCompleted: Boolean
     ) {
-        val subTaskEntity = SubTaskEntity(
-            id = subTask.id,
-            taskId = taskId,
-            description = subTask.description,
-            isCompleted = isCompleted,
-            cost = subTask.cost
-        )
-        taskDao.insertSubTasks(listOf(subTaskEntity))
+        taskDao.insertSubTasks(listOf(subTask.toEntity(taskId, isCompleted)))
     }
 
     override suspend fun addSubTask(taskId: Long, description: String, cost: Int) {

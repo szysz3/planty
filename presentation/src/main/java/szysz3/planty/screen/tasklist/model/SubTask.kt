@@ -4,5 +4,5 @@ data class SubTask(
     val id: Long = 0,
     val description: String = "",
     val isCompleted: Boolean = false,
-    val cost: Int = 0
+    val cost: Float = 0f
 )
