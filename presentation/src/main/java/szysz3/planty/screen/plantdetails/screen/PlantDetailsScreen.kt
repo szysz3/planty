@@ -29,8 +29,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import szysz3.planty.R
-import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
-import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
 import szysz3.planty.screen.plantdetails.composable.EvenGrid
 import szysz3.planty.screen.plantdetails.model.PlantDetailItem
 import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
@@ -55,8 +53,6 @@ import szysz3.planty.util.openWebSearch
 
 @Composable
 fun PlantDetailsScreen(
-    mainScreenViewModel: MainScreenViewModel,
-    myGardenViewModel: MyGardenViewModel,
     origin: PlantDetailsScreenOrigin,
     plantId: Int,
     onNavigateBack: () -> Unit,
@@ -65,15 +61,10 @@ fun PlantDetailsScreen(
     plantDetailsViewModel: PlantDetailsViewModel = hiltViewModel(),
 ) {
     val uiState by plantDetailsViewModel.uiState.collectAsState()
-    val myGardenUiState by myGardenViewModel.uiState.collectAsState()
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         plantDetailsViewModel.updatePlantId(plantId)
-
-        mainScreenViewModel.updateShowBackButton(true)
-        mainScreenViewModel.updateTopBarVisibility(true)
-        mainScreenViewModel.updateShowDeleteButton(origin == PlantDetailsScreenOrigin.HOME_SCREEN)
     }
 
     EllipticalBackground(R.drawable.bcg3, 0.5f)
@@ -248,7 +239,7 @@ fun PlantDetailsScreen(
             if (origin == PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN) {
                 RoundedButton(
                     onClick = {
-                        myGardenViewModel.saveCell(plant)
+//                        myGardenViewModel.saveCell(plant)
                         onPlantChosen()
                     },
                     text = "Plant!"
@@ -257,20 +248,20 @@ fun PlantDetailsScreen(
         }
     }
 
-    if (myGardenUiState.isDeleteDialogVisible) {
-        DeleteAlertDialog(
-            title = "Delete Plant",
-            message = "Are you sure you want to delete this plant?",
-            confirmButtonText = "Delete",
-            dismissButtonText = "Cancel",
-            onConfirmDelete = {
-                myGardenViewModel.saveCell(null)
-                myGardenViewModel.showDeleteDialog(false)
-                onNavigateBack()
-            },
-            onCancel = {
-                myGardenViewModel.showDeleteDialog(false)
-            }
-        )
-    }
+//    if (myGardenUiState.isDeleteDialogVisible) {
+    DeleteAlertDialog(
+        title = "Delete Plant",
+        message = "Are you sure you want to delete this plant?",
+        confirmButtonText = "Delete",
+        dismissButtonText = "Cancel",
+        onConfirmDelete = {
+//                myGardenViewModel.saveCell(null)
+//                myGardenViewModel.showDeleteDialog(false)
+            onNavigateBack()
+        },
+        onCancel = {
+//                myGardenViewModel.showDeleteDialog(false)
+        }
+    )
+//    }
 }

@@ -6,7 +6,6 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.toArgb
 import dagger.hilt.android.AndroidEntryPoint
 import szysz3.planty.screen.main.screen.MainScreen
@@ -22,13 +21,8 @@ class MainActivity : ComponentActivity() {
                     statusBarStyle = SystemBarStyle.dark(MaterialTheme.colorScheme.background.toArgb()),
                     navigationBarStyle = SystemBarStyle.dark(MaterialTheme.colorScheme.background.toArgb())
                 )
-                AppContent()
+                MainScreen()
             }
         }
     }
-}
-
-@Composable
-fun AppContent() {
-    MainScreen()
 }

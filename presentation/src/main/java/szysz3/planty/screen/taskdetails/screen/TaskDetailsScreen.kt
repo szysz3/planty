@@ -29,14 +29,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.taskdetails.composable.SubTaskRow
 import szysz3.planty.screen.taskdetails.viewmodel.TaskDetailsViewModel
 import szysz3.planty.ui.widgets.RoundedButton
 
 @Composable
 fun TaskDetailsScreen(
-    mainScreenViewModel: MainScreenViewModel,
     taskDetailsViewModel: TaskDetailsViewModel = hiltViewModel(),
     taskId: Int?,
     onNavigateBack: () -> Unit,
@@ -52,12 +50,6 @@ fun TaskDetailsScreen(
 
     LaunchedEffect(taskId) {
         taskDetailsViewModel.loadTask(taskId)
-    }
-
-    LaunchedEffect(Unit) {
-        mainScreenViewModel.updateShowBackButton(true)
-        mainScreenViewModel.updateShowDeleteButton(true)
-        mainScreenViewModel.updateTopBarVisibility(true)
     }
 
     val task = uiState.task ?: return // Exit early if task is null

@@ -15,10 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import szysz3.planty.screen.imagegallery.screen.ImageGalleryScreen
-import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
-import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
 import szysz3.planty.screen.plantcatalog.screen.PlantCatalogScreen
-import szysz3.planty.screen.plantcatalog.viewmodel.PlantCatalogViewModel
 import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
 import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreen
 import szysz3.planty.screen.plantid.screen.PlantIdScreen
@@ -28,9 +25,6 @@ import szysz3.planty.screen.tasklist.screen.TaskListScreen
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
-    mainScreenViewModel: MainScreenViewModel,
-    myGardenViewModel: MyGardenViewModel,
-    plantCatalogViewModel: PlantCatalogViewModel,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -40,8 +34,6 @@ fun NavigationGraph(
     ) {
         composable(BottomNavItem.Home.route) {
             MyGardenScreen(
-                mainScreenViewModel = mainScreenViewModel,
-                myGardenViewModel = myGardenViewModel,
                 onNavigateToPlantAPlant = {
                     navigate(navController, BottomNavItem.Catalog)
                 },
@@ -55,21 +47,18 @@ fun NavigationGraph(
         }
         composable(BottomNavItem.TaskList.route) {
             TaskListScreen(
-                mainScreenViewModel = mainScreenViewModel
             ) { task ->
                 navigate(navController, NavigationItem.TaskDetails.withArgs(task?.id?.toInt()))
             }
         }
         composable(BottomNavItem.Catalog.route) {
             PlantCatalogScreen(
-                mainScreenViewModel = mainScreenViewModel,
-                plantCatalogViewModel = plantCatalogViewModel,
             ) { origin, plantId ->
                 navigate(navController, NavigationItem.PlantDetails.withArgs(origin.value, plantId))
             }
         }
         composable(BottomNavItem.PlantId.route) {
-            PlantIdScreen(mainScreenViewModel = mainScreenViewModel) { localMatchingPlant ->
+            PlantIdScreen() { localMatchingPlant ->
                 localMatchingPlant?.let {
                     navigate(
                         navController,
@@ -117,8 +106,6 @@ fun NavigationGraph(
                 backStackEntry.arguments?.getInt(NavigationItem.PLANT_DETAILS_PLANT_ID_ARG_NAME)
                     ?: -1
             PlantDetailsScreen(
-                mainScreenViewModel = mainScreenViewModel,
-                myGardenViewModel = myGardenViewModel,
                 origin = PlantDetailsScreenOrigin.fromValue(origin),
                 onPlantChosen = {
                     navController.popBackStack(BottomNavItem.Home.route, false)
@@ -143,7 +130,6 @@ fun NavigationGraph(
                 backStackEntry.arguments?.getString(NavigationItem.TASK_DETAILS_TASK_ID_ARG_NAME)
                     ?.toIntOrNull()
             TaskDetailsScreen(
-                mainScreenViewModel = mainScreenViewModel,
                 taskId = taskId
             ) {
                 navController.popBackStack()

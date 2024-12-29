@@ -14,9 +14,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import szysz3.planty.R
-import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.mygarden.composable.GardenDimensionsInput
 import szysz3.planty.screen.mygarden.composable.GardenMap
 import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
@@ -28,8 +28,7 @@ import szysz3.planty.ui.widgets.FloatingActionButton
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun MyGardenScreen(
-    mainScreenViewModel: MainScreenViewModel,
-    myGardenViewModel: MyGardenViewModel,
+    myGardenViewModel: MyGardenViewModel = hiltViewModel(),
     onNavigateToPlantAPlant: () -> Unit,
     onNavigateToPlantDetails: (origin: PlantDetailsScreenOrigin, plantId: Int) -> Unit
 ) {
@@ -38,14 +37,7 @@ fun MyGardenScreen(
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        mainScreenViewModel.updateShowBackButton(false)
         myGardenViewModel.loadGarden()
-    }
-
-    LaunchedEffect(uiState.dataLoaded) {
-        mainScreenViewModel.updateHomeScreenInitialized(uiState.dataLoaded)
-        mainScreenViewModel.updateTopBarVisibility(uiState.dataLoaded)
-        mainScreenViewModel.updateShowDeleteButton(uiState.dataLoaded)
     }
 
     val rows = uiState.gardenState.rows

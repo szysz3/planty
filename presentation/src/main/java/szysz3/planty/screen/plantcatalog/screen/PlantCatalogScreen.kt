@@ -20,7 +20,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -30,10 +29,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import szysz3.planty.R
-import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.plantcatalog.composable.PlantCard
 import szysz3.planty.screen.plantcatalog.viewmodel.PlantCatalogViewModel
 import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
@@ -41,19 +40,13 @@ import szysz3.planty.ui.widgets.EllipticalBackground
 
 @Composable
 fun PlantCatalogScreen(
-    mainScreenViewModel: MainScreenViewModel,
-    plantCatalogViewModel: PlantCatalogViewModel,
+    plantCatalogViewModel: PlantCatalogViewModel = hiltViewModel(),
     onNavigateToPlantDetails: (PlantDetailsScreenOrigin, Int) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val plants = plantCatalogViewModel.pagedPlants.collectAsLazyPagingItems()
     val localSearchQuery =
         remember { mutableStateOf(plantCatalogViewModel.searchQuery.value) }
-
-    LaunchedEffect(Unit) {
-        mainScreenViewModel.updateShowBackButton(true)
-        mainScreenViewModel.updateShowDeleteButton(false)
-    }
 
     EllipticalBackground(R.drawable.bcg2)
 

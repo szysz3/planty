@@ -29,7 +29,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import szysz3.planty.R
-import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 import szysz3.planty.screen.plantcatalog.model.Plant
 import szysz3.planty.screen.plantid.composable.PlantResultCard
 import szysz3.planty.screen.plantid.viewmodel.PlantIdViewModel
@@ -40,7 +39,6 @@ import szysz3.planty.util.openWebSearch
 
 @Composable
 fun PlantIdScreen(
-    mainScreenViewModel: MainScreenViewModel,
     viewModel: PlantIdViewModel = hiltViewModel(),
     onOpenPlantDetails: (plant: Plant?) -> Unit
 ) {
@@ -63,10 +61,6 @@ fun PlantIdScreen(
         if (success) {
             viewModel.identifyPlant()
         }
-    }
-
-    LaunchedEffect(Unit) {
-        mainScreenViewModel.updateTopBarVisibility(false)
     }
 
     LaunchedEffect(uiState.photoUri, shouldLaunchCamera) {

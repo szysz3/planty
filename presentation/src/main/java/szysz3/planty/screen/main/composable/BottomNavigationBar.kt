@@ -9,12 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import szysz3.planty.screen.main.viewmodel.MainScreenViewModel
 
 @Composable
 fun BottomNavigationBar(
-    navController: NavHostController,
-    mainScreenViewModel: MainScreenViewModel,
+    navController: NavHostController
 ) {
     val items = listOf(
         BottomNavItem.Home,
@@ -52,8 +50,6 @@ fun BottomNavigationBar(
                 },
                 selected = isSelected,
                 onClick = {
-                    mainScreenViewModel.handleTopBarVisibility(item.route)
-
                     navController.navigate(item.route) {
                         popUpTo(navController.graph.startDestinationId) {
                             saveState = true
