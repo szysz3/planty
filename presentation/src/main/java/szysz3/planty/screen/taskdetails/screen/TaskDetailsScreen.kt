@@ -88,7 +88,9 @@ fun TaskDetailsScreen(
         )
 
         DisposableEffect(Unit) {
-            focusRequester.requestFocus()
+            if (taskId == null) {
+                focusRequester.requestFocus()
+            }
             onDispose { }
         }
 
@@ -111,7 +113,9 @@ fun TaskDetailsScreen(
                 )
 
                 DisposableEffect(Unit) {
-                    focusRequester.requestFocus()
+                    if (taskId == null) {
+                        focusRequester.requestFocus()
+                    }
                     onDispose { }
                 }
             }

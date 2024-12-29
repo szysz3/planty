@@ -40,26 +40,26 @@ val WashedSage = Color(0xFF60684F)      // Darker sage green for natural harmony
 val CloudClay = Color(0xFFBCA99A)       // Darker clay for subtle highlights
 
 // Light Theme Colors
-val PaleSage = Color(0xFFAABDA1)         // Soft muted green for gentle contrast
-val CreamyPeach = Color(0xFFF7D9C4)      // Warm pastel peach for highlights
-val LavenderMist = Color(0xFFE4D6F4)     // Light lavender for soft accents
-val SunlitSand = Color(0xFFF1E3D6)       // Warm sandy beige for highlights
-val BlushingRose = Color(0xFFF2CFC9)     // Light rose pink for gentle color
-val MorningSky = Color(0xFFCEE5ED)       // Soft powdery blue for cool tones
-val DewyMoss = Color(0xFFC6D6B8)         // Light green-gray for earthy accents
-val GoldenDusk = Color(0xFFF4E2B4)       // Pale gold for warmth and elegance
-val SoftCoral = Color(0xFFF7BFB0)        // Gentle coral for vibrant accents
-val SilverHaze = Color(0xFFD4D6D9)       // Neutral silver-gray for balance
-val PowderBlue = Color(0xFFAEC4D6)     // Soft blue for a calming accent
-val LightCoral = Color(0xFFE6AFAF)     // Gentle coral for warm highlights
-val PastelMint = Color(0xFFB6D4B0)     // Muted mint green for natural balance
-val PaleLilac = Color(0xFFD4C8E6)      // Soft lilac for a delicate touch
-val WarmVanilla = Color(0xFFF1E7D1)    // Creamy vanilla for warm surfaces
-val HazyGray = Color(0xFFCECBC8)       // Soft gray for neutral blending
-val BlushPeach = Color(0xFFF7D4C6)     // Light peach for subtle warmth
-val GentleSage = Color(0xFFC4D4C2)     // Muted sage green for natural harmony
-val CloudySky = Color(0xFFCBDCE6)      // Pale sky blue for airy tones
-val SoftSand = Color(0xFFE9D8C9)       // Light sandy beige for grounding elements
+val PaleSage = Color(0xFF8FA98C)         // Slightly darker muted green for gentle contrast
+val CreamyPeach = Color(0xFFE6C2A8)      // Deeper pastel peach for highlights
+val LavenderMist = Color(0xFFD0BEE4)     // Darker lavender for soft accents
+val SunlitSand = Color(0xFFE4D0B8)       // Warmer sandy beige for highlights
+val BlushingRose = Color(0xFFD9A8A2)     // Richer rose pink for gentle color
+val MorningSky = Color(0xFFB0CBD7)       // Deeper powdery blue for cool tones
+val DewyMoss = Color(0xFFAABF9A)         // Darker green-gray for earthy accents
+val GoldenDusk = Color(0xFFE5C894)       // Warmer pale gold for elegance
+val SoftCoral = Color(0xFFE09D8B)        // Deeper coral for vibrant accents
+val SilverHaze = Color(0xFFBFC2C5)       // Richer silver-gray for balance
+val PowderBlue = Color(0xFF93AEC4)       // Darker soft blue for a calming accent
+val LightCoral = Color(0xFFD38D8D)       // Deeper coral for warm highlights
+val PastelMint = Color(0xFFA3BF98)       // Richer mint green for natural balance
+val PaleLilac = Color(0xFFBBA9D4)        // Deeper lilac for a delicate touch
+val WarmVanilla = Color(0xFFE3D2B8)      // Warmer creamy vanilla for surfaces
+val HazyGray = Color(0xFFB4B1AE)         // Deeper gray for neutral blending
+val BlushPeach = Color(0xFFE5BAA3)       // Richer peach for subtle warmth
+val GentleSage = Color(0xFF9FB49E)       // Darker sage green for natural harmony
+val CloudySky = Color(0xFFADC9DC)        // Deeper sky blue for airy tones
+val SoftSand = Color(0xFFD8BA9F)         // Richer sandy beige for grounding elements
 
 val DarkCardColors = listOf(
     SoftTaupe,
