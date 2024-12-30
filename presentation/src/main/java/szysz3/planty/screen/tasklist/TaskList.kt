@@ -1,9 +1,8 @@
 package szysz3.planty.screen.tasklist
 
-import androidx.compose.animation.fadeIn
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
+import szysz3.planty.navigation.staticComposable
 import szysz3.planty.screen.tasklist.screen.TaskListScreen
 
 object TaskListFeature {
@@ -18,14 +17,8 @@ fun NavGraphBuilder.addTaskListScreen(
     onShowTaskDetails: (Long) -> Unit,
     onAddNewTask: () -> Unit
 ) {
-    composable(
+    staticComposable(
         route = TaskListFeature.route(),
-        enterTransition = {
-            fadeIn()
-        },
-        exitTransition = {
-            null
-        },
     ) {
         TaskListScreen(
             title = TaskListFeature.TITLE,

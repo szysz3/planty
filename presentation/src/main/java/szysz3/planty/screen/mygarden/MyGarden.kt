@@ -1,10 +1,9 @@
 package szysz3.planty.screen.mygarden
 
 import MyGardenScreen
-import androidx.compose.animation.fadeIn
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
+import szysz3.planty.navigation.staticComposable
 
 object MyGardenFeature {
     const val TITLE = "My Garden"
@@ -14,14 +13,8 @@ object MyGardenFeature {
 }
 
 fun NavGraphBuilder.addMyGardenScreen(navController: NavHostController) {
-    composable(
+    staticComposable(
         route = MyGardenFeature.route(),
-        enterTransition = {
-            fadeIn()
-        },
-        exitTransition = {
-            null
-        },
     ) {
         MyGardenScreen(
             title = MyGardenFeature.TITLE,

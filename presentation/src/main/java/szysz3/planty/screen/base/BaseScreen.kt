@@ -1,5 +1,11 @@
 package szysz3.planty.screen.base
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +16,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import szysz3.planty.screen.base.topbar.TopBarTitle
@@ -26,6 +37,12 @@ fun BaseScreen(
     navigationIcon: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
+    var isContentVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        isContentVisible = true
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -56,6 +73,29 @@ fun BaseScreen(
             }
         }
     ) { innerPadding ->
-        content(innerPadding)
+        AnimatedContent(isContentVisible, innerPadding, content)
+    }
+}
+
+@Composable
+fun AnimatedContent(
+    isVisible: Boolean,
+    innerPaddingValues: PaddingValues,
+    content: @Composable (PaddingValues) -> Unit
+) {
+    AnimatedVisibility(
+        visible = isVisible,
+        enter =
+        fadeIn(animationSpec = tween(300)) + slideInHorizontally(
+            initialOffsetX = { fullWidth -> fullWidth / 4 },
+            animationSpec = tween(150)
+        ),
+        exit =
+        fadeOut(animationSpec = tween(300)) + slideOutHorizontally(
+            targetOffsetX = { fullWidth -> -fullWidth / 4 },
+            animationSpec = tween(150)
+        ),
+    ) {
+        content(innerPaddingValues)
     }
 }

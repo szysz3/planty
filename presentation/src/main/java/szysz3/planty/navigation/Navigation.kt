@@ -11,6 +11,6 @@ open class BottomNavItem(route: String, title: String, val icon: ImageVector) :
 fun NavHostController.showScreen(route: String) {
     navigate(route) {
         launchSingleTop = true
-        restoreState = true
+        restoreState = false
     }
 }

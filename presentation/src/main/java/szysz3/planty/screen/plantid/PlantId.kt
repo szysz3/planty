@@ -1,9 +1,8 @@
 package szysz3.planty.screen.plantid
 
-import androidx.compose.animation.fadeIn
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
+import szysz3.planty.navigation.staticComposable
 import szysz3.planty.screen.plantid.screen.PlantIdScreen
 
 object PlantIdFeature {
@@ -17,14 +16,8 @@ fun NavGraphBuilder.addPlantIdScreen(
     navController: NavHostController,
     onShowPlantDetails: (plantId: Int) -> Unit
 ) {
-    composable(
+    staticComposable(
         route = PlantIdFeature.route(),
-        enterTransition = {
-            fadeIn()
-        },
-        exitTransition = {
-            null
-        },
     ) {
         PlantIdScreen(
             title = PlantIdFeature.TITLE,
