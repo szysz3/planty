@@ -18,9 +18,8 @@ fun BottomNavigationBar(
     val items = listOf(
         BottomBarNavigation.MyGarden,
         BottomBarNavigation.TaskList,
+        BottomBarNavigation.PlantCatalog,
         BottomBarNavigation.PlantId,
-//        BottomNavItem.Catalog,
-//        BottomNavItem.PlantId
     )
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route

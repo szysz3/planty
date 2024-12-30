@@ -22,7 +22,8 @@ fun TopBar(
     val currentRoute = currentBackStackEntry?.destination?.route
 
     val title = remember(currentRoute) {
-        NavigationItem.getTitleForRoute(currentRoute ?: "") ?: ""
+//        NavigationItem.getTitleForRoute(currentRoute ?: "") ?: ""
+        ""
     }
     TopAppBar(
         colors = TopAppBarColors(

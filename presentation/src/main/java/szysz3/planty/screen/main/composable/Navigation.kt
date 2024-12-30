@@ -1,10 +1,7 @@
 package szysz3.planty.screen.main.composable
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -14,7 +11,7 @@ import szysz3.planty.navigation.BottomBarNavigation
 import szysz3.planty.navigation.showScreen
 import szysz3.planty.screen.imagegallery.screen.ImageGalleryScreen
 import szysz3.planty.screen.mygarden.addMyGardenScreen
-import szysz3.planty.screen.plantcatalog.screen.PlantCatalogScreen
+import szysz3.planty.screen.plantcatalog.addPlantCatalogScreen
 import szysz3.planty.screen.plantdetails.PlantDetailsFeature
 import szysz3.planty.screen.plantdetails.addPlantDetailsScreen
 import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
@@ -63,17 +60,18 @@ fun NavigationGraph(
             }
         )
 
-        composable(BottomNavItem.Catalog.route) {
-            PlantCatalogScreen(
-            ) { origin, plantId ->
+        addPlantCatalogScreen(
+            navController,
+            onShowPlantDetails = { origin, plantId ->
                 navController.showScreen(
                     PlantDetailsFeature.routeWithArgs(
                         origin = origin.value,
                         plantId = plantId
                     )
                 )
+
             }
-        }
+        )
 
         composable(
             route = NavigationItem.ImageGallery.route,
@@ -113,20 +111,6 @@ open class NavigationItem(val route: String, val title: String) {
     }
 
     companion object {
-
         const val IMAGE_GALLERY_PLANT_ID_ARG_NAME = "plantId"
-
-        fun getTitleForRoute(route: String): String? {
-            return when {
-                route == BottomNavItem.Catalog.route -> BottomNavItem.Catalog.title
-                else -> null
-            }
-        }
     }
 }
-
-open class BottomNavItem(route: String, title: String, val icon: ImageVector) :
-    NavigationItem(route, title) {
-    object Catalog : BottomNavItem("catalog", "Catalog", Icons.Rounded.Info)
-}
-
