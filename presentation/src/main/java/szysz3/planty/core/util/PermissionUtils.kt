@@ -1,4 +1,4 @@
-package szysz3.planty.util
+package szysz3.planty.core.util
 
 import android.content.Context
 import android.content.pm.PackageManager

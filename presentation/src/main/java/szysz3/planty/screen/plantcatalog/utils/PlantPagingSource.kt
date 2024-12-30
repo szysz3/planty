@@ -1,4 +1,4 @@
-package szysz3.planty.screen.plantcatalog.paging
+package szysz3.planty.screen.plantcatalog.utils
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

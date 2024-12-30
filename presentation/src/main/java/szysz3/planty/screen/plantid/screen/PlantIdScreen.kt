@@ -33,11 +33,11 @@ import androidx.navigation.NavHostController
 import szysz3.planty.R
 import szysz3.planty.core.composable.EllipticalBackground
 import szysz3.planty.core.composable.FloatingActionButton
+import szysz3.planty.core.util.PermissionUtils
+import szysz3.planty.core.util.openWebSearch
 import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.plantid.composable.PlantResultCard
 import szysz3.planty.screen.plantid.viewmodel.PlantIdViewModel
-import szysz3.planty.util.PermissionUtils
-import szysz3.planty.util.openWebSearch
 
 @Composable
 fun PlantIdScreen(

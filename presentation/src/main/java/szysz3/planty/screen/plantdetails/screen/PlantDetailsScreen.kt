@@ -36,6 +36,7 @@ import szysz3.planty.core.composable.ImageButton
 import szysz3.planty.core.composable.ImageWithTextHorizontal
 import szysz3.planty.core.composable.RoundedButton
 import szysz3.planty.core.model.PlantDetailsScreenOrigin
+import szysz3.planty.core.util.openWebSearch
 import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.plantdetails.composable.EvenGrid
 import szysz3.planty.screen.plantdetails.model.PlantDetailItem
@@ -51,7 +52,6 @@ import szysz3.planty.screen.plantdetails.model.mapShadeToString
 import szysz3.planty.screen.plantdetails.model.mapSoilToString
 import szysz3.planty.screen.plantdetails.model.mapWellDrainedToString
 import szysz3.planty.screen.plantdetails.viewmodel.PlantDetailsViewModel
-import szysz3.planty.util.openWebSearch
 
 @Composable
 fun PlantDetailsScreen(

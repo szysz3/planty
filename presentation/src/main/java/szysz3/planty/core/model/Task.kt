@@ -13,6 +13,7 @@ data class Task(
     val index: Int = 0,
 ) {
     companion object {
+        // TODO: remove color init
         fun empty(isDarkMode: Boolean): Task {
             return Task(
                 title = "",
