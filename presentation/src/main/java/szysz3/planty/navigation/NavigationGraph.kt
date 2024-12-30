@@ -1,15 +1,12 @@
-package szysz3.planty.screen.main.composable
+package szysz3.planty.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import szysz3.planty.navigation.BottomBarNavigation
-import szysz3.planty.navigation.showScreen
-import szysz3.planty.screen.imagegallery.screen.ImageGalleryScreen
+import szysz3.planty.navigation.bottombar.BottomBarNavigationItems
+import szysz3.planty.screen.imagegallery.ImageGalleryFeature
+import szysz3.planty.screen.imagegallery.addImageGalleryScreen
 import szysz3.planty.screen.mygarden.addMyGardenScreen
 import szysz3.planty.screen.plantcatalog.addPlantCatalogScreen
 import szysz3.planty.screen.plantdetails.PlantDetailsFeature
@@ -27,7 +24,7 @@ fun NavigationGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = BottomBarNavigation.MyGarden.route,
+        startDestination = BottomBarNavigationItems.MyGarden.route,
         modifier = modifier
     ) {
         addMyGardenScreen(navController)
@@ -48,7 +45,6 @@ fun NavigationGraph(
                     plantId = plantId
                 )
             )
-
         })
         addPlantDetailsScreen(
             navController,
@@ -56,10 +52,13 @@ fun NavigationGraph(
                 navController.popBackStack()
             },
             onPlantImageClicked = { plantId ->
-//                    navigate(navController, NavigationItem.ImageGallery.withArgs(plantId))
+                navController.showScreen(
+                    ImageGalleryFeature.routeWithArgs(
+                        plantId = plantId
+                    )
+                )
             }
         )
-
         addPlantCatalogScreen(
             navController,
             onShowPlantDetails = { origin, plantId ->
@@ -72,45 +71,6 @@ fun NavigationGraph(
 
             }
         )
-
-        composable(
-            route = NavigationItem.ImageGallery.route,
-            arguments = listOf(
-                navArgument(NavigationItem.IMAGE_GALLERY_PLANT_ID_ARG_NAME) {
-                    type = NavType.IntType
-                    nullable = false
-                }
-            )
-        ) { backStackEntry ->
-            val plantId =
-                backStackEntry.arguments?.getInt(NavigationItem.IMAGE_GALLERY_PLANT_ID_ARG_NAME)
-                    ?: -1
-            ImageGalleryScreen(plantId = plantId) {
-                // on close action
-            }
-        }
-    }
-}
-
-open class NavigationItem(val route: String, val title: String) {
-
-    object ImageGallery :
-        NavigationItem(
-            "/imageGallery/{${IMAGE_GALLERY_PLANT_ID_ARG_NAME}}",
-            "Image gallery"
-        ) {
-        fun withArgs(plantId: Int): NavigationItem {
-            return NavigationItem(
-                route.replace(
-                    "{${IMAGE_GALLERY_PLANT_ID_ARG_NAME}}",
-                    plantId.toString()
-                ),
-                title
-            )
-        }
-    }
-
-    companion object {
-        const val IMAGE_GALLERY_PLANT_ID_ARG_NAME = "plantId"
+        addImageGalleryScreen(navController)
     }
 }

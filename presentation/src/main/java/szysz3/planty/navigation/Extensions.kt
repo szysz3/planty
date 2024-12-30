@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 
 fun NavGraphBuilder.staticComposable(
@@ -39,4 +40,11 @@ fun NavGraphBuilder.staticComposable(
         popExitTransition = popExitTransition,
         content = content
     )
+}
+
+fun NavHostController.showScreen(route: String) {
+    navigate(route) {
+        launchSingleTop = true
+        restoreState = false
+    }
 }

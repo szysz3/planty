@@ -1,4 +1,4 @@
-package szysz3.planty.navigation
+package szysz3.planty.navigation.bottombar
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Done
@@ -10,7 +10,7 @@ import szysz3.planty.screen.plantcatalog.PlantCatalogFeature
 import szysz3.planty.screen.plantid.PlantIdFeature
 import szysz3.planty.screen.tasklist.TaskListFeature
 
-object BottomBarNavigation {
+object BottomBarNavigationItems {
     val MyGarden = BottomNavItem(MyGardenFeature.route(), MyGardenFeature.TITLE, Icons.Rounded.Home)
     val TaskList = BottomNavItem(TaskListFeature.route(), TaskListFeature.TITLE, Icons.Rounded.Done)
     val PlantId = BottomNavItem(PlantIdFeature.route(), PlantIdFeature.TITLE, Icons.Rounded.Search)

@@ -259,20 +259,21 @@ fun PlantDetailsScreen(
         }
 
 //    if (myGardenUiState.isDeleteDialogVisible) {
-        DeleteAlertDialog(
-            title = "Delete Plant",
-            message = "Are you sure you want to delete this plant?",
-            confirmButtonText = "Delete",
-            dismissButtonText = "Cancel",
-            onConfirmDelete = {
+        if (false) {
+            DeleteAlertDialog(
+                title = "Delete Plant",
+                message = "Are you sure you want to delete this plant?",
+                confirmButtonText = "Delete",
+                dismissButtonText = "Cancel",
+                onConfirmDelete = {
 //                myGardenViewModel.saveCell(null)
 //                myGardenViewModel.showDeleteDialog(false)
-                navController.popBackStack()
-            },
-            onCancel = {
+                    navController.popBackStack()
+                },
+                onCancel = {
 //                myGardenViewModel.showDeleteDialog(false)
-            }
-        )
-//    }
+                }
+            )
+        }
     }
 }

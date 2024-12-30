@@ -9,17 +9,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import szysz3.planty.navigation.BottomBarNavigation
+import szysz3.planty.navigation.bottombar.BottomBarNavigationItems
 
 @Composable
 fun BottomNavigationBar(
     navController: NavHostController
 ) {
     val items = listOf(
-        BottomBarNavigation.MyGarden,
-        BottomBarNavigation.TaskList,
-        BottomBarNavigation.PlantCatalog,
-        BottomBarNavigation.PlantId,
+        BottomBarNavigationItems.MyGarden,
+        BottomBarNavigationItems.TaskList,
+        BottomBarNavigationItems.PlantCatalog,
+        BottomBarNavigationItems.PlantId,
     )
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route

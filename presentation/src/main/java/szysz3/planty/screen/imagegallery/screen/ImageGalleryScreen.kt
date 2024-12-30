@@ -18,14 +18,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.imagegallery.composable.ZoomableImage
 import szysz3.planty.screen.imagegallery.viewmodel.ImageGalleryViewModel
 
 @Composable
 fun ImageGalleryScreen(
-    imageGalleryViewModel: ImageGalleryViewModel = hiltViewModel(),
+    title: String,
+    navController: NavHostController,
     plantId: Int,
-    onClose: () -> Unit
+    imageGalleryViewModel: ImageGalleryViewModel = hiltViewModel(),
 ) {
     val uiState by imageGalleryViewModel.uiState.collectAsState()
     val pagerState = rememberPagerState(initialPage = 0) {
@@ -36,31 +39,45 @@ fun ImageGalleryScreen(
         imageGalleryViewModel.updateImageUrls(plantId)
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        uiState.imageUrls?.let { imageUrls ->
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize(),
-            ) { page ->
-                imageUrls[page]?.let { url ->
-                    ZoomableImage(
-                        imageUrl = url
-                    )
+    BaseScreen(
+        title = title,
+        showTopBar = true,
+        showBottomBar = true,
+        navController = navController
+    ) { padding ->
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
+            uiState.imageUrls?.let { imageUrls ->
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.fillMaxSize(),
+                ) { page ->
+                    imageUrls[page]?.let { url ->
+                        ZoomableImage(
+                            imageUrl = url
+                        )
+                    }
                 }
             }
-        }
 
-        IconButton(
-            onClick = onClose,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(16.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.Close,
-                contentDescription = "Close",
-                modifier = Modifier.size(32.dp)
-            )
+            IconButton(
+                onClick = {
+                    navController.popBackStack()
+                },
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Close,
+                    contentDescription = "Close",
+                    modifier = Modifier.size(32.dp)
+                )
+            }
         }
     }
 }
