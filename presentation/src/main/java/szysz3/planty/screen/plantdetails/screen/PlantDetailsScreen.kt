@@ -26,9 +26,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import szysz3.planty.R
+import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.plantdetails.composable.EvenGrid
 import szysz3.planty.screen.plantdetails.model.PlantDetailItem
 import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
@@ -53,11 +55,12 @@ import szysz3.planty.util.openWebSearch
 
 @Composable
 fun PlantDetailsScreen(
+    title: String,
+    navController: NavHostController,
     origin: PlantDetailsScreenOrigin,
     plantId: Int,
-    onNavigateBack: () -> Unit,
     onPlantChosen: () -> Unit,
-    onPlantImageClicked: (Int) -> Unit,
+    onPlantImageClicked: (plantId: Int) -> Unit,
     plantDetailsViewModel: PlantDetailsViewModel = hiltViewModel(),
 ) {
     val uiState by plantDetailsViewModel.uiState.collectAsState()
@@ -67,201 +70,209 @@ fun PlantDetailsScreen(
         plantDetailsViewModel.updatePlantId(plantId)
     }
 
-    EllipticalBackground(R.drawable.bcg3, 0.5f)
+    BaseScreen(
+        title = title,
+        showTopBar = true,
+        showBottomBar = true,
+        navController = navController
+    ) { padding ->
 
-    uiState.selectedPlant?.let { plant ->
-        val elements = listOfNotNull(
-            plant.soil?.takeIf { it.isNotEmpty() }?.let {
-                PlantDetailItem(R.drawable.icon_soil, mapSoilToString(it))
-            },
-            plant.deciduousEvergreen?.takeIf { it.isNotEmpty() }?.let {
-                PlantDetailItem(R.drawable.icon_evergreen, mapDeciduousEvergreenToString(it))
-            },
-            plant.wellDrained?.let {
-                PlantDetailItem(R.drawable.icon_drain, mapWellDrainedToString(it))
-            },
-            plant.frostTender?.let {
-                PlantDetailItem(R.drawable.icon_frost, mapFrostTenderToString(it))
-            },
-            plant.moisture?.let {
-                PlantDetailItem(R.drawable.icon_moisture, mapMoistureToString(it))
-            },
-            plant.shade?.takeIf { it.isNotEmpty() }?.let {
-                PlantDetailItem(R.drawable.icon_shade, mapShadeToString(it))
-            },
-            plant.ph?.takeIf { it.isNotEmpty() }?.let {
-                PlantDetailItem(R.drawable.icon_ph, mapPHToString(it))
-            },
-            plant.poorSoil?.let {
-                PlantDetailItem(R.drawable.icon_poor_soil, mapPoorSoilToString(it))
-            },
-            plant.drought?.let {
-                PlantDetailItem(R.drawable.icon_drought, mapDroughtToString(it))
-            },
-            plant.hardiness?.let {
-                PlantDetailItem(R.drawable.icon_temp, mapHardinessToString(it))
-            }
-        )
+        EllipticalBackground(R.drawable.bcg3, 0.5f)
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp),
-        ) {
+        uiState.selectedPlant?.let { plant ->
+            val elements = listOfNotNull(
+                plant.soil?.takeIf { it.isNotEmpty() }?.let {
+                    PlantDetailItem(R.drawable.icon_soil, mapSoilToString(it))
+                },
+                plant.deciduousEvergreen?.takeIf { it.isNotEmpty() }?.let {
+                    PlantDetailItem(R.drawable.icon_evergreen, mapDeciduousEvergreenToString(it))
+                },
+                plant.wellDrained?.let {
+                    PlantDetailItem(R.drawable.icon_drain, mapWellDrainedToString(it))
+                },
+                plant.frostTender?.let {
+                    PlantDetailItem(R.drawable.icon_frost, mapFrostTenderToString(it))
+                },
+                plant.moisture?.let {
+                    PlantDetailItem(R.drawable.icon_moisture, mapMoistureToString(it))
+                },
+                plant.shade?.takeIf { it.isNotEmpty() }?.let {
+                    PlantDetailItem(R.drawable.icon_shade, mapShadeToString(it))
+                },
+                plant.ph?.takeIf { it.isNotEmpty() }?.let {
+                    PlantDetailItem(R.drawable.icon_ph, mapPHToString(it))
+                },
+                plant.poorSoil?.let {
+                    PlantDetailItem(R.drawable.icon_poor_soil, mapPoorSoilToString(it))
+                },
+                plant.drought?.let {
+                    PlantDetailItem(R.drawable.icon_drought, mapDroughtToString(it))
+                },
+                plant.hardiness?.let {
+                    PlantDetailItem(R.drawable.icon_temp, mapHardinessToString(it))
+                }
+            )
+
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+                    .padding(padding),
             ) {
-                Row(
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .height(200.dp),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState())
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.Start,
-                        verticalArrangement = Arrangement.Center,
+                    Row(
                         modifier = Modifier
-                            .weight(1.3f)
-                            .padding(end = 8.dp)
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .height(200.dp),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Card(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                            onClick = {
-                                onPlantImageClicked(plant.id)
-                            }
-                        ) {
-                            AsyncImage(
-                                model = ImageRequest.Builder(LocalContext.current)
-                                    .data(plant.imageUrls?.firstOrNull())
-                                    .crossfade(true)
-                                    .placeholder(R.drawable.plant_placeholder)
-                                    .error(R.drawable.plant_placeholder)
-                                    .build(),
-                                contentScale = ContentScale.Crop,
-                                contentDescription = plant.commonName,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                            )
-                        }
-                    }
-                    if (plant.width != null || plant.height != null || !plant.growthRate.isNullOrEmpty()) {
                         Column(
                             horizontalAlignment = Alignment.Start,
                             verticalArrangement = Arrangement.Center,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(0.7f)
-                                .padding(start = 8.dp)
+                                .weight(1.3f)
+                                .padding(end = 8.dp)
                         ) {
-                            plant.width?.let { width ->
-                                ImageWithTextHorizontal(
-                                    imageRes = R.drawable.icon_width,
-                                    title = width.toString()
-                                )
-                            }
-
-                            plant.height?.let { height ->
-                                ImageWithTextHorizontal(
-                                    imageRes = R.drawable.icon_height,
-                                    title = height.toString()
-                                )
-                            }
-                            if (!plant.growthRate.isNullOrEmpty()) {
-                                ImageWithTextHorizontal(
-                                    imageRes = R.drawable.icon_growth_rate,
-                                    title = mapGrowthRateToString(plant.growthRate)
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                                onClick = {
+                                    onPlantImageClicked(plant.id)
+                                }
+                            ) {
+                                AsyncImage(
+                                    model = ImageRequest.Builder(LocalContext.current)
+                                        .data(plant.imageUrls?.firstOrNull())
+                                        .crossfade(true)
+                                        .placeholder(R.drawable.plant_placeholder)
+                                        .error(R.drawable.plant_placeholder)
+                                        .build(),
+                                    contentScale = ContentScale.Crop,
+                                    contentDescription = plant.commonName,
+                                    modifier = Modifier
+                                        .fillMaxSize()
                                 )
                             }
                         }
+                        if (plant.width != null || plant.height != null || !plant.growthRate.isNullOrEmpty()) {
+                            Column(
+                                horizontalAlignment = Alignment.Start,
+                                verticalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(0.7f)
+                                    .padding(start = 8.dp)
+                            ) {
+                                plant.width?.let { width ->
+                                    ImageWithTextHorizontal(
+                                        imageRes = R.drawable.icon_width,
+                                        title = width.toString()
+                                    )
+                                }
+
+                                plant.height?.let { height ->
+                                    ImageWithTextHorizontal(
+                                        imageRes = R.drawable.icon_height,
+                                        title = height.toString()
+                                    )
+                                }
+                                if (!plant.growthRate.isNullOrEmpty()) {
+                                    ImageWithTextHorizontal(
+                                        imageRes = R.drawable.icon_growth_rate,
+                                        title = mapGrowthRateToString(plant.growthRate)
+                                    )
+                                }
+                            }
+                        }
                     }
-                }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
-                Text(text = plant.latinName, style = MaterialTheme.typography.headlineMedium)
+                    Text(text = plant.latinName, style = MaterialTheme.typography.headlineMedium)
 
-                plant.commonName?.let { commonName ->
-                    Text(
-                        text = "($commonName)",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                EvenGrid(
-                    items = elements,
-                    columns = 2, // Set the number of columns
-                    modifier = Modifier.fillMaxWidth(),
-                    createItem = { item ->
-                        ImageWithTextHorizontal(
-                            imageRes = item.imageRes,
-                            title = item.title,
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(4.dp)
+                    plant.commonName?.let { commonName ->
+                        Text(
+                            text = "($commonName)",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                         )
                     }
-                )
 
-                if (!plant.cultivationDetails.isNullOrEmpty()) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    ImageWithTextHorizontal(
-                        imageRes = R.drawable.icon_info,
-                        title = "Cultivation details",
-                        iconSize = 32,
-                        textStyle = MaterialTheme.typography.headlineSmall
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    EvenGrid(
+                        items = elements,
+                        columns = 2, // Set the number of columns
+                        modifier = Modifier.fillMaxWidth(),
+                        createItem = { item ->
+                            ImageWithTextHorizontal(
+                                imageRes = item.imageRes,
+                                title = item.title,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(4.dp)
+                            )
+                        }
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = plant.cultivationDetails, modifier = Modifier.padding(8.dp))
+
+                    if (!plant.cultivationDetails.isNullOrEmpty()) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        ImageWithTextHorizontal(
+                            imageRes = R.drawable.icon_info,
+                            title = "Cultivation details",
+                            iconSize = 32,
+                            textStyle = MaterialTheme.typography.headlineSmall
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(text = plant.cultivationDetails, modifier = Modifier.padding(8.dp))
+                    }
+
+                    ImageButton(
+                        icon = Icons.Rounded.Search,
+                        text = "More details",
+                        modifier = Modifier
+                            .align(Alignment.End)
+                            .padding(8.dp)
+                    ) {
+                        openWebSearch(plant.latinName, context)
+                    }
                 }
 
-                ImageButton(
-                    icon = Icons.Rounded.Search,
-                    text = "More details",
-                    modifier = Modifier
-                        .align(Alignment.End)
-                        .padding(8.dp)
-                ) {
-                    openWebSearch(plant.latinName, context)
-                }
-            }
-
-            if (origin == PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN) {
-                RoundedButton(
-                    onClick = {
+                if (origin == PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN) {
+                    RoundedButton(
+                        onClick = {
 //                        myGardenViewModel.saveCell(plant)
-                        onPlantChosen()
-                    },
-                    text = "Plant!"
-                )
+                            onPlantChosen()
+                        },
+                        text = "Plant!"
+                    )
+                }
             }
         }
-    }
 
 //    if (myGardenUiState.isDeleteDialogVisible) {
-    DeleteAlertDialog(
-        title = "Delete Plant",
-        message = "Are you sure you want to delete this plant?",
-        confirmButtonText = "Delete",
-        dismissButtonText = "Cancel",
-        onConfirmDelete = {
+        DeleteAlertDialog(
+            title = "Delete Plant",
+            message = "Are you sure you want to delete this plant?",
+            confirmButtonText = "Delete",
+            dismissButtonText = "Cancel",
+            onConfirmDelete = {
 //                myGardenViewModel.saveCell(null)
 //                myGardenViewModel.showDeleteDialog(false)
-            onNavigateBack()
-        },
-        onCancel = {
+                navController.popBackStack()
+            },
+            onCancel = {
 //                myGardenViewModel.showDeleteDialog(false)
-        }
-    )
+            }
+        )
 //    }
+    }
 }
