@@ -27,7 +27,13 @@ fun NavigationGraph(
         startDestination = BottomBarNavigationItems.MyGarden.route,
         modifier = modifier
     ) {
-        addMyGardenScreen(navController)
+        addMyGardenScreen(navController,
+            onPlantChosen = { origin, plantId ->
+                // TODO: implement
+            },
+            onGardenFieldChosen = { row, column ->
+                //TODO: implement
+            })
         addTaskListScreen(
             navController,
             onShowTaskDetails = { taskId ->

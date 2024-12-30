@@ -78,7 +78,7 @@ class MyGardenViewModel @Inject constructor(
         }
     }
 
-    suspend fun loadGarden() {
+    fun loadGarden() {
         viewModelScope.launch {
             try {
                 val loadedState = loadGardenStateUseCase(NoParams())

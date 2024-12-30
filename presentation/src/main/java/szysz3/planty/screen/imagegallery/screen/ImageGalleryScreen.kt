@@ -41,7 +41,7 @@ fun ImageGalleryScreen(
 
     BaseScreen(
         title = title,
-        showTopBar = true,
+        showTopBar = false,
         showBottomBar = true,
         navController = navController
     ) { padding ->

@@ -20,6 +20,7 @@ import szysz3.planty.R
 import szysz3.planty.core.composable.DeleteAlertDialog
 import szysz3.planty.core.composable.EllipticalBackground
 import szysz3.planty.core.composable.FloatingActionButton
+import szysz3.planty.core.model.PlantDetailsScreenOrigin
 import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.mygarden.composable.GardenDimensionsInput
 import szysz3.planty.screen.mygarden.composable.GardenMap
@@ -30,6 +31,8 @@ import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
 fun MyGardenScreen(
     title: String,
     navController: NavHostController,
+    onPlantChosen: (origin: PlantDetailsScreenOrigin, plantId: Int) -> Unit,
+    onGardenFieldChosen: (row: Int, column: Int) -> Unit,
     myGardenViewModel: MyGardenViewModel = hiltViewModel(),
 ) {
     val uiState by myGardenViewModel.uiState.collectAsState()
@@ -39,9 +42,6 @@ fun MyGardenScreen(
     LaunchedEffect(Unit) {
         myGardenViewModel.loadGarden()
     }
-
-    val rows = uiState.gardenState.rows
-    val columns = uiState.gardenState.columns
 
     BaseScreen(
         title = title,
@@ -57,21 +57,24 @@ fun MyGardenScreen(
                 .padding(padding),
             contentAlignment = Alignment.Center
         ) {
-            if (uiState.dataLoaded && rows > 0 && columns > 0) {
+            if (uiState.dataLoaded
+                && uiState.gardenState.rows > 0
+                && uiState.gardenState.columns > 0
+            ) {
                 GardenMap(
-                    rows = rows,
-                    columns = columns,
+                    rows = uiState.gardenState.rows,
+                    columns = uiState.gardenState.columns,
                     state = uiState.gardenState,
                     onPlantSelected = { row, col ->
                         myGardenViewModel.updateSelectedCell(row, col)
                         val plantForSelectedCell = myGardenViewModel.getPlantForSelectedCell()
                         if (plantForSelectedCell == null) {
-//                        onNavigateToPlantAPlant()
+                            onGardenFieldChosen(row, col)
                         } else {
-//                        onNavigateToPlantDetails(
-//                            PlantDetailsScreenOrigin.HOME_SCREEN,
-//                            plantForSelectedCell.id
-//                        )
+                            onPlantChosen(
+                                PlantDetailsScreenOrigin.HOME_SCREEN,
+                                plantForSelectedCell.id
+                            )
                         }
                     }
                 )
