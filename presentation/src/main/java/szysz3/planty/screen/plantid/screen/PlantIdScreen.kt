@@ -1,5 +1,6 @@
 package szysz3.planty.screen.plantid.screen
 
+import android.Manifest
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,11 +31,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import szysz3.planty.R
+import szysz3.planty.core.composable.EllipticalBackground
+import szysz3.planty.core.composable.FloatingActionButton
 import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.plantid.composable.PlantResultCard
 import szysz3.planty.screen.plantid.viewmodel.PlantIdViewModel
-import szysz3.planty.ui.widgets.EllipticalBackground
-import szysz3.planty.ui.widgets.FloatingActionButton
 import szysz3.planty.util.PermissionUtils
 import szysz3.planty.util.openWebSearch
 
@@ -128,7 +129,7 @@ fun PlantIdScreen(
                             viewModel.createPhotoFile()
                             shouldLaunchCamera = true
                         } else {
-                            permissionLauncher.launch(android.Manifest.permission.CAMERA)
+                            permissionLauncher.launch(Manifest.permission.CAMERA)
                         }
                     })
             }

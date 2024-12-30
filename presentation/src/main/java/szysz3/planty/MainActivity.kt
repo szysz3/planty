@@ -9,7 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.toArgb
 import dagger.hilt.android.AndroidEntryPoint
 import szysz3.planty.screen.main.screen.MainScreen
-import szysz3.planty.ui.theme.PlantyTheme
+import szysz3.planty.theme.PlantyTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

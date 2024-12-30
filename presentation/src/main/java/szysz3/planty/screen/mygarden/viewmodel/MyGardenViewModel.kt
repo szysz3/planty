@@ -7,16 +7,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import szysz3.planty.core.model.GardenCell
+import szysz3.planty.core.model.Plant
 import szysz3.planty.domain.usecase.ClearGardenUseCase
 import szysz3.planty.domain.usecase.LoadGardenStateUseCase
 import szysz3.planty.domain.usecase.SaveGardenStateUseCase
 import szysz3.planty.domain.usecase.base.NoParams
-import szysz3.planty.screen.mygarden.model.GardenCell
 import szysz3.planty.screen.mygarden.model.GardenState
 import szysz3.planty.screen.mygarden.model.MyGardenScreenState
 import szysz3.planty.screen.mygarden.model.toDomainModel
 import szysz3.planty.screen.mygarden.model.toPresentationModel
-import szysz3.planty.screen.plantcatalog.model.Plant
 import timber.log.Timber
 import javax.inject.Inject
 

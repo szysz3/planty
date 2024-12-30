@@ -17,13 +17,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import szysz3.planty.R
+import szysz3.planty.core.composable.DeleteAlertDialog
+import szysz3.planty.core.composable.EllipticalBackground
+import szysz3.planty.core.composable.FloatingActionButton
 import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.mygarden.composable.GardenDimensionsInput
 import szysz3.planty.screen.mygarden.composable.GardenMap
 import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
-import szysz3.planty.ui.widgets.DeleteAlertDialog
-import szysz3.planty.ui.widgets.EllipticalBackground
-import szysz3.planty.ui.widgets.FloatingActionButton
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable

@@ -1,4 +1,4 @@
-package szysz3.planty.screen.tasklist.model
+package szysz3.planty.core.model
 
 data class SubTask(
     val id: Long = 0,

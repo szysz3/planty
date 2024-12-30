@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import szysz3.planty.core.model.PlantDetailsScreenOrigin
 import szysz3.planty.navigation.bottombar.BottomBarNavigationItems
 import szysz3.planty.screen.imagegallery.ImageGalleryFeature
 import szysz3.planty.screen.imagegallery.addImageGalleryScreen
@@ -11,7 +12,6 @@ import szysz3.planty.screen.mygarden.addMyGardenScreen
 import szysz3.planty.screen.plantcatalog.addPlantCatalogScreen
 import szysz3.planty.screen.plantdetails.PlantDetailsFeature
 import szysz3.planty.screen.plantdetails.addPlantDetailsScreen
-import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
 import szysz3.planty.screen.plantid.addPlantIdScreen
 import szysz3.planty.screen.taskdetails.TaskDetailsFeature
 import szysz3.planty.screen.taskdetails.addTaskDetailsScreen

@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import szysz3.planty.R
-import szysz3.planty.screen.plantcatalog.model.Plant
+import szysz3.planty.core.model.Plant
 
 @Composable
 fun PlantCard(

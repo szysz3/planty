@@ -1,4 +1,4 @@
-package szysz3.planty.ui.theme
+package szysz3.planty.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-// Light Theme Colors
 private val LightColorsScheme = lightColorScheme(
     primary = MutedGreen,
     onPrimary = Color.Black,
@@ -25,7 +24,6 @@ private val LightColorsScheme = lightColorScheme(
     onError = Color.White
 )
 
-// Dark Theme Colors
 private val DarkColorsScheme = darkColorScheme(
     primary = MutedGreen,
     onPrimary = Color.White,

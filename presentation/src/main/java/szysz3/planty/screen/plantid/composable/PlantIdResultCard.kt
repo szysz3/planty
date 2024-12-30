@@ -32,7 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import szysz3.planty.R
-import szysz3.planty.screen.plantcatalog.model.Plant
+import szysz3.planty.core.model.Plant
 import szysz3.planty.screen.plantid.model.PlantResult
 
 @Composable

@@ -1,4 +1,4 @@
-package szysz3.planty.ui.widgets
+package szysz3.planty.core.composable
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image

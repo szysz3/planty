@@ -1,4 +1,4 @@
-package szysz3.planty.screen.main.composable
+package szysz3.planty.screen.base.bottombar
 
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem

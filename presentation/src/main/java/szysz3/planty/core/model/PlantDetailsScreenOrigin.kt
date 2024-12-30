@@ -1,4 +1,4 @@
-package szysz3.planty.screen.plantdetails.model
+package szysz3.planty.core.model
 
 enum class PlantDetailsScreenOrigin(val value: Int) {
     HOME_SCREEN(0),

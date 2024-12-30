@@ -1,9 +1,9 @@
 package szysz3.planty.screen.mygarden.model
 
-import szysz3.planty.screen.plantcatalog.model.Plant
-import szysz3.planty.domain.model.GardenCell as GardenCellDomain
+import szysz3.planty.core.model.GardenCell
+import szysz3.planty.core.model.toDomain
+import szysz3.planty.core.model.toPresentationModel
 import szysz3.planty.domain.model.GardenState as GardenStateDomain
-import szysz3.planty.domain.model.Plant as PlantDomain
 
 fun GardenStateDomain.toPresentationModel(): GardenState {
     return GardenState(
@@ -21,11 +21,11 @@ fun GardenStateDomain.toPresentationModel(): GardenState {
 }
 
 fun GardenState.toDomainModel(): GardenStateDomain {
-    return GardenStateDomain(
+    return szysz3.planty.domain.model.GardenState(
         rows = this.rows,
         columns = this.columns,
         cells = this.cells.map { cell ->
-            GardenCellDomain(
+            szysz3.planty.domain.model.GardenCell(
                 id = cell.id,
                 row = cell.row,
                 column = cell.column,
@@ -33,56 +33,4 @@ fun GardenState.toDomainModel(): GardenStateDomain {
             )
         }
     )
-}
-
-fun Plant.toDomain(): PlantDomain {
-    return PlantDomain(
-        id = this.id,
-        latinName = this.latinName,
-        commonName = this.commonName,
-        height = this.height,
-        width = this.width,
-        soil = this.soil,
-        ph = this.ph,
-        growthRate = this.growthRate,
-        deciduousEvergreen = this.deciduousEvergreen,
-        shade = this.shade,
-        moisture = this.moisture,
-        wellDrained = this.wellDrained,
-        poorSoil = this.poorSoil,
-        drought = this.drought,
-        frostTender = this.frostTender,
-        cultivationDetails = this.cultivationDetails,
-        ukHardiness = this.hardiness,
-        imageUrls = this.imageUrls
-    )
-}
-
-fun PlantDomain.toPresentationModel(): Plant {
-    return Plant(
-        id = this.id,
-        latinName = this.latinName,
-        commonName = this.commonName,
-        height = this.height,
-        width = this.width,
-        soil = this.soil,
-        ph = this.ph,
-        growthRate = this.growthRate,
-        deciduousEvergreen = this.deciduousEvergreen,
-        shade = this.shade,
-        moisture = this.moisture,
-        wellDrained = this.wellDrained,
-        poorSoil = this.poorSoil,
-        drought = this.drought,
-        frostTender = this.frostTender,
-        cultivationDetails = this.cultivationDetails,
-        hardiness = this.ukHardiness,
-        imageUrls = this.imageUrls
-    )
-}
-
-fun List<PlantDomain>.toPresentationModel(): List<Plant> {
-    return map { plant ->
-        plant.toPresentationModel()
-    }
 }

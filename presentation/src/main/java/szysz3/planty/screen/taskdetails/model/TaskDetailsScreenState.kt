@@ -1,7 +1,7 @@
 package szysz3.planty.screen.taskdetails.model
 
-import szysz3.planty.screen.tasklist.model.SubTask
-import szysz3.planty.screen.tasklist.model.Task
+import szysz3.planty.core.model.SubTask
+import szysz3.planty.core.model.Task
 
 data class TaskDetailsScreenState(
     val task: Task = Task.empty(false),

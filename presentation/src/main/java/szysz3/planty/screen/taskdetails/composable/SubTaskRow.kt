@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import szysz3.planty.screen.tasklist.model.SubTask
+import szysz3.planty.core.model.SubTask
 
 @Composable
 fun SubTaskRow(

@@ -1,8 +1,8 @@
-package szysz3.planty.screen.tasklist.model
+package szysz3.planty.core.model
 
 import androidx.compose.ui.graphics.Color
-import szysz3.planty.ui.theme.DarkCardColors
-import szysz3.planty.ui.theme.LightCardColors
+import szysz3.planty.theme.DarkCardColors
+import szysz3.planty.theme.LightCardColors
 
 data class Task(
     val id: Long = 0,

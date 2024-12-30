@@ -1,4 +1,4 @@
-package szysz3.planty.ui.theme
+package szysz3.planty.theme
 
 import androidx.compose.ui.graphics.Color
 

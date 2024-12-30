@@ -1,4 +1,4 @@
-package szysz3.planty.ui.widgets
+package szysz3.planty.core.composable
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme

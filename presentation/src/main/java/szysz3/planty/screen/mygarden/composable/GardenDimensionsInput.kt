@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import szysz3.planty.ui.widgets.RoundedButton
+import szysz3.planty.core.composable.RoundedButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

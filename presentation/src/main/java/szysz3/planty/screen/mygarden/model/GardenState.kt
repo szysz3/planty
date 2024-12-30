@@ -1,5 +1,7 @@
 package szysz3.planty.screen.mygarden.model
 
+import szysz3.planty.core.model.GardenCell
+
 data class GardenState(
     val rows: Int = 0,
     val columns: Int = 0,

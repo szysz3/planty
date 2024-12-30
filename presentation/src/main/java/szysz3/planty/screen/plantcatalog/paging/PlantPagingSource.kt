@@ -2,10 +2,10 @@ package szysz3.planty.screen.plantcatalog.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import szysz3.planty.core.model.Plant
+import szysz3.planty.core.model.toPresentationModel
 import szysz3.planty.domain.usecase.PlantSearchUseCase
 import szysz3.planty.domain.usecase.PlantSearchUseCaseParams
-import szysz3.planty.screen.mygarden.model.toPresentationModel
-import szysz3.planty.screen.plantcatalog.model.Plant
 
 class PlantPagingSource(
     private val searchPlantUseCase: PlantSearchUseCase,

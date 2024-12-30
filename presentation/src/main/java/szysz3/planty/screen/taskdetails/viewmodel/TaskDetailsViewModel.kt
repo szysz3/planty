@@ -6,13 +6,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import szysz3.planty.core.model.SubTask
+import szysz3.planty.core.model.Task
+import szysz3.planty.core.model.toDomain
+import szysz3.planty.core.model.toPresentation
 import szysz3.planty.domain.usecase.task.AddTaskUseCase
 import szysz3.planty.domain.usecase.task.GetTaskByIdUseCase
 import szysz3.planty.screen.taskdetails.model.TaskDetailsScreenState
-import szysz3.planty.screen.tasklist.model.SubTask
-import szysz3.planty.screen.tasklist.model.Task
-import szysz3.planty.screen.tasklist.model.toDomain
-import szysz3.planty.screen.tasklist.model.toPresentation
 import javax.inject.Inject
 
 @HiltViewModel

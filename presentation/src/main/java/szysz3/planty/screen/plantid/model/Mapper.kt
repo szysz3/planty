@@ -1,8 +1,8 @@
 package szysz3.planty.screen.plantid.model
 
+import szysz3.planty.core.model.toPresentationModel
 import szysz3.planty.domain.model.remote.PlantIdResponse
 import szysz3.planty.domain.model.remote.Result
-import szysz3.planty.screen.mygarden.model.toPresentationModel
 
 fun PlantIdResponse.toPresentationModel(): List<PlantResult> {
     return results.map { result -> result.toPresentationModel() }

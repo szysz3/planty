@@ -30,10 +30,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import szysz3.planty.core.composable.RoundedButton
 import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.taskdetails.composable.SubTaskRow
 import szysz3.planty.screen.taskdetails.viewmodel.TaskDetailsViewModel
-import szysz3.planty.ui.widgets.RoundedButton
 
 @Composable
 fun TaskDetailsScreen(

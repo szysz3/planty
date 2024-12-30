@@ -1,6 +1,6 @@
 package szysz3.planty.screen.plantid.model
 
-import szysz3.planty.screen.plantcatalog.model.Plant
+import szysz3.planty.core.model.Plant
 
 data class PlantResult(
     val name: String?,

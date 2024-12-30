@@ -7,14 +7,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import szysz3.planty.core.model.toDomain
+import szysz3.planty.core.model.toPresentation
 import szysz3.planty.domain.usecase.base.NoParams
 import szysz3.planty.domain.usecase.task.ObserveTasksUseCase
 import szysz3.planty.domain.usecase.task.UpdateTaskOrderUseCase
 import szysz3.planty.domain.usecase.task.UpdateTaskOrderUseCaseParams
 import szysz3.planty.domain.usecase.task.UpdateTasksUseCase
 import szysz3.planty.screen.tasklist.model.TaskListScreenState
-import szysz3.planty.screen.tasklist.model.toDomain
-import szysz3.planty.screen.tasklist.model.toPresentation
 import javax.inject.Inject
 
 @HiltViewModel

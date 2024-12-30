@@ -30,10 +30,15 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import szysz3.planty.R
+import szysz3.planty.core.composable.DeleteAlertDialog
+import szysz3.planty.core.composable.EllipticalBackground
+import szysz3.planty.core.composable.ImageButton
+import szysz3.planty.core.composable.ImageWithTextHorizontal
+import szysz3.planty.core.composable.RoundedButton
+import szysz3.planty.core.model.PlantDetailsScreenOrigin
 import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.plantdetails.composable.EvenGrid
 import szysz3.planty.screen.plantdetails.model.PlantDetailItem
-import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
 import szysz3.planty.screen.plantdetails.model.mapDeciduousEvergreenToString
 import szysz3.planty.screen.plantdetails.model.mapDroughtToString
 import szysz3.planty.screen.plantdetails.model.mapFrostTenderToString
@@ -46,11 +51,6 @@ import szysz3.planty.screen.plantdetails.model.mapShadeToString
 import szysz3.planty.screen.plantdetails.model.mapSoilToString
 import szysz3.planty.screen.plantdetails.model.mapWellDrainedToString
 import szysz3.planty.screen.plantdetails.viewmodel.PlantDetailsViewModel
-import szysz3.planty.ui.widgets.DeleteAlertDialog
-import szysz3.planty.ui.widgets.EllipticalBackground
-import szysz3.planty.ui.widgets.ImageButton
-import szysz3.planty.ui.widgets.ImageWithTextHorizontal
-import szysz3.planty.ui.widgets.RoundedButton
 import szysz3.planty.util.openWebSearch
 
 @Composable

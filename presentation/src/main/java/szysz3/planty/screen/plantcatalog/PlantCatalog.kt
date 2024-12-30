@@ -2,9 +2,9 @@ package szysz3.planty.screen.plantcatalog
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import szysz3.planty.core.model.PlantDetailsScreenOrigin
 import szysz3.planty.navigation.staticComposable
 import szysz3.planty.screen.plantcatalog.screen.PlantCatalogScreen
-import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
 
 object PlantCatalogFeature {
     const val TITLE = "Plants"

@@ -34,11 +34,11 @@ import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import szysz3.planty.R
+import szysz3.planty.core.composable.EllipticalBackground
+import szysz3.planty.core.model.PlantDetailsScreenOrigin
 import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.plantcatalog.composable.PlantCard
 import szysz3.planty.screen.plantcatalog.viewmodel.PlantCatalogViewModel
-import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
-import szysz3.planty.ui.widgets.EllipticalBackground
 
 @Composable
 fun PlantCatalogScreen(

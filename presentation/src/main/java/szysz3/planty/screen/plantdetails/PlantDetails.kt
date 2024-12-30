@@ -4,8 +4,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import szysz3.planty.core.model.PlantDetailsScreenOrigin
 import szysz3.planty.navigation.staticComposable
-import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
 import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreen
 
 object PlantDetailsFeature {

@@ -23,8 +23,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import szysz3.planty.screen.base.bottombar.BottomNavigationBar
 import szysz3.planty.screen.base.topbar.TopBarTitle
-import szysz3.planty.screen.main.composable.BottomNavigationBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
