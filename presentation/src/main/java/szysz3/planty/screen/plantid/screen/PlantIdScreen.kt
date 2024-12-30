@@ -28,8 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import szysz3.planty.R
-import szysz3.planty.screen.plantcatalog.model.Plant
+import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.plantid.composable.PlantResultCard
 import szysz3.planty.screen.plantid.viewmodel.PlantIdViewModel
 import szysz3.planty.ui.widgets.EllipticalBackground
@@ -39,8 +40,10 @@ import szysz3.planty.util.openWebSearch
 
 @Composable
 fun PlantIdScreen(
+    title: String,
+    navController: NavHostController,
     viewModel: PlantIdViewModel = hiltViewModel(),
-    onOpenPlantDetails: (plant: Plant?) -> Unit
+    onShowPlantDetails: (plantId: Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -72,67 +75,76 @@ fun PlantIdScreen(
         }
     }
 
-    EllipticalBackground(R.drawable.bcg4)
+    BaseScreen(
+        title = title,
+        showTopBar = true,
+        showBottomBar = true,
+        navController = navController
+    ) { padding ->
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        if (uiState.isLoading) {
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.onBackground)
-        } else {
-            uiState.identifiedPlants?.let { plants ->
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    contentPadding = PaddingValues(vertical = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(plants) { plantIdResult ->
-                        PlantResultCard(plantResult = plantIdResult) { plant ->
-                            if (plant != null) {
-                                onOpenPlantDetails(plant)
-                            } else {
-                                openWebSearch(plantIdResult.scientificName, context)
+        EllipticalBackground(R.drawable.bcg4)
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
+            contentAlignment = Alignment.Center
+        ) {
+            if (uiState.isLoading) {
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.onBackground)
+            } else {
+                uiState.identifiedPlants?.let { plants ->
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        contentPadding = PaddingValues(vertical = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        items(plants) { plantIdResult ->
+                            PlantResultCard(plantResult = plantIdResult) { plant ->
+                                if (plant != null) {
+                                    onShowPlantDetails(plant.id)
+                                } else {
+                                    openWebSearch(plantIdResult.scientificName, context)
+                                }
                             }
                         }
                     }
+                } ?: uiState.errorMessage?.let { error ->
+                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                    viewModel.clearErrorMessage()
                 }
-            } ?: uiState.errorMessage?.let { error ->
-                Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-                viewModel.clearErrorMessage()
             }
-        }
 
-        AnimatedVisibility(
-            visible = uiState.identifiedPlants?.isEmpty() == true || !uiState.isLoading,
-        ) {
-            FloatingActionButton(
-                icon = Icons.Rounded.Search,
-                contentDescription = "Identify plant",
-                onClick = {
-                    if (PermissionUtils.hasCameraPermission(context)) {
-                        viewModel.createPhotoFile()
-                        shouldLaunchCamera = true
-                    } else {
-                        permissionLauncher.launch(android.Manifest.permission.CAMERA)
+            AnimatedVisibility(
+                visible = uiState.identifiedPlants?.isEmpty() == true || !uiState.isLoading,
+            ) {
+                FloatingActionButton(
+                    icon = Icons.Rounded.Search,
+                    contentDescription = "Identify plant",
+                    onClick = {
+                        if (PermissionUtils.hasCameraPermission(context)) {
+                            viewModel.createPhotoFile()
+                            shouldLaunchCamera = true
+                        } else {
+                            permissionLauncher.launch(android.Manifest.permission.CAMERA)
+                        }
+                    })
+            }
+
+            AnimatedVisibility(
+                visible = uiState.identifiedPlants?.isNotEmpty() == true,
+            ) {
+                FloatingActionButton(
+                    icon = Icons.Rounded.Clear, // Replace with your desired icon
+                    contentDescription = "Second action",
+                    onClick = {
+                        viewModel.clearResults()
                     }
-                })
-        }
+                )
+            }
 
-        AnimatedVisibility(
-            visible = uiState.identifiedPlants?.isNotEmpty() == true,
-        ) {
-            FloatingActionButton(
-                icon = Icons.Rounded.Clear, // Replace with your desired icon
-                contentDescription = "Second action",
-                onClick = {
-                    viewModel.clearResults()
-                }
-            )
         }
 
     }

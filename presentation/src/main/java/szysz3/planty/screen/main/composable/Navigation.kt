@@ -2,7 +2,6 @@ package szysz3.planty.screen.main.composable
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -18,7 +17,7 @@ import szysz3.planty.screen.mygarden.addMyGardenScreen
 import szysz3.planty.screen.plantcatalog.screen.PlantCatalogScreen
 import szysz3.planty.screen.plantdetails.model.PlantDetailsScreenOrigin
 import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreen
-import szysz3.planty.screen.plantid.screen.PlantIdScreen
+import szysz3.planty.screen.plantid.addPlantIdScreen
 import szysz3.planty.screen.taskdetails.TaskDetailsFeature
 import szysz3.planty.screen.taskdetails.addTaskDetailsScreen
 import szysz3.planty.screen.tasklist.addTaskListScreen
@@ -44,6 +43,9 @@ fun NavigationGraph(
             }
         )
         addTaskDetailsScreen(navController)
+        addPlantIdScreen(navController, onShowPlantDetails = { plantId ->
+
+        })
 
         composable(BottomNavItem.Catalog.route) {
             PlantCatalogScreen(
@@ -51,19 +53,21 @@ fun NavigationGraph(
                 navigate(navController, NavigationItem.PlantDetails.withArgs(origin.value, plantId))
             }
         }
-        composable(BottomNavItem.PlantId.route) {
-            PlantIdScreen() { localMatchingPlant ->
-                localMatchingPlant?.let {
-                    navigate(
-                        navController,
-                        NavigationItem.PlantDetails.withArgs(
-                            PlantDetailsScreenOrigin.PLANT_ID_SCREEN.value,
-                            localMatchingPlant.id
-                        )
-                    )
-                }
-            }
-        }
+
+//        composable(BottomNavItem.PlantId.route) {
+//            PlantIdScreen() { localMatchingPlant ->
+//                localMatchingPlant?.let {
+//                    navigate(
+//                        navController,
+//                        NavigationItem.PlantDetails.withArgs(
+//                            PlantDetailsScreenOrigin.PLANT_ID_SCREEN.value,
+//                            localMatchingPlant.id
+//                        )
+//                    )
+//                }
+//            }
+//        }
+
         composable(
             route = NavigationItem.ImageGallery.route,
             arguments = listOf(
@@ -171,9 +175,7 @@ open class NavigationItem(val route: String, val title: String) {
             return when {
                 route.startsWith(PlantDetails.route.substringBefore("/{")) -> PlantDetails.title
                 route == BottomNavItem.Catalog.route -> BottomNavItem.Catalog.title
-//                route == BottomNavItem.Home.route -> BottomNavItem.Home.title
-//                route == BottomNavItem.TaskList.route -> BottomNavItem.TaskList.title
-                route == BottomNavItem.PlantId.route -> BottomNavItem.PlantId.title
+//                route == BottomNavItem.PlantId.route -> BottomNavItem.PlantId.title
                 else -> null
             }
         }
@@ -182,10 +184,8 @@ open class NavigationItem(val route: String, val title: String) {
 
 open class BottomNavItem(route: String, title: String, val icon: ImageVector) :
     NavigationItem(route, title) {
-    //    object Home : BottomNavItem("myGarden", "My Garden", Icons.Rounded.Home)
-//    object TaskList : BottomNavItem("taskList", "Tasks", Icons.Rounded.Done)
     object Catalog : BottomNavItem("catalog", "Catalog", Icons.Rounded.Info)
-    object PlantId :
-        BottomNavItem("plantId", "Id", Icons.Rounded.Search)
+//    object PlantId :
+//        BottomNavItem("plantId", "Id", Icons.Rounded.Search)
 }
 

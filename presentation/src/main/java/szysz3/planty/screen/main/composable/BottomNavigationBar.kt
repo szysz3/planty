@@ -18,7 +18,7 @@ fun BottomNavigationBar(
     val items = listOf(
         BottomBarNavigation.MyGarden,
         BottomBarNavigation.TaskList,
-//        BottomNavItem.TaskList,
+        BottomBarNavigation.PlantId,
 //        BottomNavItem.Catalog,
 //        BottomNavItem.PlantId
     )
