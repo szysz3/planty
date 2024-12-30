@@ -7,12 +7,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import szysz3.planty.core.model.GardenCell
 import szysz3.planty.core.model.Plant
-import szysz3.planty.domain.usecase.ClearGardenUseCase
-import szysz3.planty.domain.usecase.LoadGardenStateUseCase
-import szysz3.planty.domain.usecase.SaveGardenStateUseCase
 import szysz3.planty.domain.usecase.base.NoParams
+import szysz3.planty.domain.usecase.garden.ClearGardenUseCase
+import szysz3.planty.domain.usecase.garden.LoadGardenStateUseCase
+import szysz3.planty.domain.usecase.garden.SaveGardenStateUseCase
 import szysz3.planty.screen.mygarden.model.GardenState
 import szysz3.planty.screen.mygarden.model.MyGardenScreenState
 import szysz3.planty.screen.mygarden.model.toDomainModel
@@ -51,21 +50,6 @@ class MyGardenViewModel @Inject constructor(
             )
         }
         saveGardenState(initialGardenState)
-    }
-
-    fun saveCell(plant: Plant?) {
-        viewModelScope.launch {
-            val row = _uiState.value.selectedCell?.first ?: return@launch
-            val column = _uiState.value.selectedCell?.second ?: return@launch
-
-            val updatedCells = _uiState.value.gardenState.cells.toMutableList()
-            updatedCells.removeAll { it.row == row && it.column == column }
-            updatedCells.add(GardenCell(0, row, column, plant))
-
-            val updatedGardenState = _uiState.value.gardenState.copy(cells = updatedCells)
-            _uiState.update { it.copy(gardenState = updatedGardenState) }
-            saveGardenState(updatedGardenState)
-        }
     }
 
     private fun saveGardenState(gardenState: GardenState) {

@@ -59,6 +59,8 @@ fun PlantDetailsScreen(
     navController: NavHostController,
     origin: PlantDetailsScreenOrigin,
     plantId: Int,
+    row: Int?,
+    column: Int?,
     onPlantChosen: () -> Unit,
     onPlantImageClicked: (plantId: Int) -> Unit,
     plantDetailsViewModel: PlantDetailsViewModel = hiltViewModel(),
@@ -162,7 +164,10 @@ fun PlantDetailsScreen(
                                 )
                             }
                         }
-                        if (plant.width != null || plant.height != null || !plant.growthRate.isNullOrEmpty()) {
+                        if (plant.width != null
+                            || plant.height != null
+                            || !plant.growthRate.isNullOrEmpty()
+                        ) {
                             Column(
                                 horizontalAlignment = Alignment.Start,
                                 verticalArrangement = Arrangement.Center,
@@ -249,7 +254,11 @@ fun PlantDetailsScreen(
                 if (origin == PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN) {
                     RoundedButton(
                         onClick = {
-//                        myGardenViewModel.saveCell(plant)
+                            plantDetailsViewModel.persistPlant(
+                                row = row,
+                                column = column,
+                                plant = plant
+                            )
                             onPlantChosen()
                         },
                         text = "Plant!"
@@ -258,15 +267,18 @@ fun PlantDetailsScreen(
             }
         }
 
-//    if (myGardenUiState.isDeleteDialogVisible) {
-        if (false) {
+        if (uiState.isDeleteDialogVisible) {
             DeleteAlertDialog(
                 title = "Delete Plant",
                 message = "Are you sure you want to delete this plant?",
                 confirmButtonText = "Delete",
                 dismissButtonText = "Cancel",
                 onConfirmDelete = {
-//                myGardenViewModel.saveCell(null)
+                    plantDetailsViewModel.persistPlant(
+                        row = row,
+                        column = column,
+                        plant = null
+                    )
 //                myGardenViewModel.showDeleteDialog(false)
                     navController.popBackStack()
                 },

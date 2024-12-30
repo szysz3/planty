@@ -9,6 +9,7 @@ import szysz3.planty.navigation.bottombar.BottomBarNavigationItems
 import szysz3.planty.screen.imagegallery.ImageGalleryFeature
 import szysz3.planty.screen.imagegallery.addImageGalleryScreen
 import szysz3.planty.screen.mygarden.addMyGardenScreen
+import szysz3.planty.screen.plantcatalog.PlantCatalogFeature
 import szysz3.planty.screen.plantcatalog.addPlantCatalogScreen
 import szysz3.planty.screen.plantdetails.PlantDetailsFeature
 import szysz3.planty.screen.plantdetails.addPlantDetailsScreen
@@ -28,11 +29,23 @@ fun NavigationGraph(
         modifier = modifier
     ) {
         addMyGardenScreen(navController,
-            onPlantChosen = { origin, plantId ->
-                // TODO: implement
+            onPlantChosen = { origin, plantId, row, column ->
+                navController.showScreen(
+                    PlantDetailsFeature.routeWithArgs(
+                        origin = origin.value,
+                        plantId = plantId,
+                        row = row,
+                        column = column
+                    )
+                )
             },
             onGardenFieldChosen = { row, column ->
-                //TODO: implement
+                navController.showScreen(
+                    PlantCatalogFeature.routeWithArgs(
+                        row = row,
+                        column = column,
+                    )
+                )
             })
         addTaskListScreen(
             navController,
@@ -67,11 +80,13 @@ fun NavigationGraph(
         )
         addPlantCatalogScreen(
             navController,
-            onShowPlantDetails = { origin, plantId ->
+            onShowPlantDetails = { origin, plantId, row, column ->
                 navController.showScreen(
                     PlantDetailsFeature.routeWithArgs(
                         origin = origin.value,
-                        plantId = plantId
+                        plantId = plantId,
+                        row = row,
+                        column = column
                     )
                 )
 

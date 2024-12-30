@@ -1,4 +1,4 @@
-package szysz3.planty.domain.usecase
+package szysz3.planty.domain.usecase.plant
 
 import szysz3.planty.domain.model.Plant
 import szysz3.planty.domain.repository.PlantRepository

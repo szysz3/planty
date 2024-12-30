@@ -2,6 +2,8 @@ package szysz3.planty.screen.plantdetails.model
 
 import szysz3.planty.core.model.Plant
 
-data class PlantDetailScreenState(val plantId: Int? = null, val selectedPlant: Plant? = null) {
-
-}
+data class PlantDetailScreenState(
+    val plantId: Int? = null,
+    val selectedPlant: Plant? = null,
+    val isDeleteDialogVisible: Boolean = false
+)

@@ -1,4 +1,4 @@
-package szysz3.planty.domain.usecase
+package szysz3.planty.domain.usecase.plant
 
 import android.content.Context
 import android.net.Uri

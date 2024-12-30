@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import szysz3.planty.core.model.toPresentationModel
-import szysz3.planty.domain.usecase.GetPlantUseCase
+import szysz3.planty.domain.usecase.plant.GetPlantUseCase
 import szysz3.planty.screen.imagegallery.model.ImageGalleryScreenState
 import javax.inject.Inject
 

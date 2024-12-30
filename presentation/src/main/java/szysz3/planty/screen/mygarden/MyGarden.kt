@@ -15,7 +15,7 @@ object MyGardenFeature {
 
 fun NavGraphBuilder.addMyGardenScreen(
     navController: NavHostController,
-    onPlantChosen: (origin: PlantDetailsScreenOrigin, plantId: Int) -> Unit,
+    onPlantChosen: (origin: PlantDetailsScreenOrigin, plantId: Int, row: Int, column: Int) -> Unit,
     onGardenFieldChosen: (row: Int, column: Int) -> Unit,
 ) {
     staticComposable(

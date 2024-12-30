@@ -7,11 +7,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import szysz3.planty.BuildConfig
-import szysz3.planty.domain.usecase.IdentifyPlantUseCase
-import szysz3.planty.domain.usecase.IdentifyPlantsParams
 import szysz3.planty.domain.usecase.base.NoParams
 import szysz3.planty.domain.usecase.photo.CreateTempPhotoFileUseCase
 import szysz3.planty.domain.usecase.photo.DeleteTempPhotoFileUseCase
+import szysz3.planty.domain.usecase.plant.IdentifyPlantUseCase
+import szysz3.planty.domain.usecase.plant.IdentifyPlantsParams
 import szysz3.planty.screen.plantid.model.PlantIdScreenState
 import szysz3.planty.screen.plantid.model.toPresentationModel
 import timber.log.Timber

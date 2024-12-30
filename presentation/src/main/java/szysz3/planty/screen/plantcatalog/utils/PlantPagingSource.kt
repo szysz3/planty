@@ -4,8 +4,8 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import szysz3.planty.core.model.Plant
 import szysz3.planty.core.model.toPresentationModel
-import szysz3.planty.domain.usecase.PlantSearchUseCase
-import szysz3.planty.domain.usecase.PlantSearchUseCaseParams
+import szysz3.planty.domain.usecase.plant.PlantSearchUseCase
+import szysz3.planty.domain.usecase.plant.PlantSearchUseCaseParams
 
 class PlantPagingSource(
     private val searchPlantUseCase: PlantSearchUseCase,

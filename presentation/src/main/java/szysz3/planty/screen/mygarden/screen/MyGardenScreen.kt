@@ -31,7 +31,7 @@ import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
 fun MyGardenScreen(
     title: String,
     navController: NavHostController,
-    onPlantChosen: (origin: PlantDetailsScreenOrigin, plantId: Int) -> Unit,
+    onPlantChosen: (origin: PlantDetailsScreenOrigin, plantId: Int, row: Int, column: Int) -> Unit,
     onGardenFieldChosen: (row: Int, column: Int) -> Unit,
     myGardenViewModel: MyGardenViewModel = hiltViewModel(),
 ) {
@@ -73,7 +73,9 @@ fun MyGardenScreen(
                         } else {
                             onPlantChosen(
                                 PlantDetailsScreenOrigin.HOME_SCREEN,
-                                plantForSelectedCell.id
+                                plantForSelectedCell.id,
+                                row,
+                                col
                             )
                         }
                     }

@@ -44,7 +44,9 @@ import szysz3.planty.screen.plantcatalog.viewmodel.PlantCatalogViewModel
 fun PlantCatalogScreen(
     title: String,
     navController: NavHostController,
-    onShowPlantDetails: (origin: PlantDetailsScreenOrigin, plantId: Int) -> Unit,
+    row: Int?,
+    column: Int?,
+    onShowPlantDetails: (origin: PlantDetailsScreenOrigin, plantId: Int, row: Int?, column: Int?) -> Unit,
     plantCatalogViewModel: PlantCatalogViewModel = hiltViewModel(),
 ) {
     val focusManager = LocalFocusManager.current
@@ -140,7 +142,9 @@ fun PlantCatalogScreen(
                                                 plantCatalogViewModel.selectPlant(plant)
                                                 onShowPlantDetails(
                                                     PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN,
-                                                    plant.id
+                                                    plant.id,
+                                                    row,
+                                                    column,
                                                 )
                                             }
                                         }

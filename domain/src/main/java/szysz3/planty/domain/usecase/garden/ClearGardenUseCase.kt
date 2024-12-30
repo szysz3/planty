@@ -1,4 +1,4 @@
-package szysz3.planty.domain.usecase
+package szysz3.planty.domain.usecase.garden
 
 import szysz3.planty.domain.repository.GardenRepository
 import szysz3.planty.domain.usecase.base.BaseUseCase
