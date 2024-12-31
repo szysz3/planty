@@ -8,5 +8,6 @@ data class TaskDetailsScreenState(
     val activeSubTasks: List<SubTask> = emptyList(),
     val completedSubTasks: List<SubTask> = emptyList(),
     val completedSubTaskCost: Double = 0.0,
-    val totalCost: Double = 0.0
+    val totalCost: Double = 0.0,
+    val isDeleteDialogVisible: Boolean = false
 )

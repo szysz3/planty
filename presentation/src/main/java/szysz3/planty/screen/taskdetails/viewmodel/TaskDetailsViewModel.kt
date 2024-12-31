@@ -5,12 +5,14 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import szysz3.planty.core.model.SubTask
 import szysz3.planty.core.model.Task
 import szysz3.planty.core.model.toDomain
 import szysz3.planty.core.model.toPresentation
 import szysz3.planty.domain.usecase.task.AddTaskUseCase
+import szysz3.planty.domain.usecase.task.DeleteTaskUseCase
 import szysz3.planty.domain.usecase.task.GetTaskByIdUseCase
 import szysz3.planty.screen.taskdetails.model.TaskDetailsScreenState
 import javax.inject.Inject
@@ -19,7 +21,8 @@ import javax.inject.Inject
 class TaskDetailsViewModel @Inject constructor(
     private val getTaskByIdUseCase: GetTaskByIdUseCase,
     private val addTaskUseCase: AddTaskUseCase,
-    private val updateTaskUseCase: AddTaskUseCase
+    private val updateTaskUseCase: AddTaskUseCase,
+    private val deleteTaskUseCase: DeleteTaskUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TaskDetailsScreenState())
@@ -50,6 +53,16 @@ class TaskDetailsViewModel @Inject constructor(
             task.copy(tasks = updatedSubTasks)
         }
         _uiState.value = refreshState(updatedTask)
+    }
+
+    fun deleteTask() {
+        viewModelScope.launch {
+            deleteTaskUseCase.invoke(_uiState.value.task.toDomain())
+        }
+    }
+
+    fun showDeleteDialog(show: Boolean) {
+        _uiState.update { it.copy(isDeleteDialogVisible = show) }
     }
 
     fun updateTaskTitle(newTitle: String) {

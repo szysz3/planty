@@ -30,8 +30,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import szysz3.planty.core.composable.DeleteAlertDialog
 import szysz3.planty.core.composable.RoundedButton
 import szysz3.planty.screen.base.BaseScreen
+import szysz3.planty.screen.base.topbar.TopBarBackButton
+import szysz3.planty.screen.base.topbar.TopBarDeleteButton
 import szysz3.planty.screen.taskdetails.composable.SubTaskRow
 import szysz3.planty.screen.taskdetails.viewmodel.TaskDetailsViewModel
 
@@ -59,6 +62,22 @@ fun TaskDetailsScreen(
         title = title,
         showTopBar = true,
         showBottomBar = true,
+        topBarActions = {
+            TopBarDeleteButton(
+                showDeleteButton = taskId != null,
+                onDeleteClick = {
+                    taskDetailsViewModel.showDeleteDialog(true)
+                }
+            )
+        },
+        topBarBackNavigation = {
+            TopBarBackButton(
+                showBackButton = true,
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        },
         navController = navController
     ) { padding ->
 
@@ -219,6 +238,23 @@ fun TaskDetailsScreen(
                     }
                 }
             }
+        }
+
+        if (uiState.isDeleteDialogVisible) {
+            DeleteAlertDialog(
+                title = "Delete Task",
+                message = "Are you sure you want to delete this task?",
+                confirmButtonText = "Delete",
+                dismissButtonText = "Cancel",
+                onConfirmDelete = {
+                    taskDetailsViewModel.deleteTask()
+                    taskDetailsViewModel.showDeleteDialog(false)
+                    navController.popBackStack()
+                },
+                onCancel = {
+                    taskDetailsViewModel.showDeleteDialog(false)
+                }
+            )
         }
     }
 }
