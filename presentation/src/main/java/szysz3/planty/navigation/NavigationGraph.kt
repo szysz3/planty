@@ -8,6 +8,7 @@ import szysz3.planty.core.model.PlantDetailsScreenOrigin
 import szysz3.planty.navigation.bottombar.BottomBarNavigationItems
 import szysz3.planty.screen.imagegallery.ImageGalleryFeature
 import szysz3.planty.screen.imagegallery.addImageGalleryScreen
+import szysz3.planty.screen.mygarden.MyGardenFeature
 import szysz3.planty.screen.mygarden.addMyGardenScreen
 import szysz3.planty.screen.plantcatalog.PlantCatalogFeature
 import szysz3.planty.screen.plantcatalog.addPlantCatalogScreen
@@ -68,7 +69,7 @@ fun NavigationGraph(
         addPlantDetailsScreen(
             navController,
             onPlantChosen = {
-                navController.popBackStack()
+                navController.popBackStack(MyGardenFeature.route(), false)
             },
             onPlantImageClicked = { plantId ->
                 navController.showScreen(

@@ -2,9 +2,12 @@ package szysz3.planty.data.repository
 
 import androidx.room.Transaction
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import szysz3.planty.data.database.dao.GardenCellDao
 import szysz3.planty.data.database.dao.GardenPlantDao
+import szysz3.planty.data.database.entity.GardenCellEntity
 import szysz3.planty.data.database.entity.toDomain
 import szysz3.planty.data.database.entity.toEntity
 import szysz3.planty.data.database.entity.toGardenPlantEntity
@@ -22,18 +25,15 @@ class GardenRepositoryImpl @Inject constructor(
     override suspend fun loadGardenState(): GardenState {
         return withContext(Dispatchers.IO) {
             val gardenCellEntities = gardenCellDao.getAllCells()
-            val gardenCells = gardenCellEntities.map { cell ->
-                val plant = cell.plantId.let { plantId ->
-                    gardenPlantDao.getGardenPlantById(plantId)?.toDomain()
-                }
-                cell.toDomain(plant)
-            }
+            crateGardenState(gardenCellEntities)
+        }
+    }
 
-            GardenState(
-                rows = calculateRows(gardenCells),
-                columns = calculateColumns(gardenCells),
-                cells = gardenCells
-            )
+    override suspend fun observeGardenState(): Flow<GardenState> {
+        return withContext(Dispatchers.IO) {
+            gardenCellDao.observeAllCells().map { gardenCellEntities ->
+                crateGardenState(gardenCellEntities)
+            }
         }
     }
 
@@ -65,6 +65,21 @@ class GardenRepositoryImpl @Inject constructor(
             gardenCellDao.clearGarden()
             gardenPlantDao.clearAllPlants()
         }
+    }
+
+    private suspend fun crateGardenState(gardenCellEntities: List<GardenCellEntity>): GardenState {
+        val gardenCells = gardenCellEntities.map { cell ->
+            val plant = cell.plantId.let { plantId ->
+                gardenPlantDao.getGardenPlantById(plantId)?.toDomain()
+            }
+            cell.toDomain(plant)
+        }
+
+        return GardenState(
+            rows = calculateRows(gardenCells),
+            columns = calculateColumns(gardenCells),
+            cells = gardenCells
+        )
     }
 
     private fun calculateRows(cells: List<GardenCell>): Int {

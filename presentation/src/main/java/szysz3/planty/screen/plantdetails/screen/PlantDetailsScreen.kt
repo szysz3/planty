@@ -261,6 +261,7 @@ fun PlantDetailsScreen(
                             )
                             onPlantChosen()
                         },
+                        modifier = Modifier.fillMaxWidth(),
                         text = "Plant!"
                     )
                 }

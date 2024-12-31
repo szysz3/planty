@@ -5,12 +5,13 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import szysz3.planty.core.model.Plant
 import szysz3.planty.domain.usecase.base.NoParams
 import szysz3.planty.domain.usecase.garden.ClearGardenUseCase
-import szysz3.planty.domain.usecase.garden.LoadGardenStateUseCase
+import szysz3.planty.domain.usecase.garden.ObserveGardenStateUseCase
 import szysz3.planty.domain.usecase.garden.SaveGardenStateUseCase
 import szysz3.planty.screen.mygarden.model.GardenState
 import szysz3.planty.screen.mygarden.model.MyGardenScreenState
@@ -22,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MyGardenViewModel @Inject constructor(
     private val saveGardenStateUseCase: SaveGardenStateUseCase,
-    private val loadGardenStateUseCase: LoadGardenStateUseCase,
+    private val observeGardenStateUseCase: ObserveGardenStateUseCase,
     private val clearGardenUseCase: ClearGardenUseCase
 ) : ViewModel() {
 
@@ -41,7 +42,7 @@ class MyGardenViewModel @Inject constructor(
         _uiState.update { it.copy(isBottomSheetVisible = show) }
     }
 
-    fun initializeGarden(rows: Int, columns: Int) {
+    fun createGarden(rows: Int, columns: Int) {
         val initialGardenState = GardenState.empty(rows, columns)
         _uiState.update {
             it.copy(
@@ -62,22 +63,22 @@ class MyGardenViewModel @Inject constructor(
         }
     }
 
-    fun loadGarden() {
+    fun observeGardenState() {
         viewModelScope.launch {
-            try {
-                val loadedState = loadGardenStateUseCase(NoParams())
-                val gardenState = loadedState.toPresentationModel()
-                if (isGardenStateValid(gardenState)) {
-                    _uiState.update {
-                        it.copy(
-                            gardenState = gardenState,
-                            dataLoaded = true
-                        )
+            observeGardenStateUseCase(NoParams())
+                .distinctUntilChanged()
+                .collect { loadedState ->
+                    val gardenState = loadedState.toPresentationModel()
+                    if (isGardenStateValid(gardenState)) {
+                        _uiState.update {
+                            it.copy(
+                                gardenState = gardenState,
+                                dataLoaded = true
+                            )
+                        }
                     }
                 }
-            } catch (e: Exception) {
-                Timber.e(e)
-            }
+
         }
     }
 

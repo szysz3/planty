@@ -40,7 +40,7 @@ fun MyGardenScreen(
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        myGardenViewModel.loadGarden()
+        myGardenViewModel.observeGardenState()
     }
 
     BaseScreen(
@@ -111,7 +111,7 @@ fun MyGardenScreen(
                 bottomSheetState = bottomSheetState,
                 onDismissRequest = { myGardenViewModel.showBottomSheet(false) },
                 onDimensionsSubmitted = { height, width ->
-                    myGardenViewModel.initializeGarden(height, width)
+                    myGardenViewModel.createGarden(height, width)
                     coroutineScope.launch {
                         bottomSheetState.hide()
                     }.invokeOnCompletion {

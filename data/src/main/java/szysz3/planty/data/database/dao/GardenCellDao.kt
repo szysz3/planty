@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 import szysz3.planty.data.database.entity.GardenCellEntity
 
 @Dao
@@ -16,6 +17,9 @@ interface GardenCellDao {
     // Fetch all garden cells with their associated plant IDs
     @Query("SELECT * FROM garden_cells")
     suspend fun getAllCells(): List<GardenCellEntity>
+
+    @Query("SELECT * FROM garden_cells")
+    fun observeAllCells(): Flow<List<GardenCellEntity>>
 
     // Fetch a specific garden cell by its ID
     @Query("SELECT * FROM garden_cells WHERE id = :cellId")
