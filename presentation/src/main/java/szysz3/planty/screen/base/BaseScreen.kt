@@ -38,7 +38,7 @@ fun BaseScreen(
     topBarActions: (@Composable RowScope.() -> Unit)? = {
         TopBarDeleteButton()
     },
-    navigationIcon: @Composable () -> Unit = {
+    topBarBackNavigation: @Composable () -> Unit = {
         TopBarBackButton()
     },
     content: @Composable (PaddingValues) -> Unit
@@ -65,7 +65,7 @@ fun BaseScreen(
                     ),
                     title = { TopBarTitle(title) },
                     navigationIcon = {
-                        navigationIcon.invoke()
+                        topBarBackNavigation.invoke()
                     },
                     actions = {
                         topBarActions?.invoke(this)

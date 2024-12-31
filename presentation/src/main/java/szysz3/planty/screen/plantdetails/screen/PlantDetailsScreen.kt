@@ -38,6 +38,8 @@ import szysz3.planty.core.composable.RoundedButton
 import szysz3.planty.core.model.PlantDetailsScreenOrigin
 import szysz3.planty.core.util.openWebSearch
 import szysz3.planty.screen.base.BaseScreen
+import szysz3.planty.screen.base.topbar.TopBarBackButton
+import szysz3.planty.screen.base.topbar.TopBarDeleteButton
 import szysz3.planty.screen.plantdetails.composable.EvenGrid
 import szysz3.planty.screen.plantdetails.model.PlantDetailItem
 import szysz3.planty.screen.plantdetails.model.mapDeciduousEvergreenToString
@@ -76,6 +78,22 @@ fun PlantDetailsScreen(
         title = title,
         showTopBar = true,
         showBottomBar = true,
+        topBarActions = {
+            TopBarDeleteButton(
+                showDeleteButton = origin == PlantDetailsScreenOrigin.MY_GARDEN,
+                onDeleteClick = {
+                    plantDetailsViewModel.showDeleteDialog(true)
+                }
+            )
+        },
+        topBarBackNavigation = {
+            TopBarBackButton(
+                showBackButton = true,
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        },
         navController = navController
     ) { padding ->
 
@@ -280,11 +298,11 @@ fun PlantDetailsScreen(
                         column = column,
                         plant = null
                     )
-//                myGardenViewModel.showDeleteDialog(false)
+                    plantDetailsViewModel.showDeleteDialog(false)
                     navController.popBackStack()
                 },
                 onCancel = {
-//                myGardenViewModel.showDeleteDialog(false)
+                    plantDetailsViewModel.showDeleteDialog(false)
                 }
             )
         }

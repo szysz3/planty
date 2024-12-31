@@ -62,7 +62,7 @@ fun PlantCatalogScreen(
         title = title,
         showTopBar = true,
         showBottomBar = true,
-        navigationIcon = {
+        topBarBackNavigation = {
             TopBarBackButton(showBackButton = origin != PlantCatalogScreenOrigin.BOTTOM_BAR,
                 onBackClick = {
                     navController.popBackStack()
