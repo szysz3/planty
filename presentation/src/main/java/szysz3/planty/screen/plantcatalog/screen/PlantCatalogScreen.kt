@@ -37,6 +37,7 @@ import szysz3.planty.R
 import szysz3.planty.core.composable.EllipticalBackground
 import szysz3.planty.core.model.PlantCatalogScreenOrigin
 import szysz3.planty.screen.base.BaseScreen
+import szysz3.planty.screen.base.topbar.TopBarBackButton
 import szysz3.planty.screen.plantcatalog.composable.PlantCard
 import szysz3.planty.screen.plantcatalog.viewmodel.PlantCatalogViewModel
 
@@ -61,6 +62,12 @@ fun PlantCatalogScreen(
         title = title,
         showTopBar = true,
         showBottomBar = true,
+        navigationIcon = {
+            TopBarBackButton(showBackButton = origin != PlantCatalogScreenOrigin.BOTTOM_BAR,
+                onBackClick = {
+                    navController.popBackStack()
+                })
+        },
         navController = navController
     ) { padding ->
 

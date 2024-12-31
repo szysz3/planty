@@ -24,6 +24,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import szysz3.planty.screen.base.bottombar.BottomNavigationBar
+import szysz3.planty.screen.base.topbar.TopBarBackButton
+import szysz3.planty.screen.base.topbar.TopBarDeleteButton
 import szysz3.planty.screen.base.topbar.TopBarTitle
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,8 +35,12 @@ fun BaseScreen(
     showTopBar: Boolean = true,
     showBottomBar: Boolean = true,
     navController: NavHostController,
-    topBarActions: (@Composable RowScope.() -> Unit)? = null,
-    navigationIcon: @Composable () -> Unit = {},
+    topBarActions: (@Composable RowScope.() -> Unit)? = {
+        TopBarDeleteButton()
+    },
+    navigationIcon: @Composable () -> Unit = {
+        TopBarBackButton()
+    },
     content: @Composable (PaddingValues) -> Unit
 ) {
     var isContentVisible by remember { mutableStateOf(false) }

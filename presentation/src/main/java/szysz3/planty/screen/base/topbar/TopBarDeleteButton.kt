@@ -14,8 +14,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun TopBarDeleteButton(
-    showDeleteButton: Boolean,
-    onDeleteClick: () -> Unit
+    showDeleteButton: Boolean = false,
+    onDeleteClick: () -> Unit = {}
 ) {
     // Reserve space for the delete button even when it's not visible
     Box(

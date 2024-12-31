@@ -14,8 +14,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun TopBarBackButton(
-    showBackButton: Boolean,
-    onBackClick: () -> Unit
+    showBackButton: Boolean = false,
+    onBackClick: () -> Unit = { }
 ) {
     // Reserve space for the back button even when it's not visible
     Box(
