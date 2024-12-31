@@ -5,16 +5,33 @@ import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Search
+import szysz3.planty.core.model.PlantCatalogScreenOrigin
 import szysz3.planty.screen.mygarden.MyGardenFeature
 import szysz3.planty.screen.plantcatalog.PlantCatalogFeature
 import szysz3.planty.screen.plantid.PlantIdFeature
 import szysz3.planty.screen.tasklist.TaskListFeature
 
 object BottomBarNavigationItems {
-    val MyGarden = BottomNavItem(MyGardenFeature.route(), MyGardenFeature.TITLE, Icons.Rounded.Home)
-    val TaskList = BottomNavItem(TaskListFeature.route(), TaskListFeature.TITLE, Icons.Rounded.Done)
-    val PlantId = BottomNavItem(PlantIdFeature.route(), PlantIdFeature.TITLE, Icons.Rounded.Search)
+    val MyGarden = BottomNavItem(
+        MyGardenFeature.route(),
+        MyGardenFeature.TITLE,
+        Icons.Rounded.Home
+    )
+    val TaskList = BottomNavItem(
+        TaskListFeature.route(),
+        TaskListFeature.TITLE,
+        Icons.Rounded.Done
+    )
+    val PlantId = BottomNavItem(
+        PlantIdFeature.route(),
+        PlantIdFeature.TITLE,
+        Icons.Rounded.Search
+    )
     val PlantCatalog =
-        BottomNavItem(PlantCatalogFeature.route(), PlantCatalogFeature.TITLE, Icons.Rounded.Info)
+        BottomNavItem(
+            PlantCatalogFeature.routeWithArgs(origin = PlantCatalogScreenOrigin.BOTTOM_BAR.value),
+            PlantCatalogFeature.TITLE,
+            Icons.Rounded.Info
+        )
 
 }

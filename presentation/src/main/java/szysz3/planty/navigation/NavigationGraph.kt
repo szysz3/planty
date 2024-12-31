@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import szysz3.planty.core.model.PlantCatalogScreenOrigin
 import szysz3.planty.core.model.PlantDetailsScreenOrigin
 import szysz3.planty.navigation.bottombar.BottomBarNavigationItems
 import szysz3.planty.screen.imagegallery.ImageGalleryFeature
@@ -30,21 +31,22 @@ fun NavigationGraph(
         modifier = modifier
     ) {
         addMyGardenScreen(navController,
-            onPlantChosen = { origin, plantId, row, column ->
+            onPlantChosen = { plantId, row, column ->
                 navController.showScreen(
                     PlantDetailsFeature.routeWithArgs(
-                        origin = origin.value,
                         plantId = plantId,
                         row = row,
-                        column = column
+                        column = column,
+                        origin = PlantDetailsScreenOrigin.MY_GARDEN.value
                     )
                 )
             },
-            onGardenFieldChosen = { row, column ->
+            onEmptyGardenFieldChosen = { row, column ->
                 navController.showScreen(
                     PlantCatalogFeature.routeWithArgs(
                         row = row,
                         column = column,
+                        origin = PlantCatalogScreenOrigin.MY_GARDEN.value
                     )
                 )
             })
@@ -82,9 +84,11 @@ fun NavigationGraph(
         addPlantCatalogScreen(
             navController,
             onShowPlantDetails = { origin, plantId, row, column ->
+                val plantDetailsOrigin =
+                    PlantDetailsScreenOrigin.fromPlantCatalogScreenOrigin(origin)
                 navController.showScreen(
                     PlantDetailsFeature.routeWithArgs(
-                        origin = origin.value,
+                        origin = plantDetailsOrigin.value,
                         plantId = plantId,
                         row = row,
                         column = column

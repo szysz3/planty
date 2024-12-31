@@ -3,7 +3,6 @@ package szysz3.planty.screen.mygarden
 import MyGardenScreen
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import szysz3.planty.core.model.PlantDetailsScreenOrigin
 import szysz3.planty.navigation.staticComposable
 
 object MyGardenFeature {
@@ -15,8 +14,8 @@ object MyGardenFeature {
 
 fun NavGraphBuilder.addMyGardenScreen(
     navController: NavHostController,
-    onPlantChosen: (origin: PlantDetailsScreenOrigin, plantId: Int, row: Int, column: Int) -> Unit,
-    onGardenFieldChosen: (row: Int, column: Int) -> Unit,
+    onPlantChosen: (plantId: Int, row: Int, column: Int) -> Unit,
+    onEmptyGardenFieldChosen: (row: Int, column: Int) -> Unit,
 ) {
     staticComposable(
         route = MyGardenFeature.route(),
@@ -25,7 +24,7 @@ fun NavGraphBuilder.addMyGardenScreen(
             title = MyGardenFeature.TITLE,
             navController = navController,
             onPlantChosen = onPlantChosen,
-            onGardenFieldChosen = onGardenFieldChosen
+            onEmptyGardenFieldChosen = onEmptyGardenFieldChosen
         )
     }
 }

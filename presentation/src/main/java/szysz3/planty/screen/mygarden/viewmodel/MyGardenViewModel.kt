@@ -78,7 +78,6 @@ class MyGardenViewModel @Inject constructor(
                         }
                     }
                 }
-
         }
     }
 

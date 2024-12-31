@@ -20,7 +20,6 @@ import szysz3.planty.R
 import szysz3.planty.core.composable.DeleteAlertDialog
 import szysz3.planty.core.composable.EllipticalBackground
 import szysz3.planty.core.composable.FloatingActionButton
-import szysz3.planty.core.model.PlantDetailsScreenOrigin
 import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.mygarden.composable.GardenDimensionsInput
 import szysz3.planty.screen.mygarden.composable.GardenMap
@@ -31,8 +30,8 @@ import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
 fun MyGardenScreen(
     title: String,
     navController: NavHostController,
-    onPlantChosen: (origin: PlantDetailsScreenOrigin, plantId: Int, row: Int, column: Int) -> Unit,
-    onGardenFieldChosen: (row: Int, column: Int) -> Unit,
+    onPlantChosen: (plantId: Int, row: Int, column: Int) -> Unit,
+    onEmptyGardenFieldChosen: (row: Int, column: Int) -> Unit,
     myGardenViewModel: MyGardenViewModel = hiltViewModel(),
 ) {
     val uiState by myGardenViewModel.uiState.collectAsState()
@@ -69,10 +68,9 @@ fun MyGardenScreen(
                         myGardenViewModel.updateSelectedCell(row, col)
                         val plantForSelectedCell = myGardenViewModel.getPlantForSelectedCell()
                         if (plantForSelectedCell == null) {
-                            onGardenFieldChosen(row, col)
+                            onEmptyGardenFieldChosen(row, col)
                         } else {
                             onPlantChosen(
-                                PlantDetailsScreenOrigin.HOME_SCREEN,
                                 plantForSelectedCell.id,
                                 row,
                                 col

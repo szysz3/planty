@@ -251,7 +251,7 @@ fun PlantDetailsScreen(
                     }
                 }
 
-                if (origin == PlantDetailsScreenOrigin.PLANT_A_PLANT_SCREEN) {
+                if (origin == PlantDetailsScreenOrigin.PLANT_CATALOG_MY_GARDEN) {
                     RoundedButton(
                         onClick = {
                             plantDetailsViewModel.persistPlant(
