@@ -21,6 +21,7 @@ import szysz3.planty.core.composable.DeleteAlertDialog
 import szysz3.planty.core.composable.EllipticalBackground
 import szysz3.planty.core.composable.FloatingActionButton
 import szysz3.planty.screen.base.BaseScreen
+import szysz3.planty.screen.base.topbar.TopBarDeleteButton
 import szysz3.planty.screen.mygarden.composable.GardenDimensionsInput
 import szysz3.planty.screen.mygarden.composable.GardenMap
 import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
@@ -46,6 +47,14 @@ fun MyGardenScreen(
         title = title,
         showTopBar = true,
         showBottomBar = true,
+        topBarActions = {
+            TopBarDeleteButton(
+                showDeleteButton = uiState.dataLoaded,
+                onDeleteClick = {
+                    myGardenViewModel.showDeleteDialog(true)
+                }
+            )
+        },
         navController = navController
     ) { padding ->
         EllipticalBackground(R.drawable.bcg1)
