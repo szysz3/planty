@@ -11,26 +11,36 @@ import szysz3.planty.screen.plantid.PlantIdFeature
 import szysz3.planty.screen.tasklist.TaskListFeature
 
 object BottomBarNavigationItems {
+    private const val GRAPH = "graph"
+
     val MyGarden = BottomNavItem(
-        MyGardenFeature.route(),
-        MyGardenFeature.TITLE,
-        Icons.Rounded.Home
+        route = MyGardenFeature.route(origin = GRAPH),
+        title = MyGardenFeature.TITLE,
+        icon = Icons.Rounded.Home,
+        graphRoute = GRAPH
     )
     val TaskList = BottomNavItem(
-        TaskListFeature.route(),
-        TaskListFeature.TITLE,
-        Icons.Rounded.Done
+        route = TaskListFeature.route(origin = GRAPH),
+        title = TaskListFeature.TITLE,
+        icon = Icons.Rounded.Done,
+        graphRoute = GRAPH
     )
     val PlantId = BottomNavItem(
-        PlantIdFeature.route(),
-        PlantIdFeature.TITLE,
-        Icons.Rounded.Search
+        route = PlantIdFeature.route(origin = GRAPH),
+        title = PlantIdFeature.TITLE,
+        icon = Icons.Rounded.Search,
+        graphRoute = GRAPH
     )
-    val PlantCatalog =
-        BottomNavItem(
-            PlantCatalogFeature.route(),
-            PlantCatalogFeature.TITLE,
-            Icons.Rounded.Info
-        )
-
+    val PlantCatalog = BottomNavItem(
+        route = PlantCatalogFeature.route(origin = GRAPH),
+        title = PlantCatalogFeature.TITLE,
+        icon = Icons.Rounded.Info,
+        graphRoute = GRAPH
+    )
+    val items = listOf(
+        MyGarden,
+        TaskList,
+        PlantId,
+        PlantCatalog
+    )
 }
