@@ -3,6 +3,7 @@ package szysz3.planty.navigation.graph
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.navigation
+import szysz3.planty.core.model.PlantDetailsConfig
 import szysz3.planty.navigation.bottombar.BottomBarNavigationItems
 import szysz3.planty.navigation.showScreen
 import szysz3.planty.screen.imagegallery.ImageGalleryFeature
@@ -27,7 +28,8 @@ fun NavGraphBuilder.myGardenGraph(navController: NavHostController) {
                         plantId = plantId,
                         row = row,
                         column = column,
-                        origin = MyGardenFeature.route()
+                        origin = MyGardenFeature.route(),
+                        config = PlantDetailsConfig.DELETE.value
                     )
                 )
             },
@@ -36,7 +38,8 @@ fun NavGraphBuilder.myGardenGraph(navController: NavHostController) {
                     PlantCatalogFeature.routeWithArgs(
                         row = row,
                         column = column,
-                        origin = MyGardenFeature.route()
+                        origin = MyGardenFeature.route(),
+                        config = PlantDetailsConfig.PLANT.value
                     )
                 )
             })
@@ -46,7 +49,7 @@ fun NavGraphBuilder.myGardenGraph(navController: NavHostController) {
             onPlantImageClicked = { plantId ->
                 navController.showScreen(
                     ImageGalleryFeature.routeWithArgs(
-                        origin = "${MyGardenFeature.route()}${PlantDetailsFeature.route()}",
+                        origin = "${MyGardenFeature.route()}${PlantDetailsFeature.baseRoute()}",
                         plantId = plantId
                     )
                 )
@@ -62,23 +65,24 @@ fun NavGraphBuilder.myGardenGraph(navController: NavHostController) {
             onPlantImageClicked = { plantId ->
                 navController.showScreen(
                     ImageGalleryFeature.routeWithArgs(
-                        origin = "${MyGardenFeature.route()}${PlantCatalogFeature.route()}${PlantDetailsFeature.route()}",
+                        origin = "${MyGardenFeature.route()}${PlantCatalogFeature.baseRoute()}${PlantDetailsFeature.baseRoute()}",
                         plantId = plantId
                     )
                 )
             },
-            origin = "${MyGardenFeature.route()}${PlantCatalogFeature.route()}"
+            origin = "${MyGardenFeature.route()}${PlantCatalogFeature.baseRoute()}"
         )
 
         addPlantCatalogScreen(
             navController = navController,
-            onShowPlantDetails = { origin, plantId, row, column ->
+            onShowPlantDetails = { plantId, row, column ->
                 navController.showScreen(
                     PlantDetailsFeature.routeWithArgs(
-                        origin = "${MyGardenFeature.route()}${PlantCatalogFeature.route()}",
+                        origin = "${MyGardenFeature.route()}${PlantCatalogFeature.baseRoute()}",
                         plantId = plantId,
                         row = row,
-                        column = column
+                        column = column,
+                        config = PlantDetailsConfig.PLANT.value
                     )
                 )
             },
@@ -87,12 +91,12 @@ fun NavGraphBuilder.myGardenGraph(navController: NavHostController) {
 
         addImageGalleryScreen(
             navController = navController,
-            origin = "${MyGardenFeature.route()}${PlantDetailsFeature.route()}"
+            origin = "${MyGardenFeature.route()}${PlantDetailsFeature.baseRoute()}"
         )
 
         addImageGalleryScreen(
             navController = navController,
-            origin = "${MyGardenFeature.route()}${PlantCatalogFeature.route()}${PlantDetailsFeature.route()}"
+            origin = "${MyGardenFeature.route()}${PlantCatalogFeature.baseRoute()}${PlantDetailsFeature.baseRoute()}"
         )
     }
 }

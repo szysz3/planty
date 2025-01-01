@@ -35,7 +35,7 @@ import szysz3.planty.core.composable.EllipticalBackground
 import szysz3.planty.core.composable.ImageButton
 import szysz3.planty.core.composable.ImageWithTextHorizontal
 import szysz3.planty.core.composable.RoundedButton
-import szysz3.planty.core.model.PlantDetailsScreenOrigin
+import szysz3.planty.core.model.PlantDetailsConfig
 import szysz3.planty.core.util.openWebSearch
 import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.base.topbar.TopBarBackButton
@@ -54,12 +54,13 @@ import szysz3.planty.screen.plantdetails.model.mapShadeToString
 import szysz3.planty.screen.plantdetails.model.mapSoilToString
 import szysz3.planty.screen.plantdetails.model.mapWellDrainedToString
 import szysz3.planty.screen.plantdetails.viewmodel.PlantDetailsViewModel
+import timber.log.Timber
 
 @Composable
 fun PlantDetailsScreen(
     title: String,
     navController: NavHostController,
-    origin: PlantDetailsScreenOrigin = PlantDetailsScreenOrigin.MY_GARDEN,
+    config: PlantDetailsConfig,
     plantId: Int,
     row: Int?,
     column: Int?,
@@ -69,6 +70,8 @@ fun PlantDetailsScreen(
 ) {
     val uiState by plantDetailsViewModel.uiState.collectAsState()
     val context = LocalContext.current
+
+    Timber.d("-----> plant details: row: $row, column: $column")
 
     LaunchedEffect(Unit) {
         plantDetailsViewModel.updatePlantId(plantId)
@@ -80,7 +83,7 @@ fun PlantDetailsScreen(
         showBottomBar = true,
         topBarActions = {
             TopBarDeleteButton(
-                showDeleteButton = origin == PlantDetailsScreenOrigin.MY_GARDEN,
+                showDeleteButton = config == PlantDetailsConfig.DELETE,
                 onDeleteClick = {
                     plantDetailsViewModel.showDeleteDialog(true)
                 }
@@ -269,7 +272,7 @@ fun PlantDetailsScreen(
                     }
                 }
 
-                if (origin == PlantDetailsScreenOrigin.PLANT_CATALOG_MY_GARDEN) {
+                if (config == PlantDetailsConfig.PLANT) {
                     RoundedButton(
                         onClick = {
                             plantDetailsViewModel.persistPlant(

@@ -12,15 +12,27 @@ object TaskDetailsFeature {
     const val TITLE = "Task Details"
     const val TASK_DETAILS_TASK_ID_ARG_NAME = "taskId"
 
-    private const val BASE_ROUTE = "/taskDetails/{${TASK_DETAILS_TASK_ID_ARG_NAME}}"
+    private const val BASE_ROUTE = "/taskDetails"
 
-    fun route(origin: String = "") = "$origin${BASE_ROUTE}"
+    private const val BASE_ROUTE_WITH_ARGS =
+        "$BASE_ROUTE?$TASK_DETAILS_TASK_ID_ARG_NAME={${TASK_DETAILS_TASK_ID_ARG_NAME}}"
+
+    private fun baseRoute(origin: String = "") = "$origin${BASE_ROUTE}"
+
+    fun route(origin: String = "") = "$origin${BASE_ROUTE_WITH_ARGS}"
 
     fun routeWithArgs(origin: String = "", taskId: Long?): String {
-        return route(origin).replace(
-            "{${TASK_DETAILS_TASK_ID_ARG_NAME}}",
-            taskId.toString()
-        )
+        val queryParams = buildList {
+            add("$TASK_DETAILS_TASK_ID_ARG_NAME=$taskId")
+        }
+
+        val finalRoute = if (queryParams.isNotEmpty()) {
+            "${baseRoute(origin)}?${queryParams.joinToString("&")}"
+        } else {
+            baseRoute(origin)
+        }
+
+        return finalRoute
     }
 }
 

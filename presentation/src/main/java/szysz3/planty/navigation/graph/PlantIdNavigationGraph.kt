@@ -3,6 +3,7 @@ package szysz3.planty.navigation.graph
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
+import szysz3.planty.core.model.PlantDetailsConfig
 import szysz3.planty.navigation.bottombar.BottomBarNavigationItems
 import szysz3.planty.navigation.showScreen
 import szysz3.planty.screen.imagegallery.ImageGalleryFeature
@@ -22,7 +23,8 @@ fun NavGraphBuilder.plantIdGraph(navController: NavHostController) {
                 navController.showScreen(
                     PlantDetailsFeature.routeWithArgs(
                         origin = PlantIdFeature.route(),
-                        plantId = plantId
+                        plantId = plantId,
+                        config = PlantDetailsConfig.PREVIEW.value
                     )
                 )
             })
@@ -32,7 +34,7 @@ fun NavGraphBuilder.plantIdGraph(navController: NavHostController) {
             onPlantImageClicked = { plantId ->
                 navController.showScreen(
                     ImageGalleryFeature.routeWithArgs(
-                        origin = "${PlantIdFeature.route()}${PlantDetailsFeature.route()}",
+                        origin = "${PlantIdFeature.route()}${PlantDetailsFeature.baseRoute()}",
                         plantId = plantId
                     )
                 )
@@ -42,7 +44,7 @@ fun NavGraphBuilder.plantIdGraph(navController: NavHostController) {
 
         addImageGalleryScreen(
             navController = navController,
-            origin = "${PlantIdFeature.route()}${PlantDetailsFeature.route()}"
+            origin = "${PlantIdFeature.route()}${PlantDetailsFeature.baseRoute()}"
         )
 
     }

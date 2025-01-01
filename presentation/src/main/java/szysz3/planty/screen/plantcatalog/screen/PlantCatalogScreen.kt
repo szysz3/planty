@@ -35,7 +35,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import szysz3.planty.R
 import szysz3.planty.core.composable.EllipticalBackground
-import szysz3.planty.core.model.PlantCatalogScreenOrigin
+import szysz3.planty.core.model.PlantCatalogConfig
 import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.base.topbar.TopBarBackButton
 import szysz3.planty.screen.plantcatalog.composable.PlantCard
@@ -45,10 +45,10 @@ import szysz3.planty.screen.plantcatalog.viewmodel.PlantCatalogViewModel
 fun PlantCatalogScreen(
     title: String,
     navController: NavHostController,
-    origin: PlantCatalogScreenOrigin,
+    origin: PlantCatalogConfig,
     row: Int?,
     column: Int?,
-    onShowPlantDetails: (origin: PlantCatalogScreenOrigin, plantId: Int, row: Int?, column: Int?) -> Unit,
+    onShowPlantDetails: (plantId: Int, row: Int?, column: Int?) -> Unit,
     plantCatalogViewModel: PlantCatalogViewModel = hiltViewModel(),
 ) {
     val focusManager = LocalFocusManager.current
@@ -63,7 +63,7 @@ fun PlantCatalogScreen(
         showTopBar = true,
         showBottomBar = true,
         topBarBackNavigation = {
-            TopBarBackButton(showBackButton = origin != PlantCatalogScreenOrigin.BOTTOM_BAR,
+            TopBarBackButton(showBackButton = origin == PlantCatalogConfig.PLANT,
                 onBackClick = {
                     navController.popBackStack()
                 })
@@ -149,7 +149,6 @@ fun PlantCatalogScreen(
                                             plant?.let {
                                                 plantCatalogViewModel.selectPlant(plant)
                                                 onShowPlantDetails(
-                                                    origin,
                                                     plant.id,
                                                     row,
                                                     column,

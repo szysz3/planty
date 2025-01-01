@@ -32,7 +32,7 @@ object BottomBarNavigationItems {
         graphRoute = GRAPH
     )
     val PlantCatalog = BottomNavItem(
-        route = PlantCatalogFeature.route(origin = GRAPH),
+        route = PlantCatalogFeature.baseRoute(origin = GRAPH),
         title = PlantCatalogFeature.TITLE,
         icon = Icons.Rounded.Info,
         graphRoute = GRAPH
