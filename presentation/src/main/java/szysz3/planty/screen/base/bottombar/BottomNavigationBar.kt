@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import szysz3.planty.navigation.bottombar.BottomBarNavigationItems
+import timber.log.Timber
 
 @Composable
 fun BottomNavigationBar(
@@ -24,11 +25,13 @@ fun BottomNavigationBar(
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
 
+    Timber.d("----> current route: ${currentRoute}")
+
     BottomNavigation(
         backgroundColor = MaterialTheme.colorScheme.background,
     ) {
         items.forEach { item ->
-            val isSelected = currentRoute?.contains(item.route) == true
+            val isSelected = currentRoute?.startsWith(item.route) == true
 
             BottomNavigationItem(
                 icon = {

@@ -12,12 +12,12 @@ object ImageGalleryFeature {
     const val TITLE = "Image Gallery"
     const val IMAGE_GALLERY_PLANT_ID_ARG_NAME = "plantId"
 
-    private const val ROUTE = "/imageGallery/{${IMAGE_GALLERY_PLANT_ID_ARG_NAME}}"
+    private const val BASE_ROUTE = "/imageGallery/{${IMAGE_GALLERY_PLANT_ID_ARG_NAME}}"
 
-    fun route() = ROUTE
+    fun route(origin: String = "") = "$origin${BASE_ROUTE}"
 
-    fun routeWithArgs(plantId: Int): String {
-        return ROUTE.replace(
+    fun routeWithArgs(origin: String = "", plantId: Int): String {
+        return route(origin).replace(
             "{${IMAGE_GALLERY_PLANT_ID_ARG_NAME}}",
             plantId.toString()
         )
@@ -25,10 +25,11 @@ object ImageGalleryFeature {
 }
 
 fun NavGraphBuilder.addImageGalleryScreen(
+    origin: String = "",
     navController: NavHostController,
 ) {
     staticComposable(
-        route = ImageGalleryFeature.route(),
+        route = ImageGalleryFeature.route(origin = origin),
         arguments = listOf(
             navArgument(IMAGE_GALLERY_PLANT_ID_ARG_NAME) {
                 type = NavType.IntType

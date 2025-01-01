@@ -14,35 +14,35 @@ object PlantCatalogFeature {
     const val PLANT_CATALOG_COLUMN_ARG_NAME = "column"
     const val PLANT_CATALOG_ORIGIN_ARG_NAME = "origin"
 
-    private const val ROUTE =
-        "/plantCatalog/{$PLANT_CATALOG_ROW_ARG_NAME}/{${PLANT_CATALOG_COLUMN_ARG_NAME}}/{${PLANT_CATALOG_ORIGIN_ARG_NAME}}"
+    private const val BASE_ROUTE = "/plantCatalog"
 
-    fun route() = ROUTE
+    fun route(origin: String = "") = "$origin$BASE_ROUTE"
 
     fun routeWithArgs(
+        origin: String = "",
         row: Int? = null,
         column: Int? = null,
-        origin: Int
     ): String {
-        return ROUTE.replace(
-            "{$PLANT_CATALOG_ROW_ARG_NAME}",
-            row.toString()
-        ).replace(
-            "{$PLANT_CATALOG_COLUMN_ARG_NAME}",
-            column.toString()
-        ).replace(
-            "{$PLANT_CATALOG_ORIGIN_ARG_NAME}",
-            origin.toString()
-        )
+        val queryParams = buildList {
+            row?.let { add("$PLANT_CATALOG_ROW_ARG_NAME=$it") }
+            column?.let { add("$PLANT_CATALOG_COLUMN_ARG_NAME=$it") }
+        }
+
+        return if (queryParams.isNotEmpty()) {
+            "${route(origin)}?${queryParams.joinToString("&")}"
+        } else {
+            route(origin)
+        }
     }
 }
 
 fun NavGraphBuilder.addPlantCatalogScreen(
+    origin: String = "",
     navController: NavHostController,
     onShowPlantDetails: (origin: PlantCatalogScreenOrigin, plantId: Int, row: Int?, column: Int?) -> Unit,
 ) {
     staticComposable(
-        route = PlantCatalogFeature.route(),
+        route = PlantCatalogFeature.route(origin = origin),
         arguments = listOf(
             navArgument(PlantCatalogFeature.PLANT_CATALOG_ROW_ARG_NAME) {
                 type = NavType.StringType
@@ -51,11 +51,7 @@ fun NavGraphBuilder.addPlantCatalogScreen(
             navArgument(PlantCatalogFeature.PLANT_CATALOG_COLUMN_ARG_NAME) {
                 type = NavType.StringType
                 nullable = true
-            },
-            navArgument(PlantCatalogFeature.PLANT_CATALOG_ORIGIN_ARG_NAME) {
-                type = NavType.IntType
-                nullable = false
-            },
+            }
         )
     ) { backStackEntry ->
         val row =

@@ -7,18 +7,19 @@ import szysz3.planty.screen.tasklist.screen.TaskListScreen
 
 object TaskListFeature {
     const val TITLE = "Task List"
-    private const val ROUTE = "taskList"
+    private const val BASE_ROUTE = "/taskList"
 
-    fun route() = ROUTE
+    fun route(origin: String = "") = "$origin$BASE_ROUTE"
 }
 
 fun NavGraphBuilder.addTaskListScreen(
+    origin: String = "",
     navController: NavHostController,
     onShowTaskDetails: (Long) -> Unit,
     onAddNewTask: () -> Unit
 ) {
     staticComposable(
-        route = TaskListFeature.route(),
+        route = TaskListFeature.route(origin = origin),
     ) {
         TaskListScreen(
             title = TaskListFeature.TITLE,

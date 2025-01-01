@@ -4,52 +4,52 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import szysz3.planty.core.model.PlantDetailsScreenOrigin
 import szysz3.planty.navigation.staticComposable
 import szysz3.planty.screen.plantdetails.screen.PlantDetailsScreen
 
 object PlantDetailsFeature {
     const val TITLE = "Plant Details"
-    const val PLANT_DETAILS_ORIGIN_ARG_NAME = "origin"
     const val PLANT_DETAILS_PLANT_ID_ARG_NAME = "plantId"
     const val PLANT_DETAILS_ROW_ARG_NAME = "row"
     const val PLANT_DETAILS_COLUMN_ARG_NAME = "column"
 
-    private const val ROUTE =
-        "/plantDetails/{${PLANT_DETAILS_ORIGIN_ARG_NAME}}/{${PLANT_DETAILS_PLANT_ID_ARG_NAME}}/{${PLANT_DETAILS_ROW_ARG_NAME}}/{${PLANT_DETAILS_COLUMN_ARG_NAME}}"
+    private const val BASE_ROUTE = "/plantDetails/{${PLANT_DETAILS_PLANT_ID_ARG_NAME}}"
 
-    fun route() = ROUTE
+    fun route(origin: String = "") = "$origin${BASE_ROUTE}"
 
-    fun routeWithArgs(origin: Int, plantId: Int, row: Int? = null, column: Int? = null): String {
-        return ROUTE.replace(
-            "{${PLANT_DETAILS_ORIGIN_ARG_NAME}}",
-            origin.toString()
-        ).replace(
+    fun routeWithArgs(
+        origin: String = "",
+        plantId: Int,
+        row: Int? = null,
+        column: Int? = null
+    ): String {
+        val route = route(origin).replace(
             "{${PLANT_DETAILS_PLANT_ID_ARG_NAME}}",
             plantId.toString()
-        ).replace(
-            "{${PLANT_DETAILS_ROW_ARG_NAME}}",
-            row.toString()
         )
-            .replace(
-                "{${PLANT_DETAILS_COLUMN_ARG_NAME}}",
-                column.toString()
-            )
+
+        val queryParams = buildList {
+            row?.let { add("$PLANT_DETAILS_ROW_ARG_NAME=$it") }
+            column?.let { add("$PLANT_DETAILS_COLUMN_ARG_NAME=$it") }
+        }
+
+        return if (queryParams.isNotEmpty()) {
+            "${route}?${queryParams.joinToString("&")}"
+        } else {
+            route
+        }
     }
 }
 
 fun NavGraphBuilder.addPlantDetailsScreen(
+    origin: String = "",
     navController: NavHostController,
-    onPlantChosen: () -> Unit,
+    onPlantChosen: (() -> Unit)? = null,
     onPlantImageClicked: (plantId: Int) -> Unit,
 ) {
     staticComposable(
-        route = PlantDetailsFeature.route(),
+        route = PlantDetailsFeature.route(origin),
         arguments = listOf(
-            navArgument(PlantDetailsFeature.PLANT_DETAILS_ORIGIN_ARG_NAME) {
-                type = NavType.IntType
-                nullable = false
-            },
             navArgument(PlantDetailsFeature.PLANT_DETAILS_PLANT_ID_ARG_NAME) {
                 type = NavType.IntType
                 nullable = false
@@ -63,10 +63,6 @@ fun NavGraphBuilder.addPlantDetailsScreen(
                 nullable = true
             }
         )) { backStackEntry ->
-
-        val origin =
-            backStackEntry.arguments?.getInt(PlantDetailsFeature.PLANT_DETAILS_ORIGIN_ARG_NAME)
-                ?: throw IllegalArgumentException("Argument 'origin' is required and must not be null")
         val plantId =
             backStackEntry.arguments?.getInt(PlantDetailsFeature.PLANT_DETAILS_PLANT_ID_ARG_NAME)
                 ?: throw IllegalArgumentException("Argument 'plantId' is required and must not be null")
@@ -80,7 +76,6 @@ fun NavGraphBuilder.addPlantDetailsScreen(
         PlantDetailsScreen(
             title = PlantDetailsFeature.TITLE,
             navController = navController,
-            origin = PlantDetailsScreenOrigin.fromValue(origin),
             plantId = plantId,
             row = row,
             column = column,

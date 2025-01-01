@@ -12,12 +12,12 @@ object TaskDetailsFeature {
     const val TITLE = "Task Details"
     const val TASK_DETAILS_TASK_ID_ARG_NAME = "taskId"
 
-    private const val ROUTE = "/taskList/taskDetails/{${TASK_DETAILS_TASK_ID_ARG_NAME}}"
+    private const val BASE_ROUTE = "/taskDetails/{${TASK_DETAILS_TASK_ID_ARG_NAME}}"
 
-    fun route() = ROUTE
+    fun route(origin: String = "") = "$origin${BASE_ROUTE}"
 
-    fun routeWithArgs(taskId: Long?): String {
-        return ROUTE.replace(
+    fun routeWithArgs(origin: String = "", taskId: Long?): String {
+        return route(origin).replace(
             "{${TASK_DETAILS_TASK_ID_ARG_NAME}}",
             taskId.toString()
         )
@@ -25,10 +25,11 @@ object TaskDetailsFeature {
 }
 
 fun NavGraphBuilder.addTaskDetailsScreen(
+    origin: String = "",
     navController: NavHostController,
 ) {
     staticComposable(
-        route = TaskDetailsFeature.route(),
+        route = TaskDetailsFeature.route(origin = origin),
         arguments = listOf(
             navArgument(TASK_DETAILS_TASK_ID_ARG_NAME) {
                 type = NavType.StringType

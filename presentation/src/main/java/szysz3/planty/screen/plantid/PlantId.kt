@@ -7,17 +7,18 @@ import szysz3.planty.screen.plantid.screen.PlantIdScreen
 
 object PlantIdFeature {
     const val TITLE = "Plant Id"
-    private const val ROUTE = "plantId"
+    private const val BASE_ROUTE = "/plantId"
 
-    fun route() = ROUTE
+    fun route(origin: String = "") = "$origin$BASE_ROUTE"
 }
 
 fun NavGraphBuilder.addPlantIdScreen(
+    origin: String = "",
     navController: NavHostController,
     onShowPlantDetails: (plantId: Int) -> Unit
 ) {
     staticComposable(
-        route = PlantIdFeature.route(),
+        route = PlantIdFeature.route(origin = origin),
     ) {
         PlantIdScreen(
             title = PlantIdFeature.TITLE,

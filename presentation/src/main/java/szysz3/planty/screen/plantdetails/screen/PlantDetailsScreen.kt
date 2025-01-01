@@ -59,11 +59,11 @@ import szysz3.planty.screen.plantdetails.viewmodel.PlantDetailsViewModel
 fun PlantDetailsScreen(
     title: String,
     navController: NavHostController,
-    origin: PlantDetailsScreenOrigin,
+    origin: PlantDetailsScreenOrigin = PlantDetailsScreenOrigin.MY_GARDEN,
     plantId: Int,
     row: Int?,
     column: Int?,
-    onPlantChosen: () -> Unit,
+    onPlantChosen: (() -> Unit)?,
     onPlantImageClicked: (plantId: Int) -> Unit,
     plantDetailsViewModel: PlantDetailsViewModel = hiltViewModel(),
 ) {
@@ -277,7 +277,9 @@ fun PlantDetailsScreen(
                                 column = column,
                                 plant = plant
                             )
-                            onPlantChosen()
+                            if (onPlantChosen != null) {
+                                onPlantChosen()
+                            }
                         },
                         modifier = Modifier.fillMaxWidth(),
                         text = "Plant!"
