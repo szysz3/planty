@@ -3,13 +3,15 @@ package szysz3.planty.screen.mygarden
 import MyGardenScreen
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import szysz3.planty.navigation.FeatureRoute
 import szysz3.planty.navigation.staticComposable
 
-object MyGardenFeature {
+object MyGardenFeature : FeatureRoute {
     const val TITLE = "My Garden"
-    private const val BASE_ROUTE = "/myGarden"
 
-    fun route(origin: String = "") = "$origin$BASE_ROUTE"
+    override val basePath: String = "/myGarden"
+
+    override val routeWithArgsPattern: String = basePath
 }
 
 fun NavGraphBuilder.addMyGardenScreen(
@@ -19,7 +21,7 @@ fun NavGraphBuilder.addMyGardenScreen(
     onEmptyGardenFieldChosen: (row: Int, column: Int) -> Unit,
 ) {
     staticComposable(
-        route = MyGardenFeature.route(origin = origin),
+        route = MyGardenFeature.route(origin),
     ) {
         MyGardenScreen(
             title = MyGardenFeature.TITLE,

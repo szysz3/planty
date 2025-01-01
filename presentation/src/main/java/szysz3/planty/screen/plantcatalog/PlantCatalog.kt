@@ -5,13 +5,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import szysz3.planty.core.model.PlantCatalogConfig
+import szysz3.planty.navigation.FeatureRoute
+import szysz3.planty.navigation.buildQueryString
 import szysz3.planty.navigation.staticComposable
 import szysz3.planty.screen.plantcatalog.PlantCatalogFeature.PLANT_CATALOG_COLUMN_ARG_NAME
 import szysz3.planty.screen.plantcatalog.PlantCatalogFeature.PLANT_CATALOG_CONFIG_ARG_NAME
 import szysz3.planty.screen.plantcatalog.PlantCatalogFeature.PLANT_CATALOG_ROW_ARG_NAME
 import szysz3.planty.screen.plantcatalog.screen.PlantCatalogScreen
 
-object PlantCatalogFeature {
+object PlantCatalogFeature : FeatureRoute {
     const val TITLE = "Plants"
     const val PLANT_CATALOG_CONFIG_ARG_NAME = "config"
     const val PLANT_CATALOG_ROW_ARG_NAME = "row"
@@ -19,15 +21,13 @@ object PlantCatalogFeature {
 
     private const val BASE_ROUTE = "/plantCatalog"
 
-    private const val ROUTE_WITH_ARGS =
-        "$BASE_ROUTE?${PLANT_CATALOG_CONFIG_ARG_NAME}={${PLANT_CATALOG_CONFIG_ARG_NAME}}&${PLANT_CATALOG_ROW_ARG_NAME}={${PLANT_CATALOG_ROW_ARG_NAME}}&${PLANT_CATALOG_COLUMN_ARG_NAME}={${PLANT_CATALOG_COLUMN_ARG_NAME}}"
+    override val basePath: String = BASE_ROUTE
 
-    fun baseRoute(origin: String = "") = "$origin$BASE_ROUTE"
-
-    fun route(origin: String = ""): String {
-        val registeredRoute = "$origin$ROUTE_WITH_ARGS"
-        return registeredRoute
-    }
+    override val routeWithArgsPattern: String =
+        "$basePath?" +
+                "$PLANT_CATALOG_CONFIG_ARG_NAME={$PLANT_CATALOG_CONFIG_ARG_NAME}&" +
+                "$PLANT_CATALOG_ROW_ARG_NAME={$PLANT_CATALOG_ROW_ARG_NAME}&" +
+                "$PLANT_CATALOG_COLUMN_ARG_NAME={$PLANT_CATALOG_COLUMN_ARG_NAME}"
 
     fun routeWithArgs(
         origin: String = "",
@@ -35,19 +35,12 @@ object PlantCatalogFeature {
         row: Int? = null,
         column: Int? = null,
     ): String {
-        val queryParams = buildList {
-            add("$PLANT_CATALOG_CONFIG_ARG_NAME=$config")
-            row?.let { add("$PLANT_CATALOG_ROW_ARG_NAME=$it") }
-            column?.let { add("$PLANT_CATALOG_COLUMN_ARG_NAME=$it") }
-        }
-
-        val finalRoute = if (queryParams.isNotEmpty()) {
-            "${baseRoute(origin)}?${queryParams.joinToString("&")}"
-        } else {
-            baseRoute(origin)
-        }
-
-        return finalRoute
+        val queryString = buildQueryString(
+            PLANT_CATALOG_CONFIG_ARG_NAME to config,
+            PLANT_CATALOG_ROW_ARG_NAME to row,
+            PLANT_CATALOG_COLUMN_ARG_NAME to column
+        )
+        return baseRoute(origin) + queryString
     }
 }
 
@@ -57,7 +50,7 @@ fun NavGraphBuilder.addPlantCatalogScreen(
     onShowPlantDetails: (plantId: Int, row: Int?, column: Int?) -> Unit,
 ) {
     staticComposable(
-        route = PlantCatalogFeature.route(origin = origin),
+        route = PlantCatalogFeature.route(origin),
         arguments = listOf(
             navArgument(PLANT_CATALOG_CONFIG_ARG_NAME) {
                 type = NavType.StringType
@@ -76,15 +69,17 @@ fun NavGraphBuilder.addPlantCatalogScreen(
             }
         )
     ) { backStackEntry ->
-        val config =
-            backStackEntry.arguments?.getString(PLANT_CATALOG_CONFIG_ARG_NAME)
-                ?.toIntOrNull()
-        val row =
-            backStackEntry.arguments?.getString(PLANT_CATALOG_ROW_ARG_NAME)
-                ?.toIntOrNull()
-        val column =
-            backStackEntry.arguments?.getString(PLANT_CATALOG_COLUMN_ARG_NAME)
-                ?.toIntOrNull()
+        val config = backStackEntry.arguments
+            ?.getString(PLANT_CATALOG_CONFIG_ARG_NAME)
+            ?.toIntOrNull()
+
+        val row = backStackEntry.arguments
+            ?.getString(PLANT_CATALOG_ROW_ARG_NAME)
+            ?.toIntOrNull()
+
+        val column = backStackEntry.arguments
+            ?.getString(PLANT_CATALOG_COLUMN_ARG_NAME)
+            ?.toIntOrNull()
 
         PlantCatalogScreen(
             title = PlantCatalogFeature.TITLE,

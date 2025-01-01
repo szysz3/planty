@@ -18,34 +18,35 @@ fun NavGraphBuilder.plantIdGraph(navController: NavHostController) {
         startDestination = PlantIdFeature.route(),
         route = BottomBarNavigationItems.PlantId.route
     ) {
-        addPlantIdScreen(navController = navController,
+        addPlantIdScreen(
+            navController = navController,
             onShowPlantDetails = { plantId ->
                 navController.showScreen(
                     PlantDetailsFeature.routeWithArgs(
-                        origin = PlantIdFeature.route(),
+                        origin = PlantIdFeature.baseRoute(),
                         plantId = plantId,
                         config = PlantDetailsConfig.PREVIEW.value
                     )
                 )
-            })
+            }
+        )
 
         addPlantDetailsScreen(
             navController = navController,
             onPlantImageClicked = { plantId ->
                 navController.showScreen(
                     ImageGalleryFeature.routeWithArgs(
-                        origin = "${PlantIdFeature.route()}${PlantDetailsFeature.baseRoute()}",
+                        origin = "${PlantIdFeature.baseRoute()}${PlantDetailsFeature.baseRoute()}",
                         plantId = plantId
                     )
                 )
             },
-            origin = PlantIdFeature.route()
+            origin = PlantIdFeature.baseRoute()
         )
 
         addImageGalleryScreen(
             navController = navController,
-            origin = "${PlantIdFeature.route()}${PlantDetailsFeature.baseRoute()}"
+            origin = "${PlantIdFeature.baseRoute()}${PlantDetailsFeature.baseRoute()}"
         )
-
     }
 }

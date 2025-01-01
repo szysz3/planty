@@ -20,7 +20,7 @@ fun NavGraphBuilder.taskListGraph(navController: NavHostController) {
             onShowTaskDetails = { taskId ->
                 navController.showScreen(
                     TaskDetailsFeature.routeWithArgs(
-                        origin = TaskListFeature.route(),
+                        origin = TaskListFeature.baseRoute(),
                         taskId = taskId
                     )
                 )
@@ -28,7 +28,7 @@ fun NavGraphBuilder.taskListGraph(navController: NavHostController) {
             onAddNewTask = {
                 navController.showScreen(
                     TaskDetailsFeature.routeWithArgs(
-                        origin = TaskListFeature.route(),
+                        origin = TaskListFeature.baseRoute(),
                         taskId = null
                     )
                 )
@@ -37,7 +37,7 @@ fun NavGraphBuilder.taskListGraph(navController: NavHostController) {
 
         addTaskDetailsScreen(
             navController = navController,
-            origin = TaskListFeature.route()
+            origin = TaskListFeature.baseRoute()
         )
     }
 }

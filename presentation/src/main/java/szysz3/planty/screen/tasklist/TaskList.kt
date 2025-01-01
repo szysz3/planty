@@ -2,14 +2,18 @@ package szysz3.planty.screen.tasklist
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import szysz3.planty.navigation.FeatureRoute
 import szysz3.planty.navigation.staticComposable
 import szysz3.planty.screen.tasklist.screen.TaskListScreen
 
-object TaskListFeature {
+object TaskListFeature : FeatureRoute {
     const val TITLE = "Task List"
+
     private const val BASE_ROUTE = "/taskList"
 
-    fun route(origin: String = "") = "$origin$BASE_ROUTE"
+    override val basePath: String = BASE_ROUTE
+
+    override val routeWithArgsPattern: String = basePath
 }
 
 fun NavGraphBuilder.addTaskListScreen(
@@ -19,7 +23,7 @@ fun NavGraphBuilder.addTaskListScreen(
     onAddNewTask: () -> Unit
 ) {
     staticComposable(
-        route = TaskListFeature.route(origin = origin),
+        route = TaskListFeature.route(origin),
     ) {
         TaskListScreen(
             title = TaskListFeature.TITLE,

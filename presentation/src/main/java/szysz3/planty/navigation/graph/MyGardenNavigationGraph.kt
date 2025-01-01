@@ -25,10 +25,10 @@ fun NavGraphBuilder.myGardenGraph(navController: NavHostController) {
             onPlantChosen = { plantId, row, column ->
                 navController.showScreen(
                     PlantDetailsFeature.routeWithArgs(
+                        origin = MyGardenFeature.baseRoute(),
                         plantId = plantId,
                         row = row,
                         column = column,
-                        origin = MyGardenFeature.route(),
                         config = PlantDetailsConfig.DELETE.value
                     )
                 )
@@ -36,25 +36,26 @@ fun NavGraphBuilder.myGardenGraph(navController: NavHostController) {
             onEmptyGardenFieldChosen = { row, column ->
                 navController.showScreen(
                     PlantCatalogFeature.routeWithArgs(
+                        origin = MyGardenFeature.baseRoute(),
                         row = row,
                         column = column,
-                        origin = MyGardenFeature.route(),
                         config = PlantDetailsConfig.PLANT.value
                     )
                 )
-            })
+            }
+        )
 
         addPlantDetailsScreen(
             navController = navController,
             onPlantImageClicked = { plantId ->
                 navController.showScreen(
                     ImageGalleryFeature.routeWithArgs(
-                        origin = "${MyGardenFeature.route()}${PlantDetailsFeature.baseRoute()}",
+                        origin = "${MyGardenFeature.baseRoute()}${PlantDetailsFeature.baseRoute()}",
                         plantId = plantId
                     )
                 )
             },
-            origin = MyGardenFeature.route()
+            origin = MyGardenFeature.baseRoute()
         )
 
         addPlantDetailsScreen(
@@ -65,12 +66,12 @@ fun NavGraphBuilder.myGardenGraph(navController: NavHostController) {
             onPlantImageClicked = { plantId ->
                 navController.showScreen(
                     ImageGalleryFeature.routeWithArgs(
-                        origin = "${MyGardenFeature.route()}${PlantCatalogFeature.baseRoute()}${PlantDetailsFeature.baseRoute()}",
+                        origin = "${MyGardenFeature.baseRoute()}${PlantCatalogFeature.baseRoute()}${PlantDetailsFeature.baseRoute()}",
                         plantId = plantId
                     )
                 )
             },
-            origin = "${MyGardenFeature.route()}${PlantCatalogFeature.baseRoute()}"
+            origin = "${MyGardenFeature.baseRoute()}${PlantCatalogFeature.baseRoute()}"
         )
 
         addPlantCatalogScreen(
@@ -78,7 +79,7 @@ fun NavGraphBuilder.myGardenGraph(navController: NavHostController) {
             onShowPlantDetails = { plantId, row, column ->
                 navController.showScreen(
                     PlantDetailsFeature.routeWithArgs(
-                        origin = "${MyGardenFeature.route()}${PlantCatalogFeature.baseRoute()}",
+                        origin = "${MyGardenFeature.baseRoute()}${PlantCatalogFeature.baseRoute()}",
                         plantId = plantId,
                         row = row,
                         column = column,
@@ -86,17 +87,17 @@ fun NavGraphBuilder.myGardenGraph(navController: NavHostController) {
                     )
                 )
             },
-            origin = MyGardenFeature.route()
+            origin = MyGardenFeature.baseRoute()
         )
 
         addImageGalleryScreen(
             navController = navController,
-            origin = "${MyGardenFeature.route()}${PlantDetailsFeature.baseRoute()}"
+            origin = "${MyGardenFeature.baseRoute()}${PlantDetailsFeature.baseRoute()}"
         )
 
         addImageGalleryScreen(
             navController = navController,
-            origin = "${MyGardenFeature.route()}${PlantCatalogFeature.baseRoute()}${PlantDetailsFeature.baseRoute()}"
+            origin = "${MyGardenFeature.baseRoute()}${PlantCatalogFeature.baseRoute()}${PlantDetailsFeature.baseRoute()}"
         )
     }
 }

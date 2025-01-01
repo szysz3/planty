@@ -15,7 +15,7 @@ import szysz3.planty.screen.plantdetails.addPlantDetailsScreen
 
 fun NavGraphBuilder.plantCatalogGraph(navController: NavHostController) {
     navigation(
-        startDestination = PlantCatalogFeature.baseRoute(),
+        startDestination = PlantCatalogFeature.route(),
         route = BottomBarNavigationItems.PlantCatalog.route
     ) {
         addPlantCatalogScreen(

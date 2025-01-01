@@ -4,39 +4,30 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import szysz3.planty.navigation.FeatureRoute
+import szysz3.planty.navigation.buildQueryString
+import szysz3.planty.navigation.requiredIntArg
 import szysz3.planty.navigation.staticComposable
 import szysz3.planty.screen.imagegallery.ImageGalleryFeature.IMAGE_GALLERY_PLANT_ID_ARG_NAME
 import szysz3.planty.screen.imagegallery.screen.ImageGalleryScreen
-import szysz3.planty.screen.plantdetails.PlantDetailsFeature.PLANT_DETAILS_PLANT_ID_ARG_NAME
 
-object ImageGalleryFeature {
+object ImageGalleryFeature : FeatureRoute {
     const val TITLE = "Image Gallery"
     const val IMAGE_GALLERY_PLANT_ID_ARG_NAME = "plantId"
 
     private const val BASE_ROUTE = "/imageGallery"
 
-    private const val BASE_ROUTE_WITH_ARGS =
-        "$BASE_ROUTE?$IMAGE_GALLERY_PLANT_ID_ARG_NAME={${IMAGE_GALLERY_PLANT_ID_ARG_NAME}}"
+    override val basePath: String = BASE_ROUTE
 
-    private fun baseRoute(origin: String = "") = "$origin${BASE_ROUTE}"
-
-    fun route(origin: String = "") = "$origin${BASE_ROUTE_WITH_ARGS}"
+    override val routeWithArgsPattern: String =
+        "$basePath?$IMAGE_GALLERY_PLANT_ID_ARG_NAME={$IMAGE_GALLERY_PLANT_ID_ARG_NAME}"
 
     fun routeWithArgs(
         origin: String = "",
         plantId: Int
     ): String {
-        val queryParams = buildList {
-            add("$PLANT_DETAILS_PLANT_ID_ARG_NAME=$plantId")
-        }
-
-        val finalRoute = if (queryParams.isNotEmpty()) {
-            "${baseRoute(origin)}?${queryParams.joinToString("&")}"
-        } else {
-            baseRoute(origin)
-        }
-
-        return finalRoute
+        val qs = buildQueryString(IMAGE_GALLERY_PLANT_ID_ARG_NAME to plantId)
+        return baseRoute(origin) + qs
     }
 }
 
@@ -45,22 +36,20 @@ fun NavGraphBuilder.addImageGalleryScreen(
     navController: NavHostController,
 ) {
     staticComposable(
-        route = ImageGalleryFeature.route(origin = origin),
+        route = ImageGalleryFeature.route(origin),
         arguments = listOf(
             navArgument(IMAGE_GALLERY_PLANT_ID_ARG_NAME) {
                 type = NavType.StringType
                 nullable = true
             }
-        )) { backStackEntry ->
-
-        val plantId =
-            backStackEntry.arguments?.getString(IMAGE_GALLERY_PLANT_ID_ARG_NAME)
-                ?: throw IllegalArgumentException("Argument 'plantId' is required and must not be null")
+        )
+    ) { backStackEntry ->
+        val plantId = backStackEntry.requiredIntArg(IMAGE_GALLERY_PLANT_ID_ARG_NAME)
 
         ImageGalleryScreen(
             title = ImageGalleryFeature.TITLE,
             navController = navController,
-            plantId = plantId.toInt()
+            plantId = plantId
         )
     }
 }

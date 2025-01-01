@@ -19,24 +19,28 @@ object BottomBarNavigationItems {
         icon = Icons.Rounded.Home,
         graphRoute = GRAPH
     )
+
     val TaskList = BottomNavItem(
         route = TaskListFeature.route(origin = GRAPH),
         title = TaskListFeature.TITLE,
         icon = Icons.Rounded.Done,
         graphRoute = GRAPH
     )
+
     val PlantId = BottomNavItem(
         route = PlantIdFeature.route(origin = GRAPH),
         title = PlantIdFeature.TITLE,
         icon = Icons.Rounded.Search,
         graphRoute = GRAPH
     )
+
     val PlantCatalog = BottomNavItem(
-        route = PlantCatalogFeature.baseRoute(origin = GRAPH),
+        route = PlantCatalogFeature.route(origin = GRAPH),
         title = PlantCatalogFeature.TITLE,
         icon = Icons.Rounded.Info,
         graphRoute = GRAPH
     )
+
     val items = listOf(
         MyGarden,
         TaskList,
