@@ -9,16 +9,6 @@ class DeleteTaskUseCase @Inject constructor(
     private val repository: TaskRepository
 ) : BaseUseCase<Task, Unit>() {
     override suspend fun invoke(input: Task) {
-        val tasks = repository.getTasks()
-            .toMutableList()
-            .apply {
-                remove(input)
-            }
-            .mapIndexed { index, task ->
-                task.copy(index = index)
-            }
-
         repository.deleteTask(input)
-        repository.saveTasks(tasks)
     }
 }

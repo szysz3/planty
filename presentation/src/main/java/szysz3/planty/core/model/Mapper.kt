@@ -11,7 +11,11 @@ fun SubTaskDomain.toPresentation(): SubTask {
         id = this.id,
         description = this.description,
         isCompleted = this.isCompleted,
-        cost = this.cost
+        cost = if (this.cost == 0f) {
+            null
+        } else {
+            this.cost
+        }
     )
 }
 
@@ -39,7 +43,7 @@ fun SubTask.toDomain(): SubTaskDomain {
         id = this.id,
         description = this.description,
         isCompleted = this.isCompleted,
-        cost = this.cost
+        cost = this.cost ?: 0f
     )
 }
 

@@ -139,7 +139,9 @@ fun TaskDetailsScreen(
                             )
                         },
                         onCostChange = { cost ->
-                            taskDetailsViewModel.updateSubTaskCost(subTask.id, cost)
+                            cost?.let {
+                                taskDetailsViewModel.updateSubTaskCost(subTask.id, it)
+                            }
                         }
                     )
 

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
@@ -17,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import szysz3.planty.core.model.SubTask
@@ -28,7 +26,7 @@ fun SubTaskRow(
     subTask: SubTask,
     onCheckedChange: ((Boolean) -> Unit)? = null,
     onDescriptionChange: ((String) -> Unit)? = null,
-    onCostChange: ((String) -> Unit)? = null
+    onCostChange: ((Float?) -> Unit)? = null
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -75,34 +73,11 @@ fun SubTaskRow(
                 .height(18.dp)
         )
         Spacer(modifier = Modifier.width(4.dp))
-        TextField(
+        CostTextField(
             modifier = Modifier.padding(start = 4.dp),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal), // For numeric input with decimals            keyboardType = KeyboardType.Decimal,
-            value = if (subTask.cost == 0f) {
-                ""
-            } else {
-                subTask.cost.toString()
-            },
-            onValueChange = { newText: String -> onCostChange?.invoke(newText) },
-            textStyle = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.onSurface,
-                textDecoration = if (subTask.isCompleted) TextDecoration.LineThrough else null
-            ),
-            placeholder = {
-                Text(
-                    text = "$10.00",
-                    textDecoration = if (subTask.isCompleted) TextDecoration.LineThrough else null,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
-            },
-            singleLine = true,
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Color.Transparent,
-                focusedContainerColor = Color.Transparent,
-                disabledContainerColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            )
-        )
+            initialValue = subTask.cost?.toString() ?: "",
+            onCostChange = {
+                onCostChange?.invoke(it)
+            })
     }
 }

@@ -82,11 +82,10 @@ class TaskDetailsViewModel @Inject constructor(
         _uiState.value = refreshState(updatedTask)
     }
 
-    fun updateSubTaskCost(subTaskId: Long, cost: String) {
+    fun updateSubTaskCost(subTaskId: Long, cost: Float) {
         val updatedTask = _uiState.value.task?.let { task ->
             val updatedSubTasks = task.subTasks.map {
-                val parsedCost = cost.toFloatOrNull() ?: 0f
-                if (it.id == subTaskId) it.copy(cost = parsedCost) else it
+                if (it.id == subTaskId) it.copy(cost = cost) else it
             }
             task.copy(
                 subTasks = updatedSubTasks
@@ -96,10 +95,18 @@ class TaskDetailsViewModel @Inject constructor(
     }
 
     fun addNewSubTask() {
-        val updatedTask = _uiState.value.task?.let { task ->
-            val newSubTask = SubTask(id = generateUniqueId(), description = "", isCompleted = false)
-            task.copy(subTasks = task.subTasks + newSubTask)
+        val currentTask = _uiState.value.task
+        val lastSubTask = currentTask.subTasks.lastOrNull()
+        if (lastSubTask != null && lastSubTask.description.isBlank()) {
+            return
         }
+
+        val newSubTask = SubTask(
+            id = generateUniqueId(),
+            description = "",
+            isCompleted = false
+        )
+        val updatedTask = currentTask.copy(subTasks = currentTask.subTasks + newSubTask)
         _uiState.value = refreshState(updatedTask)
     }
 
@@ -124,8 +131,8 @@ class TaskDetailsViewModel @Inject constructor(
     private fun refreshState(task: Task?): TaskDetailsScreenState {
         val activeSubTasks = task?.subTasks?.filter { !it.isCompleted }
         val completedSubTasks = task?.subTasks?.filter { it.isCompleted }
-        val completedSubTasksCost = completedSubTasks?.sumOf { it.cost.toDouble() }
-        val totalCost = task?.subTasks?.sumOf { it.cost.toDouble() }
+        val completedSubTasksCost = completedSubTasks?.sumOf { it.cost?.toDouble() ?: 0.0 }
+        val totalCost = task?.subTasks?.sumOf { it.cost?.toDouble() ?: 0.0 }
 
         return _uiState.value.copy(
             task = task ?: Task.empty(false),

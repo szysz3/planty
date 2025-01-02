@@ -10,10 +10,6 @@ class AddTaskUseCase @Inject constructor(
 ) : BaseUseCase<Task, Unit>() {
 
     override suspend fun invoke(input: Task) {
-        val existingTasks = repository.getTasks()
-        val shiftedExistingTasks = existingTasks.map { it.copy(index = it.index + 1) }
-        val newTask = input.copy(index = 0)
-
-        repository.saveTasks(shiftedExistingTasks + newTask)
+        repository.saveTask(input)
     }
 }

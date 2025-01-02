@@ -32,8 +32,8 @@ fun TaskCardView(
 ) {
     val completedSubTasks = task.subTasks.count { it.isCompleted }
     val totalSubTasks = task.subTasks.size
-    val completedCost = task.subTasks.filter { it.isCompleted }.sumOf { it.cost.toDouble() }
-    val totalCost = task.subTasks.sumOf { it.cost.toDouble() }
+    val completedCost = task.subTasks.filter { it.isCompleted }.sumOf { it.cost?.toDouble() ?: 0.0 }
+    val totalCost = task.subTasks.sumOf { it.cost?.toDouble() ?: 0.0 }
 
     Card(
         modifier = modifier
