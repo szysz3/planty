@@ -1,6 +1,5 @@
 package szysz3.planty.data.repository
 
-import androidx.room.Transaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -37,7 +36,27 @@ class GardenRepositoryImpl @Inject constructor(
         }
     }
 
-    @Transaction
+    override suspend fun updateGardenCell(row: Int, column: Int, plant: Plant?) {
+        withContext(Dispatchers.IO) {
+            val plantId = plant?.let {
+                gardenPlantDao.insertPlant(it.toGardenPlantEntity())
+            }
+
+            val existingCell = gardenCellDao.getCell(row, column)
+            val cellId =
+                existingCell?.id ?: 0 // 0 will force an INSERT with auto-gen if none exists
+
+            val updatedCellEntity = GardenCellEntity(
+                id = cellId,
+                row = row,
+                column = column,
+                plantId = plantId
+            )
+
+            gardenCellDao.insertSingle(updatedCellEntity)
+        }
+    }
+
     override suspend fun saveGardenState(gardenState: GardenState) {
         withContext(Dispatchers.IO) {
             clearGardenState()
