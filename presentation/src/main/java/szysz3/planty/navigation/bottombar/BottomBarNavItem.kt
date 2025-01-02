@@ -11,7 +11,19 @@ open class BottomNavItem(
     val graphRoute: String
 ) :
     NavigationItem(route, title) {
-    fun routeWithoutGraph(): String {
+
+    fun isEntryPointForGivenRoute(route: String?): Boolean {
+        route ?: return false
+        return getEntryPoint(route) == getEntryPoint(routeWithoutGraphPrefix())
+    }
+
+    private fun routeWithoutGraphPrefix(): String {
         return route.removePrefix(graphRoute)
+    }
+
+    private fun getEntryPoint(route: String): String? {
+        val regex = "/([^/?]+)".toRegex()
+        val matchResult = regex.find(route)
+        return matchResult?.groups?.get(1)?.value
     }
 }

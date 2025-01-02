@@ -17,15 +17,13 @@ fun BottomNavigationBar(
 ) {
     val items = BottomBarNavigationItems.items
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = currentBackStackEntry?.destination?.route
 
     BottomNavigation(
         backgroundColor = MaterialTheme.colorScheme.background,
     ) {
         items.forEach { item ->
             val isSelected =
-                currentRoute?.startsWith(item.routeWithoutGraph()) == true
-
+                item.isEntryPointForGivenRoute(currentBackStackEntry?.destination?.route)
             BottomNavigationItem(
                 icon = {
                     Icon(
@@ -47,7 +45,7 @@ fun BottomNavigationBar(
                 },
                 selected = isSelected,
                 onClick = {
-                    if (currentRoute == item.routeWithoutGraph()) {
+                    if (isSelected) {
                         return@BottomNavigationItem
                     }
 
