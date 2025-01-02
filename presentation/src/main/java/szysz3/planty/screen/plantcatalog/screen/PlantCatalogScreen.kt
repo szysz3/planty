@@ -20,7 +20,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,53 +53,48 @@ fun PlantCatalogScreen(
     plantCatalogViewModel: PlantCatalogViewModel = hiltViewModel(),
 ) {
     val focusManager = LocalFocusManager.current
-    val plants = plantCatalogViewModel.pagedPlants.collectAsLazyPagingItems()
-    val localSearchQuery =
-        remember { mutableStateOf(plantCatalogViewModel.searchQuery.value) }
 
-    EllipticalBackground(R.drawable.bcg2)
+    val plants = plantCatalogViewModel.pagedPlants.collectAsLazyPagingItems()
+    val searchQuery by plantCatalogViewModel.searchQuery.collectAsState()
 
     BaseScreen(
         title = title,
         showTopBar = true,
         showBottomBar = true,
         topBarBackNavigation = {
-            TopBarBackButton(showBackButton = origin == PlantCatalogConfig.PLANT,
-                onBackClick = {
-                    navController.popBackStack()
-                })
+            TopBarBackButton(
+                showBackButton = origin == PlantCatalogConfig.PLANT,
+                onBackClick = { navController.popBackStack() }
+            )
         },
         navController = navController
     ) { padding ->
-
+        EllipticalBackground(R.drawable.bcg2)
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
+                    indication = null
                 ) {
                     focusManager.clearFocus()
                 },
             contentAlignment = Alignment.Center
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
+            Column(modifier = Modifier.fillMaxSize()) {
+
                 // Search Bar
                 OutlinedTextField(
-                    value = localSearchQuery.value,
+                    value = searchQuery,
+                    onValueChange = { newValue ->
+                        plantCatalogViewModel.updateSearchQuery(newValue)
+                    },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done,
+                        imeAction = ImeAction.Done
                     ),
                     maxLines = 1,
-                    onValueChange = { value ->
-                        localSearchQuery.value = value
-                        plantCatalogViewModel.updateSearchQuery(value)
-                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
@@ -110,9 +106,8 @@ fun PlantCatalogScreen(
                         )
                     },
                     trailingIcon = {
-                        if (localSearchQuery.value.isNotEmpty()) {
+                        if (searchQuery.isNotEmpty()) {
                             IconButton(onClick = {
-                                localSearchQuery.value = ""
                                 plantCatalogViewModel.updateSearchQuery("")
                             }) {
                                 Icon(
@@ -121,7 +116,7 @@ fun PlantCatalogScreen(
                                 )
                             }
                         }
-                    },
+                    }
                 )
 
                 // Plant Grid
@@ -132,31 +127,25 @@ fun PlantCatalogScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    plants.apply {
-                        when (loadState.refresh) {
-                            is LoadState.Loading -> {
-                                items(10) {
-                                    PlantCard(modifier = Modifier.alpha(0.7f))
-                                }
+                    // Handle refresh and display placeholder cards if loading
+                    when (plants.loadState.refresh) {
+                        is LoadState.Loading -> {
+                            items(10) {
+                                PlantCard(modifier = Modifier.alpha(0.7f))
                             }
+                        }
 
-                            else -> {
-                                items(plants.itemCount) { index ->
-                                    val plant = plants[index]
-                                    PlantCard(
-                                        plant = plant,
-                                        onPlantSelected = {
-                                            plant?.let {
-                                                plantCatalogViewModel.selectPlant(plant)
-                                                onShowPlantDetails(
-                                                    plant.id,
-                                                    row,
-                                                    column,
-                                                )
-                                            }
+                        else -> {
+                            items(plants.itemCount) { index ->
+                                val plant = plants[index]
+                                PlantCard(
+                                    plant = plant,
+                                    onPlantSelected = {
+                                        plant?.let {
+                                            onShowPlantDetails(it.id, row, column)
                                         }
-                                    )
-                                }
+                                    }
+                                )
                             }
                         }
                     }

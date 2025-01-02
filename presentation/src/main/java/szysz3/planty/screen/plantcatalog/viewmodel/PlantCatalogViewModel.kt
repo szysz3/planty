@@ -13,9 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
-import szysz3.planty.core.model.Plant
 import szysz3.planty.domain.usecase.plant.PlantSearchUseCase
-import szysz3.planty.screen.plantcatalog.model.PlantCatalogScreenState
 import szysz3.planty.screen.plantcatalog.utils.PlantPagingSource
 import javax.inject.Inject
 
@@ -23,9 +21,6 @@ import javax.inject.Inject
 class PlantCatalogViewModel @Inject constructor(
     private val plantSearchUseCase: PlantSearchUseCase,
 ) : ViewModel() {
-
-    private val _uiState = MutableStateFlow(PlantCatalogScreenState())
-    val uiState: StateFlow<PlantCatalogScreenState> = _uiState
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
@@ -42,9 +37,5 @@ class PlantCatalogViewModel @Inject constructor(
 
     fun updateSearchQuery(query: String) {
         _searchQuery.update { query }
-    }
-
-    fun selectPlant(plant: Plant) {
-        _uiState.update { it.copy(selectedPlant = plant) }
     }
 }
