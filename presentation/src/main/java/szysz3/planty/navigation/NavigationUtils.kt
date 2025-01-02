@@ -57,13 +57,13 @@ fun NavGraphBuilder.staticComposable(
         fadeIn(animationSpec = tween(0))
     },
     exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = {
-        fadeOut(animationSpec = tween(durationMillis = 0))
+        fadeOut(animationSpec = tween(0))
     },
     popEnterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = {
         fadeIn(animationSpec = tween(0))
     },
     popExitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = {
-        fadeOut(animationSpec = tween(durationMillis = 0))
+        fadeOut(animationSpec = tween(0))
     },
     content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
 ) {
@@ -81,6 +81,6 @@ fun NavGraphBuilder.staticComposable(
 fun NavHostController.showScreen(route: String) {
     navigate(route) {
         launchSingleTop = true
-        restoreState = false
+        restoreState = true
     }
 }
