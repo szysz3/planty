@@ -30,7 +30,7 @@ import szysz3.planty.core.composable.RoundedButton
 @Composable
 fun GardenDimensionsInput(
     bottomSheetState: SheetState,
-    maxDimension: Int = 50,
+    maxDimension: Int = 20,
     onDismissRequest: () -> Unit,
     onDimensionsSubmitted: (Int, Int) -> Unit
 ) {

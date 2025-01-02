@@ -47,6 +47,10 @@ fun BottomNavigationBar(
                 },
                 selected = isSelected,
                 onClick = {
+                    if (currentRoute == item.routeWithoutGraph()) {
+                        return@BottomNavigationItem
+                    }
+
                     navController.navigate(item.route) {
                         while (navController.popBackStack()) {
                             // clear backstack
