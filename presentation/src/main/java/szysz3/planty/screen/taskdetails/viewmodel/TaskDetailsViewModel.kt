@@ -47,10 +47,10 @@ class TaskDetailsViewModel @Inject constructor(
 
     fun updateSubTaskDescription(subTaskId: Long, newDescription: String) {
         val updatedTask = _uiState.value.task?.let { task ->
-            val updatedSubTasks = task.tasks.map {
+            val updatedSubTasks = task.subTasks.map {
                 if (it.id == subTaskId) it.copy(description = newDescription) else it
             }
-            task.copy(tasks = updatedSubTasks)
+            task.copy(subTasks = updatedSubTasks)
         }
         _uiState.value = refreshState(updatedTask)
     }
@@ -72,11 +72,11 @@ class TaskDetailsViewModel @Inject constructor(
 
     fun toggleSubTaskCompletion(subTaskId: Long, isCompleted: Boolean) {
         val updatedTask = _uiState.value.task?.let { task ->
-            val updatedSubTasks = task.tasks.map {
+            val updatedSubTasks = task.subTasks.map {
                 if (it.id == subTaskId) it.copy(isCompleted = isCompleted) else it
             }
             task.copy(
-                tasks = updatedSubTasks,
+                subTasks = updatedSubTasks,
                 isCompleted = updatedSubTasks.all { it.isCompleted })
         }
         _uiState.value = refreshState(updatedTask)
@@ -84,12 +84,12 @@ class TaskDetailsViewModel @Inject constructor(
 
     fun updateSubTaskCost(subTaskId: Long, cost: String) {
         val updatedTask = _uiState.value.task?.let { task ->
-            val updatedSubTasks = task.tasks.map {
+            val updatedSubTasks = task.subTasks.map {
                 val parsedCost = cost.toFloatOrNull() ?: 0f
                 if (it.id == subTaskId) it.copy(cost = parsedCost) else it
             }
             task.copy(
-                tasks = updatedSubTasks
+                subTasks = updatedSubTasks
             )
         }
         _uiState.value = refreshState(updatedTask)
@@ -98,7 +98,7 @@ class TaskDetailsViewModel @Inject constructor(
     fun addNewSubTask() {
         val updatedTask = _uiState.value.task?.let { task ->
             val newSubTask = SubTask(id = generateUniqueId(), description = "", isCompleted = false)
-            task.copy(tasks = task.tasks + newSubTask)
+            task.copy(subTasks = task.subTasks + newSubTask)
         }
         _uiState.value = refreshState(updatedTask)
     }
@@ -122,10 +122,10 @@ class TaskDetailsViewModel @Inject constructor(
     }
 
     private fun refreshState(task: Task?): TaskDetailsScreenState {
-        val activeSubTasks = task?.tasks?.filter { !it.isCompleted }
-        val completedSubTasks = task?.tasks?.filter { it.isCompleted }
+        val activeSubTasks = task?.subTasks?.filter { !it.isCompleted }
+        val completedSubTasks = task?.subTasks?.filter { it.isCompleted }
         val completedSubTasksCost = completedSubTasks?.sumOf { it.cost.toDouble() }
-        val totalCost = task?.tasks?.sumOf { it.cost.toDouble() }
+        val totalCost = task?.subTasks?.sumOf { it.cost.toDouble() }
 
         return _uiState.value.copy(
             task = task ?: Task.empty(false),

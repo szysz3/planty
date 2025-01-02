@@ -7,7 +7,7 @@ import szysz3.planty.theme.LightCardColors
 data class Task(
     val id: Long = 0,
     val title: String,
-    val tasks: List<SubTask>,
+    val subTasks: List<SubTask>,
     val isCompleted: Boolean = false,
     val color: Color = Color.Transparent,
     val index: Int = 0,
@@ -17,7 +17,7 @@ data class Task(
         fun empty(isDarkMode: Boolean): Task {
             return Task(
                 title = "",
-                tasks = emptyList(),
+                subTasks = emptyList(),
                 color = if (isDarkMode) {
                     DarkCardColors.random()
                 } else {

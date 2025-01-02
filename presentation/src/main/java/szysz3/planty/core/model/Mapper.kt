@@ -19,7 +19,7 @@ fun TaskDomain.toPresentation(): Task {
     return Task(
         id = this.id,
         title = this.title,
-        tasks = this.subTasks.map { it.toPresentation() },
+        subTasks = this.subTasks.map { it.toPresentation() },
         isCompleted = this.isCompleted,
         color = Color(color),
         index = this.index
@@ -47,7 +47,7 @@ fun Task.toDomain(): TaskDomain {
     return TaskDomain(
         id = this.id,
         title = this.title,
-        subTasks = this.tasks.map { it.toDomain() },
+        subTasks = this.subTasks.map { it.toDomain() },
         isCompleted = this.isCompleted,
         color = this.color.toArgb(),
         index = this.index
