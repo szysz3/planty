@@ -1,7 +1,6 @@
 package szysz3.planty.screen.plantid.composable
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,9 +27,12 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import szysz3.planty.R
 import szysz3.planty.core.model.Plant
 import szysz3.planty.screen.plantid.model.PlantResult
@@ -53,7 +55,7 @@ fun PlantResultCard(plantResult: PlantResult, onCardClick: (plant: Plant?) -> Un
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .size(48.dp)
+                        .size(64.dp)
                         .rotate(45f)
                         .offset(y = (-48).dp)
                         .background(color = MaterialTheme.colorScheme.primary)
@@ -70,9 +72,15 @@ fun PlantResultCard(plantResult: PlantResult, onCardClick: (plant: Plant?) -> Un
                         .wrapContentHeight()
                         .padding(top = 16.dp, start = 16.dp, end = 16.dp)
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.plant_placeholder),
-                        contentDescription = "plant image placeholder",
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(plantResult.plant?.imageUrls?.firstOrNull())
+                            .crossfade(true)
+                            .placeholder(R.drawable.plant_placeholder)
+                            .error(R.drawable.plant_placeholder)
+                            .build(),
+                        contentScale = ContentScale.Crop,
+                        contentDescription = plantResult.plant?.commonName,
                         modifier = Modifier
                             .size(100.dp)
                             .clip(CircleShape)
