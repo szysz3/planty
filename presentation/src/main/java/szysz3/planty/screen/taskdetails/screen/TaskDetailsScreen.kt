@@ -49,7 +49,6 @@ fun TaskDetailsScreen(
     val isDarkMode = isSystemInDarkTheme()
     val focusRequester = remember { FocusRequester() }
 
-    // Update theme and load task
     LaunchedEffect(isDarkMode) {
         taskDetailsViewModel.updateTheme(isDarkMode)
     }
@@ -153,7 +152,6 @@ fun TaskDetailsScreen(
                     }
                 }
 
-                // Add New SubTask
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -169,14 +167,12 @@ fun TaskDetailsScreen(
                     )
                 }
 
-                // Divider
                 if (uiState.completedSubTasks.isNotEmpty()) {
                     Divider(
                         modifier = Modifier.padding(vertical = 8.dp),
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                     )
 
-                    // Completed SubTasks
                     uiState.completedSubTasks.forEach { subTask ->
                         SubTaskRow(
                             subTask = subTask,
@@ -186,7 +182,6 @@ fun TaskDetailsScreen(
             }
 
             Row(modifier = Modifier.fillMaxWidth()) {
-                // Save Button
                 RoundedButton(
                     modifier = Modifier
                         .fillMaxWidth(0.5f)

@@ -1,12 +1,10 @@
 package szysz3.planty.domain.usecase.task
 
 import szysz3.planty.domain.model.Task
-import szysz3.planty.domain.repository.TaskRepository
 import szysz3.planty.domain.usecase.base.BaseUseCase
 import javax.inject.Inject
 
 class UpdateTaskOrderUseCase @Inject constructor(
-    private val repository: TaskRepository
 ) : BaseUseCase<UpdateTaskOrderUseCaseParams, List<Task>>() {
     override suspend fun invoke(input: UpdateTaskOrderUseCaseParams): List<Task> {
         return input.tasks

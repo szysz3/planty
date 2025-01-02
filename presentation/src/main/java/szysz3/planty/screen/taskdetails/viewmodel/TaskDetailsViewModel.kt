@@ -11,17 +11,16 @@ import szysz3.planty.core.model.SubTask
 import szysz3.planty.core.model.Task
 import szysz3.planty.core.model.toDomain
 import szysz3.planty.core.model.toPresentation
-import szysz3.planty.domain.usecase.task.AddTaskUseCase
 import szysz3.planty.domain.usecase.task.DeleteTaskUseCase
 import szysz3.planty.domain.usecase.task.GetTaskByIdUseCase
+import szysz3.planty.domain.usecase.task.SaveTaskUseCase
 import szysz3.planty.screen.taskdetails.model.TaskDetailsScreenState
 import javax.inject.Inject
 
 @HiltViewModel
 class TaskDetailsViewModel @Inject constructor(
     private val getTaskByIdUseCase: GetTaskByIdUseCase,
-    private val addTaskUseCase: AddTaskUseCase,
-    private val updateTaskUseCase: AddTaskUseCase,
+    private val saveTaskUseCase: SaveTaskUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase
 ) : ViewModel() {
 
@@ -46,7 +45,7 @@ class TaskDetailsViewModel @Inject constructor(
     }
 
     fun updateSubTaskDescription(subTaskId: Long, newDescription: String) {
-        val updatedTask = _uiState.value.task?.let { task ->
+        val updatedTask = _uiState.value.task.let { task ->
             val updatedSubTasks = task.subTasks.map {
                 if (it.id == subTaskId) it.copy(description = newDescription) else it
             }
@@ -66,12 +65,12 @@ class TaskDetailsViewModel @Inject constructor(
     }
 
     fun updateTaskTitle(newTitle: String) {
-        val updatedTask = _uiState.value.task?.copy(title = newTitle)
+        val updatedTask = _uiState.value.task.copy(title = newTitle)
         _uiState.value = refreshState(updatedTask)
     }
 
     fun toggleSubTaskCompletion(subTaskId: Long, isCompleted: Boolean) {
-        val updatedTask = _uiState.value.task?.let { task ->
+        val updatedTask = _uiState.value.task.let { task ->
             val updatedSubTasks = task.subTasks.map {
                 if (it.id == subTaskId) it.copy(isCompleted = isCompleted) else it
             }
@@ -83,7 +82,7 @@ class TaskDetailsViewModel @Inject constructor(
     }
 
     fun updateSubTaskCost(subTaskId: Long, cost: Float) {
-        val updatedTask = _uiState.value.task?.let { task ->
+        val updatedTask = _uiState.value.task.let { task ->
             val updatedSubTasks = task.subTasks.map {
                 if (it.id == subTaskId) it.copy(cost = cost) else it
             }
@@ -111,16 +110,16 @@ class TaskDetailsViewModel @Inject constructor(
     }
 
     fun saveNewTask() {
-        val taskToSave = _uiState.value.task ?: return
+        val taskToSave = _uiState.value.task
         viewModelScope.launch {
-            addTaskUseCase(taskToSave.toDomain())
+            saveTaskUseCase(taskToSave.toDomain())
         }
     }
 
     fun updateTask() {
-        val taskToUpdate = _uiState.value.task ?: return
+        val taskToUpdate = _uiState.value.task
         viewModelScope.launch {
-            updateTaskUseCase(taskToUpdate.toDomain())
+            saveTaskUseCase(taskToUpdate.toDomain())
         }
     }
 
