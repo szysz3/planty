@@ -48,9 +48,10 @@ fun BottomNavigationBar(
                 selected = isSelected,
                 onClick = {
                     navController.navigate(item.route) {
-                        popUpTo(navController.graph.startDestinationId) {
-                            saveState = true
+                        while (navController.popBackStack()) {
+                            // clear backstack
                         }
+
                         launchSingleTop = true
                         restoreState = true
                     }
