@@ -37,6 +37,7 @@ import szysz3.planty.core.util.PermissionUtils
 import szysz3.planty.core.util.openWebSearch
 import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.plantid.composable.PlantResultCard
+import szysz3.planty.screen.plantid.model.PlantIdState
 import szysz3.planty.screen.plantid.viewmodel.PlantIdViewModel
 
 @Composable
@@ -91,10 +92,17 @@ fun PlantIdScreen(
                 .padding(padding),
             contentAlignment = Alignment.Center
         ) {
-            if (uiState.isLoading) {
-                CircularProgressIndicator(color = MaterialTheme.colorScheme.onBackground)
-            } else {
-                uiState.identifiedPlants?.let { plants ->
+            when (val result = uiState.plantIdResult) {
+                is PlantIdState.Idle -> {
+                    // Nothing to show..
+                    // or maybe placeholder in the future
+                }
+
+                is PlantIdState.Loading -> {
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.onBackground)
+                }
+
+                is PlantIdState.Success -> {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
@@ -102,7 +110,7 @@ fun PlantIdScreen(
                         contentPadding = PaddingValues(vertical = 8.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        items(plants) { plantIdResult ->
+                        items(result.plants) { plantIdResult ->
                             PlantResultCard(plantResult = plantIdResult) { plant ->
                                 if (plant != null) {
                                     onShowPlantDetails(plant.id)
@@ -112,14 +120,20 @@ fun PlantIdScreen(
                             }
                         }
                     }
-                } ?: uiState.errorMessage?.let { error ->
-                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-                    viewModel.clearErrorMessage()
+                }
+
+                is PlantIdState.Error -> {
+                    Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+
+                    LaunchedEffect(Unit) {
+                        viewModel.clearResults()
+                    }
                 }
             }
 
             AnimatedVisibility(
-                visible = uiState.identifiedPlants?.isEmpty() == true || !uiState.isLoading,
+                visible = (uiState.plantIdResult is PlantIdState.Idle
+                        || uiState.plantIdResult is PlantIdState.Error)
             ) {
                 FloatingActionButton(
                     icon = Icons.Rounded.Search,
@@ -135,10 +149,10 @@ fun PlantIdScreen(
             }
 
             AnimatedVisibility(
-                visible = uiState.identifiedPlants?.isNotEmpty() == true,
+                uiState.plantIdResult is PlantIdState.Success
             ) {
                 FloatingActionButton(
-                    icon = Icons.Rounded.Clear, // Replace with your desired icon
+                    icon = Icons.Rounded.Clear,
                     contentDescription = "Second action",
                     onClick = {
                         viewModel.clearResults()

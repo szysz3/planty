@@ -233,7 +233,7 @@ fun PlantDetailsScreen(
 
                     EvenGrid(
                         items = elements,
-                        columns = 2, // Set the number of columns
+                        columns = 2,
                         modifier = Modifier.fillMaxWidth(),
                         createItem = { item ->
                             ImageWithTextHorizontal(

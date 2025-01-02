@@ -13,6 +13,7 @@ import szysz3.planty.domain.usecase.photo.DeleteTempPhotoFileUseCase
 import szysz3.planty.domain.usecase.plant.IdentifyPlantUseCase
 import szysz3.planty.domain.usecase.plant.IdentifyPlantsParams
 import szysz3.planty.screen.plantid.model.PlantIdScreenState
+import szysz3.planty.screen.plantid.model.PlantIdState
 import szysz3.planty.screen.plantid.model.toPresentationModel
 import timber.log.Timber
 import javax.inject.Inject
@@ -29,8 +30,12 @@ class PlantIdViewModel @Inject constructor(
 
     fun identifyPlant() {
         viewModelScope.launch {
-            val uri = _uiState.value.photoUri ?: return@launch
-            _uiState.value = _uiState.value.copy(isLoading = true)
+            val currentState = _uiState.value
+            val uri = currentState.photoUri ?: return@launch
+
+            _uiState.value = currentState.copy(
+                plantIdResult = PlantIdState.Loading
+            )
 
             val idParams = IdentifyPlantsParams(
                 apiKey = BuildConfig.API_KEY,
@@ -39,16 +44,16 @@ class PlantIdViewModel @Inject constructor(
 
             try {
                 val result = identifyPlantUseCase(idParams)
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    photoUploaded = true,
-                    identifiedPlants = result?.toPresentationModel()
+                val plants = result?.toPresentationModel() ?: emptyList()
+
+                _uiState.value = currentState.copy(
+                    plantIdResult = PlantIdState.Success(plants),
+                    photoUploaded = true
                 )
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
-                    errorMessage = "Error identifying plant: ${e.message}",
-                    isLoading = false,
-                    identifiedPlants = null
+                _uiState.value = currentState.copy(
+                    plantIdResult = PlantIdState.Error("Error identifying plant: ${e.message}"),
+                    photoUploaded = false
                 )
             }
 
@@ -58,23 +63,22 @@ class PlantIdViewModel @Inject constructor(
         }
     }
 
-    fun clearResults() {
-        _uiState.value = _uiState.value.copy(identifiedPlants = null)
-        clearErrorMessage()
-    }
-
-    fun clearErrorMessage() {
-        _uiState.value = _uiState.value.copy(errorMessage = null)
-    }
-
     fun createPhotoFile() {
         viewModelScope.launch {
             val uri = createFileUseCase(NoParams())
             _uiState.value = _uiState.value.copy(
                 photoUri = uri,
-                photoUploaded = false,
-                identifiedPlants = null
+                plantIdResult = PlantIdState.Idle,
+                photoUploaded = false
             )
         }
+    }
+
+    fun clearResults() {
+        _uiState.value = _uiState.value.copy(
+            plantIdResult = PlantIdState.Idle,
+            photoUri = null,
+            photoUploaded = false
+        )
     }
 }

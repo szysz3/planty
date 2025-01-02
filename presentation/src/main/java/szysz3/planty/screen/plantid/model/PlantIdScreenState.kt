@@ -4,8 +4,6 @@ import android.net.Uri
 
 data class PlantIdScreenState(
     val photoUri: Uri? = null,
-    val isLoading: Boolean = false,
-    val photoUploaded: Boolean = false,
-    val identifiedPlants: List<PlantResult>? = null,
-    val errorMessage: String? = null
+    val plantIdResult: PlantIdState = PlantIdState.Idle,
+    val photoUploaded: Boolean = false
 )

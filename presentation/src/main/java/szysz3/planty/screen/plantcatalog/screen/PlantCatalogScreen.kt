@@ -119,7 +119,6 @@ fun PlantCatalogScreen(
                     }
                 )
 
-                // Plant Grid
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(minSize = 150.dp),
                     contentPadding = PaddingValues(16.dp),
@@ -127,7 +126,6 @@ fun PlantCatalogScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // Handle refresh and display placeholder cards if loading
                     when (plants.loadState.refresh) {
                         is LoadState.Loading -> {
                             items(10) {

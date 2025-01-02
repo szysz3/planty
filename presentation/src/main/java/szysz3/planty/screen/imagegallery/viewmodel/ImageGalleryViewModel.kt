@@ -23,10 +23,10 @@ class ImageGalleryViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.emit(
                 _uiState.value.copy(
-                    imageUrls = getPlantUseCase(plantId)?.toPresentationModel()?.imageUrls
+                    imageUrls = getPlantUseCase(plantId)
+                        ?.toPresentationModel()?.imageUrls
                 )
             )
         }
     }
-
 }
