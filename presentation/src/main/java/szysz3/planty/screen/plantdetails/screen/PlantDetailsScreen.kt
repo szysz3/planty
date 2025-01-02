@@ -54,7 +54,6 @@ import szysz3.planty.screen.plantdetails.model.mapShadeToString
 import szysz3.planty.screen.plantdetails.model.mapSoilToString
 import szysz3.planty.screen.plantdetails.model.mapWellDrainedToString
 import szysz3.planty.screen.plantdetails.viewmodel.PlantDetailsViewModel
-import timber.log.Timber
 
 @Composable
 fun PlantDetailsScreen(
@@ -71,10 +70,8 @@ fun PlantDetailsScreen(
     val uiState by plantDetailsViewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    Timber.d("-----> plant details: row: $row, column: $column")
-
     LaunchedEffect(Unit) {
-        plantDetailsViewModel.updatePlantId(plantId)
+        plantDetailsViewModel.initialize(config, plantId, row, column)
     }
 
     BaseScreen(
@@ -83,7 +80,7 @@ fun PlantDetailsScreen(
         showBottomBar = true,
         topBarActions = {
             TopBarDeleteButton(
-                showDeleteButton = config == PlantDetailsConfig.DELETE,
+                showDeleteButton = uiState.isDeleteButtonVisible,
                 onDeleteClick = {
                     plantDetailsViewModel.showDeleteDialog(true)
                 }
@@ -272,12 +269,10 @@ fun PlantDetailsScreen(
                     }
                 }
 
-                if (config == PlantDetailsConfig.PLANT) {
+                if (uiState.isPlantButtonVisible) {
                     RoundedButton(
                         onClick = {
                             plantDetailsViewModel.persistPlant(
-                                row = row,
-                                column = column,
                                 plant = plant
                             )
                             if (onPlantChosen != null) {
@@ -299,8 +294,6 @@ fun PlantDetailsScreen(
                 dismissButtonText = "Cancel",
                 onConfirmDelete = {
                     plantDetailsViewModel.persistPlant(
-                        row = row,
-                        column = column,
                         plant = null
                     )
                     plantDetailsViewModel.showDeleteDialog(false)

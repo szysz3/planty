@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import szysz3.planty.core.model.Plant
+import szysz3.planty.core.model.PlantDetailsConfig
 import szysz3.planty.core.model.toDomain
 import szysz3.planty.core.model.toPresentationModel
 import szysz3.planty.domain.usecase.garden.SaveGardenCellUseCase
@@ -25,14 +26,24 @@ class PlantDetailsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(PlantDetailScreenState())
     val uiState: StateFlow<PlantDetailScreenState> = _uiState
 
-    fun updatePlantId(plantId: Int) {
+    fun initialize(
+        config: PlantDetailsConfig,
+        plantId: Int,
+        row: Int?,
+        column: Int?
+    ) {
         viewModelScope.launch {
-            _uiState.emit(
-                _uiState.value.copy(
+            val plant = getPlantUseCase(plantId)
+            _uiState.update { state ->
+                state.copy(
                     plantId = plantId,
-                    selectedPlant = getPlantUseCase(plantId)?.toPresentationModel()
+                    selectedPlant = plant?.toPresentationModel(),
+                    row = row,
+                    column = column,
+                    isDeleteButtonVisible = config == PlantDetailsConfig.DELETE,
+                    isPlantButtonVisible = config == PlantDetailsConfig.PLANT
                 )
-            )
+            }
         }
     }
 
@@ -40,8 +51,10 @@ class PlantDetailsViewModel @Inject constructor(
         _uiState.update { it.copy(isDeleteDialogVisible = show) }
     }
 
-    fun persistPlant(row: Int?, column: Int?, plant: Plant?) {
+    fun persistPlant(plant: Plant?) {
         viewModelScope.launch {
+            val row = _uiState.value.row
+            val column = _uiState.value.column
             if (row == null || column == null) return@launch
             saveGardenCellUseCase(
                 SaveGardenCellUseCaseParams(
