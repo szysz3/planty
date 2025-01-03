@@ -34,7 +34,7 @@ class TaskDetailsViewModel @Inject constructor(
     }
 
     fun showDeleteDialog(show: Boolean) {
-        _uiState.update { it.copy(isDeleteDialogVisible = show) }
+        _uiState.update { state -> state.copy(isDeleteDialogVisible = show) }
     }
 
     fun loadTask(taskId: Long?) {
@@ -81,15 +81,15 @@ class TaskDetailsViewModel @Inject constructor(
     }
 
     fun updateSubTaskDescription(subTaskId: Long, newDescription: String) {
-        updateSubTask(subTaskId) { it.copy(description = newDescription) }
+        updateSubTask(subTaskId) { state -> state.copy(description = newDescription) }
     }
 
     fun toggleSubTaskCompletion(subTaskId: Long, isCompleted: Boolean) {
-        updateSubTask(subTaskId) { it.copy(isCompleted = isCompleted) }
+        updateSubTask(subTaskId) { state -> state.copy(isCompleted = isCompleted) }
     }
 
     fun updateSubTaskCost(subTaskId: Long, cost: Float) {
-        updateSubTask(subTaskId) { it.copy(cost = cost) }
+        updateSubTask(subTaskId) { state -> state.copy(cost = cost) }
     }
 
     private fun updateSubTask(

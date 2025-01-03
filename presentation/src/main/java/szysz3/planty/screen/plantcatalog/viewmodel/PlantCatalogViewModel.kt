@@ -32,7 +32,7 @@ class PlantCatalogViewModel @Inject constructor(
             Pager(
                 config = PagingConfig(
                     pageSize = 20,
-                    enablePlaceholders = false
+                    enablePlaceholders = true
                 ),
                 pagingSourceFactory = { PlantPagingSource(plantSearchUseCase, searchQuery) }
             ).flow.cachedIn(viewModelScope)

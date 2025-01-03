@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import szysz3.planty.BuildConfig
 import szysz3.planty.domain.usecase.base.NoParams
@@ -30,12 +31,11 @@ class PlantIdViewModel @Inject constructor(
 
     fun identifyPlant() {
         viewModelScope.launch {
-            val currentState = _uiState.value
-            val uri = currentState.photoUri ?: return@launch
+            val uri = _uiState.value.photoUri ?: return@launch
 
-            _uiState.value = currentState.copy(
-                plantIdResult = PlantIdState.Loading
-            )
+            _uiState.update {
+                it.copy(plantIdResult = PlantIdState.Loading)
+            }
 
             val idParams = IdentifyPlantsParams(
                 apiKey = BuildConfig.API_KEY,
@@ -46,15 +46,19 @@ class PlantIdViewModel @Inject constructor(
                 val result = identifyPlantUseCase(idParams)
                 val plants = result?.toPresentationModel() ?: emptyList()
 
-                _uiState.value = currentState.copy(
-                    plantIdResult = PlantIdState.Success(plants),
-                    photoUploaded = true
-                )
+                _uiState.update { state ->
+                    state.copy(
+                        plantIdResult = PlantIdState.Success(plants),
+                        photoUploaded = true
+                    )
+                }
             } catch (e: Exception) {
-                _uiState.value = currentState.copy(
-                    plantIdResult = PlantIdState.Error("Error identifying plant: ${e.message}"),
-                    photoUploaded = false
-                )
+                _uiState.update { state ->
+                    state.copy(
+                        plantIdResult = PlantIdState.Error("Error identifying plant: ${e.message}"),
+                        photoUploaded = false
+                    )
+                }
             }
 
             if (!deleteFileUseCase(uri)) {
@@ -66,19 +70,23 @@ class PlantIdViewModel @Inject constructor(
     fun createPhotoFile() {
         viewModelScope.launch {
             val uri = createFileUseCase(NoParams())
-            _uiState.value = _uiState.value.copy(
-                photoUri = uri,
-                plantIdResult = PlantIdState.Idle,
-                photoUploaded = false
-            )
+            _uiState.update { state ->
+                state.copy(
+                    photoUri = uri,
+                    plantIdResult = PlantIdState.Idle,
+                    photoUploaded = false
+                )
+            }
         }
     }
 
     fun clearResults() {
-        _uiState.value = _uiState.value.copy(
-            plantIdResult = PlantIdState.Idle,
-            photoUri = null,
-            photoUploaded = false
-        )
+        _uiState.update { state ->
+            state.copy(
+                plantIdResult = PlantIdState.Idle,
+                photoUri = null,
+                photoUploaded = false
+            )
+        }
     }
 }

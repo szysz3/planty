@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import szysz3.planty.core.model.toDomain
 import szysz3.planty.core.model.toPresentation
@@ -32,7 +33,9 @@ class TaskListViewModel @Inject constructor(
             observeTasksUseCase(NoParams())
                 .distinctUntilChanged()
                 .collect { tasks ->
-                    _uiState.value = _uiState.value.copy(tasks = tasks.toPresentation())
+                    _uiState.update { state ->
+                        state.copy(tasks = tasks.toPresentation())
+                    }
                 }
         }
     }
@@ -53,7 +56,9 @@ class TaskListViewModel @Inject constructor(
                 )
             )
 
-            _uiState.value = _uiState.value.copy(tasks = updatedTasks.toPresentation())
+            _uiState.update { state ->
+                state.copy(tasks = updatedTasks.toPresentation())
+            }
         }
     }
 }
