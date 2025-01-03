@@ -70,4 +70,24 @@ class TaskRepositoryImpl @Inject constructor(private val taskDao: TaskDao) : Tas
         )
         taskDao.insertSubTasks(listOf(newSubTaskEntity))
     }
+
+    override suspend fun updateTask(task: Task) {
+        val taskEntity = task.toEntity().first
+        taskDao.updateTask(taskEntity)
+
+        val subTaskEntities = task.subTasks.map { it.toEntity(task.id) }
+        taskDao.updateSubTasks(subTaskEntities)
+    }
+
+    override suspend fun updateTasks(tasks: List<Task>) {
+        val taskEntities = tasks.map { it.toEntity().first }
+        taskDao.updateTasks(taskEntities)
+
+        val allSubTaskEntities = tasks.flatMap { task ->
+            task.subTasks.map { subTask ->
+                subTask.toEntity(task.id)
+            }
+        }
+        taskDao.updateSubTasks(allSubTaskEntities)
+    }
 }

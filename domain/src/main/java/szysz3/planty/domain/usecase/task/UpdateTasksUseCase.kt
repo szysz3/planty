@@ -8,7 +8,8 @@ import javax.inject.Inject
 class UpdateTasksUseCase @Inject constructor(
     private val repository: TaskRepository
 ) : BaseUseCase<List<Task>, Unit>() {
+
     override suspend fun invoke(input: List<Task>) {
-        return repository.saveTasks(input)
+        return repository.updateTasks(input)
     }
 }

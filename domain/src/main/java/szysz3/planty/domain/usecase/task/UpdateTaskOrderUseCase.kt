@@ -6,6 +6,7 @@ import javax.inject.Inject
 
 class UpdateTaskOrderUseCase @Inject constructor(
 ) : BaseUseCase<UpdateTaskOrderUseCaseParams, List<Task>>() {
+
     override suspend fun invoke(input: UpdateTaskOrderUseCaseParams): List<Task> {
         return input.tasks
             .toMutableList()

@@ -8,6 +8,7 @@ import javax.inject.Inject
 class DeleteTaskUseCase @Inject constructor(
     private val repository: TaskRepository
 ) : BaseUseCase<Task, Unit>() {
+
     override suspend fun invoke(input: Task) {
         repository.deleteTask(input)
     }

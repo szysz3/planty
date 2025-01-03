@@ -19,5 +19,9 @@ interface TaskRepository {
 
     suspend fun updateSubTaskCompletion(taskId: Long, subTask: SubTask, isCompleted: Boolean)
 
-    suspend fun addSubTask(taskId: Long, description: String, cost: Int = 0)
+    suspend fun updateTasks(tasks: List<Task>)
+
+    suspend fun updateTask(task: Task)
+
+    suspend fun addSubTask(taskId: Long, description: String, cost: Int)
 }

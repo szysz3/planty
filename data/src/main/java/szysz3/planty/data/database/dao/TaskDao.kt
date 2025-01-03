@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import szysz3.planty.data.database.entity.SubTaskEntity
 import szysz3.planty.data.database.entity.TaskEntity
@@ -19,7 +20,7 @@ interface TaskDao {
 
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTasks(tasks: List<TaskEntity>): List<Long> // Insert multiple tasks
+    suspend fun insertTasks(tasks: List<TaskEntity>): List<Long>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSubTasks(subTasks: List<SubTaskEntity>)
@@ -41,4 +42,13 @@ interface TaskDao {
 
     @Query("DELETE FROM subtasks WHERE taskId = :taskId")
     suspend fun deleteSubTasksByTaskId(taskId: Long)
+
+    @Update
+    suspend fun updateTask(task: TaskEntity)
+
+    @Update
+    suspend fun updateTasks(tasks: List<TaskEntity>)
+
+    @Update
+    suspend fun updateSubTasks(subTasks: List<SubTaskEntity>)
 }

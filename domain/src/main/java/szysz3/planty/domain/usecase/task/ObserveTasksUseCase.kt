@@ -11,6 +11,7 @@ import javax.inject.Inject
 class ObserveTasksUseCase @Inject constructor(
     private val repository: TaskRepository
 ) : BaseUseCase<NoParams, Flow<List<Task>>>() {
+
     override suspend fun invoke(input: NoParams): Flow<List<Task>> {
         return repository.getTasksWithSubTasksFlow().map { tasks ->
             tasks.sortedWith(
