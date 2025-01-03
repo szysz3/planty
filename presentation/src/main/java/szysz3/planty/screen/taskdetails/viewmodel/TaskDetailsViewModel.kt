@@ -43,7 +43,7 @@ class TaskDetailsViewModel @Inject constructor(
                 ?: Task.empty(isDarkMode)
 
             _uiState.update { state ->
-                refreshState(state, task)
+                refreshState(state.copy(taskId = taskId), task)
             }
         }
     }

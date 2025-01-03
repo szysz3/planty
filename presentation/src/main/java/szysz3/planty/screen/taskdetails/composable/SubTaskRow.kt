@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Text
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.VerticalDivider
@@ -73,7 +73,7 @@ fun SubTaskRow(
                 .height(18.dp)
         )
         Spacer(modifier = Modifier.width(4.dp))
-        CostTextField(
+        TaskCostField(
             modifier = Modifier.padding(start = 4.dp),
             initialValue = subTask.cost?.toString() ?: "",
             onCostChange = {

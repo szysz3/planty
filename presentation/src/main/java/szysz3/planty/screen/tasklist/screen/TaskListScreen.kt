@@ -36,11 +36,10 @@ fun TaskListScreen(
     taskListViewModel: TaskListViewModel = hiltViewModel(),
 ) {
     val uiState by taskListViewModel.uiState.collectAsState()
-    val tasks = uiState.tasks
     val listState = rememberLazyListState()
     val dragDropState = rememberDragDropState(
         lazyListState = listState,
-        draggableItemsNum = tasks.size,
+        draggableItemsNum = uiState.tasks.size,
         onMove = { fromIndex, toIndex ->
             taskListViewModel.moveTask(fromIndex, toIndex)
         },
@@ -73,7 +72,10 @@ fun TaskListScreen(
                 state = listState,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                draggableItems(items = tasks, dragDropState = dragDropState) { modifier, task ->
+                draggableItems(
+                    items = uiState.tasks,
+                    dragDropState = dragDropState
+                ) { modifier, task ->
                     TaskCardView(
                         task = task,
                         modifier = modifier,

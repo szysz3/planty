@@ -16,7 +16,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 
 @Composable
-fun CostTextField(
+fun TaskCostField(
     initialValue: String?,
     onCostChange: (Float?) -> Unit,
     modifier: Modifier = Modifier

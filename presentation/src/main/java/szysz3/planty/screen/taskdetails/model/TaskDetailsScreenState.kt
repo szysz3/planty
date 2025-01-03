@@ -5,6 +5,7 @@ import szysz3.planty.core.model.Task
 
 data class TaskDetailsScreenState(
     val task: Task = Task.empty(false),
+    val taskId: Long? = null,
     val activeSubTasks: List<SubTask> = emptyList(),
     val completedSubTasks: List<SubTask> = emptyList(),
     val completedSubTaskCost: Double = 0.0,
