@@ -30,6 +30,7 @@ fun TaskCardView(
     modifier: Modifier = Modifier,
     onClicked: (Task?) -> Unit,
 ) {
+    // TODO: move to ViewModel / UseCase
     val completedSubTasks = task.subTasks.count { it.isCompleted }
     val totalSubTasks = task.subTasks.size
     val completedCost = task.subTasks.filter { it.isCompleted }.sumOf { it.cost?.toDouble() ?: 0.0 }

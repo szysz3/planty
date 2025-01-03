@@ -25,10 +25,10 @@ fun EllipticalBackground(@DrawableRes backgroundImageId: Int, tintLevelCenter: F
     var size by remember { mutableStateOf(Size.Zero) }
 
     Image(
-        painter = painterResource(id = backgroundImageId), // Replace with your background image
+        painter = painterResource(id = backgroundImageId),
         contentDescription = null,
         modifier = Modifier.fillMaxSize(),
-        contentScale = ContentScale.Crop // Adjust as needed (Crop, Fit, FillBounds, etc.)
+        contentScale = ContentScale.Crop
     )
 
     Box(
@@ -40,15 +40,15 @@ fun EllipticalBackground(@DrawableRes backgroundImageId: Int, tintLevelCenter: F
             .background(
                 brush = Brush.radialGradient(
                     colors = listOf(
-                        MaterialTheme.colorScheme.background.copy(alpha = tintLevelCenter),  // Gradual fade-out effect
-                        MaterialTheme.colorScheme.background.copy(alpha = 0.7f),  // Gradual fade-out effect
-                        MaterialTheme.colorScheme.background  // Fully solid on the edges
+                        MaterialTheme.colorScheme.background.copy(alpha = tintLevelCenter),
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.7f),
+                        MaterialTheme.colorScheme.background
                     ),
                     center = Offset(
                         size.width / 2,
                         size.height / 2
-                    ), // Center point of the gradient
-                    radius = 900f // Control the spread of the gradient
+                    ),
+                    radius = 900f
                 )
             )
     )

@@ -17,11 +17,10 @@ fun TopBarDeleteButton(
     showDeleteButton: Boolean = false,
     onDeleteClick: () -> Unit = {}
 ) {
-    // Reserve space for the delete button even when it's not visible
     Box(
         modifier = Modifier
             .fillMaxHeight()
-            .width(48.dp), // Match the size of the IconButton
+            .width(48.dp),
         contentAlignment = Alignment.Center
     ) {
         if (showDeleteButton) {

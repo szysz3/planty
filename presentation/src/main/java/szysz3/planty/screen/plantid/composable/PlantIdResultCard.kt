@@ -1,6 +1,5 @@
 package szysz3.planty.screen.plantid.composable
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,10 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
@@ -122,38 +117,6 @@ fun PlantResultCard(plantResult: PlantResult, onCardClick: (plant: Plant?) -> Un
                     endColor = MaterialTheme.colorScheme.secondary
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun PlantMatchingBar(
-    matchLevel: Float,
-    modifier: Modifier = Modifier,
-    cornerRadius: Float = 16f,
-    startColor: Color = Color.Red,
-    endColor: Color = Color.Green,
-    backgroundColor: Color = Color.Transparent
-) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            drawRect(
-                color = backgroundColor,
-            )
-            val barWidth = size.width * matchLevel
-            drawRoundRect(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(startColor, endColor),
-                    startX = 0f,
-                    endX = barWidth
-                ),
-                size = size.copy(width = barWidth),
-                topLeft = Offset(0f, 0f),
-                cornerRadius = CornerRadius(cornerRadius, cornerRadius)
-            )
         }
     }
 }

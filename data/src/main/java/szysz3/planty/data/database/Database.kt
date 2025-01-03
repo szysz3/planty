@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import szysz3.planty.data.database.dao.GardenCellDao
 import szysz3.planty.data.database.dao.GardenPlantDao
 import szysz3.planty.data.database.dao.PlantDao
@@ -52,12 +51,6 @@ abstract class GardenDatabase : RoomDatabase() {
                     GardenDatabase::class.java,
                     GARDEN_DATABASE_NAME
                 )
-                    .addCallback(object : RoomDatabase.Callback() {
-                        override fun onOpen(db: SupportSQLiteDatabase) {
-                            super.onOpen(db)
-                            db.execSQL("PRAGMA foreign_keys = ON;")
-                        }
-                    })
                     .createFromAsset("$GARDEN_DATABASE_NAME.db")
                     .build().also { instance = it }
             }

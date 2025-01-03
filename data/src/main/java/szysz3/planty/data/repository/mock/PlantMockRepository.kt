@@ -17,7 +17,7 @@ class PlantMockRepositoryImpl @Inject constructor(@ApplicationContext context: C
 
         CSVReader(InputStreamReader(inputStream)).use { csvReader ->
             var line: Array<String>?
-            csvReader.readNext() // Skip header line if present
+            csvReader.readNext()
             while (csvReader.readNext().also { line = it } != null) {
                 line?.let { plants.add(it.toPlant()) }
             }

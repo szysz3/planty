@@ -44,7 +44,7 @@ class GardenRepositoryImpl @Inject constructor(
 
             val existingCell = gardenCellDao.getCell(row, column)
             val cellId =
-                existingCell?.id ?: 0 // 0 will force an INSERT with auto-gen if none exists
+                existingCell?.id ?: 0
 
             val updatedCellEntity = GardenCellEntity(
                 id = cellId,

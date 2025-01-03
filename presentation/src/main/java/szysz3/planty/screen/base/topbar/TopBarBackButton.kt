@@ -17,11 +17,10 @@ fun TopBarBackButton(
     showBackButton: Boolean = false,
     onBackClick: () -> Unit = { }
 ) {
-    // Reserve space for the back button even when it's not visible
     Box(
         modifier = Modifier
             .fillMaxHeight()
-            .width(48.dp), // Match the size of the IconButton
+            .width(48.dp),
         contentAlignment = Alignment.Center
     ) {
         if (showBackButton) {
