@@ -29,29 +29,35 @@ class TaskDetailsViewModel @Inject constructor(
 
     private var isDarkMode: Boolean = false
 
-    fun loadTask(taskId: Long?) {
-        if (taskId == null) {
-            _uiState.value = TaskDetailsScreenState(task = Task.empty(isDarkMode))
-        } else {
-            viewModelScope.launch {
-                val task = getTaskByIdUseCase(taskId)?.toPresentation()
-                _uiState.value = refreshState(task)
-            }
-        }
-    }
-
     fun updateTheme(isDarkMode: Boolean) {
         this.isDarkMode = isDarkMode
     }
 
-    fun updateSubTaskDescription(subTaskId: Long, newDescription: String) {
-        val updatedTask = _uiState.value.task.let { task ->
-            val updatedSubTasks = task.subTasks.map {
-                if (it.id == subTaskId) it.copy(description = newDescription) else it
+    fun showDeleteDialog(show: Boolean) {
+        _uiState.update { it.copy(isDeleteDialogVisible = show) }
+    }
+
+    fun loadTask(taskId: Long?) {
+        viewModelScope.launch {
+            val task = taskId?.let { getTaskByIdUseCase(taskId)?.toPresentation() }
+                ?: Task.empty(isDarkMode)
+
+            _uiState.update { state ->
+                refreshState(state, task)
             }
-            task.copy(subTasks = updatedSubTasks)
         }
-        _uiState.value = refreshState(updatedTask)
+    }
+
+    fun addNewSubTask() {
+        _uiState.update { state ->
+            val currentTask = state.task
+            val lastSubTask = currentTask.subTasks.lastOrNull()
+            if (lastSubTask?.description?.isBlank() == true) return@update state
+
+            val newSubTask = SubTask(id = generateUniqueId())
+            val updatedTask = currentTask.copy(subTasks = currentTask.subTasks + newSubTask)
+            refreshState(state, updatedTask)
+        }
     }
 
     fun deleteTask() {
@@ -60,53 +66,11 @@ class TaskDetailsViewModel @Inject constructor(
         }
     }
 
-    fun showDeleteDialog(show: Boolean) {
-        _uiState.update { it.copy(isDeleteDialogVisible = show) }
-    }
-
     fun updateTaskTitle(newTitle: String) {
-        val updatedTask = _uiState.value.task.copy(title = newTitle)
-        _uiState.value = refreshState(updatedTask)
-    }
-
-    fun toggleSubTaskCompletion(subTaskId: Long, isCompleted: Boolean) {
-        val updatedTask = _uiState.value.task.let { task ->
-            val updatedSubTasks = task.subTasks.map {
-                if (it.id == subTaskId) it.copy(isCompleted = isCompleted) else it
-            }
-            task.copy(
-                subTasks = updatedSubTasks,
-                isCompleted = updatedSubTasks.all { it.isCompleted })
+        _uiState.update { state ->
+            val updatedTask = state.task.copy(title = newTitle)
+            refreshState(state, updatedTask)
         }
-        _uiState.value = refreshState(updatedTask)
-    }
-
-    fun updateSubTaskCost(subTaskId: Long, cost: Float) {
-        val updatedTask = _uiState.value.task.let { task ->
-            val updatedSubTasks = task.subTasks.map {
-                if (it.id == subTaskId) it.copy(cost = cost) else it
-            }
-            task.copy(
-                subTasks = updatedSubTasks
-            )
-        }
-        _uiState.value = refreshState(updatedTask)
-    }
-
-    fun addNewSubTask() {
-        val currentTask = _uiState.value.task
-        val lastSubTask = currentTask.subTasks.lastOrNull()
-        if (lastSubTask != null && lastSubTask.description.isBlank()) {
-            return
-        }
-
-        val newSubTask = SubTask(
-            id = generateUniqueId(),
-            description = "",
-            isCompleted = false
-        )
-        val updatedTask = currentTask.copy(subTasks = currentTask.subTasks + newSubTask)
-        _uiState.value = refreshState(updatedTask)
     }
 
     fun saveNewTask() {
@@ -116,29 +80,55 @@ class TaskDetailsViewModel @Inject constructor(
         }
     }
 
-    fun updateTask() {
-        val taskToUpdate = _uiState.value.task
-        viewModelScope.launch {
-            saveTaskUseCase(taskToUpdate.toDomain())
+    fun updateSubTaskDescription(subTaskId: Long, newDescription: String) {
+        updateSubTask(subTaskId) { it.copy(description = newDescription) }
+    }
+
+    fun toggleSubTaskCompletion(subTaskId: Long, isCompleted: Boolean) {
+        updateSubTask(subTaskId) { it.copy(isCompleted = isCompleted) }
+    }
+
+    fun updateSubTaskCost(subTaskId: Long, cost: Float) {
+        updateSubTask(subTaskId) { it.copy(cost = cost) }
+    }
+
+    private fun updateSubTask(
+        subTaskId: Long,
+        transform: (SubTask) -> SubTask
+    ) {
+        _uiState.update { state ->
+            val currentTask = state.task
+            val updatedSubTasks = currentTask.subTasks.map {
+                if (it.id == subTaskId) transform(it) else it
+            }
+            val updatedTask = currentTask.copy(
+                subTasks = updatedSubTasks,
+                isCompleted = updatedSubTasks.all { it.isCompleted }
+            )
+            refreshState(state, updatedTask)
         }
+    }
+
+    private fun refreshState(
+        currentState: TaskDetailsScreenState,
+        task: Task?
+    ): TaskDetailsScreenState {
+        val safeTask = task ?: Task.empty(isDarkMode)
+        val activeSubTasks = safeTask.subTasks.filterNot { it.isCompleted }
+        val completedSubTasks = safeTask.subTasks.filter { it.isCompleted }
+        val completedSubTaskCost = completedSubTasks.sumOf { it.cost?.toDouble() ?: 0.0 }
+        val totalCost = safeTask.subTasks.sumOf { it.cost?.toDouble() ?: 0.0 }
+
+        return currentState.copy(
+            task = safeTask,
+            activeSubTasks = activeSubTasks,
+            completedSubTasks = completedSubTasks,
+            completedSubTaskCost = completedSubTaskCost,
+            totalCost = totalCost
+        )
     }
 
     private fun generateUniqueId(): Long {
         return System.currentTimeMillis()
-    }
-
-    private fun refreshState(task: Task?): TaskDetailsScreenState {
-        val activeSubTasks = task?.subTasks?.filter { !it.isCompleted }
-        val completedSubTasks = task?.subTasks?.filter { it.isCompleted }
-        val completedSubTasksCost = completedSubTasks?.sumOf { it.cost?.toDouble() ?: 0.0 }
-        val totalCost = task?.subTasks?.sumOf { it.cost?.toDouble() ?: 0.0 }
-
-        return _uiState.value.copy(
-            task = task ?: Task.empty(false),
-            activeSubTasks = activeSubTasks ?: emptyList(),
-            completedSubTasks = completedSubTasks ?: emptyList(),
-            completedSubTaskCost = completedSubTasksCost ?: 0.0,
-            totalCost = totalCost ?: 0.0
-        )
     }
 }

@@ -186,13 +186,9 @@ fun TaskDetailsScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
                         .align(Alignment.Bottom),
+                    
                     onClick = {
-                        if (taskId == null) {
-                            taskDetailsViewModel.saveNewTask()
-                        } else {
-                            taskDetailsViewModel.updateTask()
-                        }
-
+                        taskDetailsViewModel.saveNewTask()
                         navController.popBackStack()
                     },
                     text = if (taskId == null) "Add" else "Update"
