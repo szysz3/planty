@@ -25,7 +25,7 @@ class ImageGalleryViewModel @Inject constructor(
             _uiState.update { state ->
                 state.copy(
                     imageUrls = getPlantUseCase(plantId)
-                        ?.toPresentationModel()?.imageUrls
+                        ?.toPresentationModel()?.imageUrls ?: emptyList()
                 )
             }
         }

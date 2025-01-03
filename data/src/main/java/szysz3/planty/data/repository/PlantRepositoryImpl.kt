@@ -9,24 +9,19 @@ import javax.inject.Inject
 
 class PlantRepositoryImpl @Inject constructor(
     private val plantDao: PlantDao,
-    private val plantImagesDao: PlantImageDao
+    private val plantImageDao: PlantImageDao
 ) : PlantRepository {
 
-    override suspend fun searchPlants(query: String?, limit: Int, offset: Int): List<Plant> {
-        return plantDao.searchPlants(query, limit, offset).map { plantEntity ->
-            val images =
-                plantImagesDao.getImagesByPlantId(plantEntity.id)?.map { it.imageUrl }.orEmpty()
-            plantEntity.toDomain(images)
-        }
-    }
-
-    override suspend fun getPlantById(id: Int): Plant? {
-        val plant = plantDao.getPlantById(id)
-        plant?.let {
-            val images = plantImagesDao.getImagesByPlantId(plant.id)?.map { it.imageUrl }
-            return plant.toDomain(images)
+    override suspend fun searchPlants(query: String?, limit: Int, offset: Int): List<Plant> =
+        plantDao.searchPlants(query, limit, offset).map { plantEntity ->
+            plantEntity.toDomain(getImageUrls(plantEntity.id))
         }
 
-        return null
-    }
+    override suspend fun getPlantById(id: Int): Plant? =
+        plantDao.getPlantById(id)?.toDomain(getImageUrls(id))
+
+    private suspend fun getImageUrls(plantId: Int): List<String> =
+        plantImageDao.getImagesByPlantId(plantId)
+            ?.mapNotNull { it.imageUrl }
+            .orEmpty()
 }

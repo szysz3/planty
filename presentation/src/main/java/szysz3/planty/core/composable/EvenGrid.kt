@@ -1,4 +1,4 @@
-package szysz3.planty.screen.plantdetails.composable
+package szysz3.planty.core.composable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

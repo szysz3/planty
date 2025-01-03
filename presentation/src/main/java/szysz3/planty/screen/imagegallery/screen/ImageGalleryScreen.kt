@@ -32,10 +32,10 @@ fun ImageGalleryScreen(
 ) {
     val uiState by imageGalleryViewModel.uiState.collectAsState()
     val pagerState = rememberPagerState(initialPage = 0) {
-        uiState.imageUrls?.size ?: 0
+        uiState.imageUrls.size
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(plantId) {
         imageGalleryViewModel.updateImageUrls(plantId)
     }
 
@@ -45,22 +45,19 @@ fun ImageGalleryScreen(
         showBottomBar = true,
         navController = navController
     ) { padding ->
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            uiState.imageUrls?.let { imageUrls ->
+            if (uiState.imageUrls.isNotEmpty()) {
                 HorizontalPager(
                     state = pagerState,
                     modifier = Modifier.fillMaxSize(),
                 ) { page ->
-                    imageUrls[page]?.let { url ->
-                        ZoomableImage(
-                            imageUrl = url
-                        )
-                    }
+                    ZoomableImage(
+                        imageUrl = uiState.imageUrls[page]
+                    )
                 }
             }
 

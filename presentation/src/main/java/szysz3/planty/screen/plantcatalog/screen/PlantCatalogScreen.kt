@@ -7,18 +7,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Clear
-import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,8 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -40,6 +29,7 @@ import szysz3.planty.core.model.PlantCatalogConfig
 import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.base.topbar.TopBarBackButton
 import szysz3.planty.screen.plantcatalog.composable.PlantCard
+import szysz3.planty.screen.plantcatalog.composable.SearchBar
 import szysz3.planty.screen.plantcatalog.viewmodel.PlantCatalogViewModel
 
 @Composable
@@ -53,6 +43,7 @@ fun PlantCatalogScreen(
     plantCatalogViewModel: PlantCatalogViewModel = hiltViewModel(),
 ) {
     val focusManager = LocalFocusManager.current
+    val interactionSource = remember { MutableInteractionSource() }
 
     val plants = plantCatalogViewModel.pagedPlants.collectAsLazyPagingItems()
     val searchQuery by plantCatalogViewModel.searchQuery.collectAsState()
@@ -75,7 +66,7 @@ fun PlantCatalogScreen(
                 .fillMaxSize()
                 .padding(padding)
                 .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
+                    interactionSource = interactionSource,
                     indication = null
                 ) {
                     focusManager.clearFocus()
@@ -84,38 +75,13 @@ fun PlantCatalogScreen(
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
 
-                // Search Bar
-                OutlinedTextField(
-                    value = searchQuery,
-                    onValueChange = { newValue ->
+                SearchBar(
+                    query = searchQuery,
+                    onQueryChange = { newValue ->
                         plantCatalogViewModel.updateSearchQuery(newValue)
                     },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done
-                    ),
-                    maxLines = 1,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    label = { Text("Search for a plant...") },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Rounded.Search,
-                            contentDescription = "Search"
-                        )
-                    },
-                    trailingIcon = {
-                        if (searchQuery.isNotEmpty()) {
-                            IconButton(onClick = {
-                                plantCatalogViewModel.updateSearchQuery("")
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Rounded.Clear,
-                                    contentDescription = "Clear Search"
-                                )
-                            }
-                        }
+                    onClearQuery = {
+                        plantCatalogViewModel.updateSearchQuery("")
                     }
                 )
 
@@ -134,7 +100,10 @@ fun PlantCatalogScreen(
                         }
 
                         else -> {
-                            items(plants.itemCount) { index ->
+                            items(
+                                count = plants.itemCount,
+                                key = { index -> plants[index]?.id ?: index }
+                            ) { index ->
                                 val plant = plants[index]
                                 PlantCard(
                                     plant = plant,

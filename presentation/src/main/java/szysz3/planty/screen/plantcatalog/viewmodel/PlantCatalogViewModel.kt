@@ -27,7 +27,7 @@ class PlantCatalogViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val pagedPlants = searchQuery
-        .debounce(500)
+        .debounce(300)
         .flatMapLatest { searchQuery ->
             Pager(
                 config = PagingConfig(

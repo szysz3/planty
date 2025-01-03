@@ -23,7 +23,7 @@ fun GardenCell.toEntity(plantId: Long?): GardenCellEntity {
     )
 }
 
-fun PlantEntity.toDomain(imageUrls: List<String?>?): Plant {
+fun PlantEntity.toDomain(imageUrls: List<String>?): Plant {
     return Plant(
         id = this.id,
         latinName = this.latinName,
