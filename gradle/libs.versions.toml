@@ -25,6 +25,9 @@ constraintlayout = "2.2.0"
 paging-runtime = "3.1.1"
 paging-compose = "1.0.0-alpha20"
 zoomable = "1.6.2"
+mockk = "1.13.5"
+kotlinx-coroutines-test = "1.7.1"
+androidx-arch-core-testing = "2.2.0"
 
 [libraries]
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
@@ -64,6 +67,9 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging-runtime" }
 paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging-compose" }
 zoomable = { group = "net.engawapg.lib", name = "zoomable", version.ref = "zoomable" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-test" }
+androidx-arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "androidx-arch-core-testing" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
