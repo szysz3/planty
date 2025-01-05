@@ -8,6 +8,8 @@ class UpdateTaskOrderUseCase @Inject constructor(
 ) : BaseUseCase<UpdateTaskOrderUseCaseParams, List<Task>>() {
 
     override suspend fun invoke(input: UpdateTaskOrderUseCaseParams): List<Task> {
+        if (input.tasks.isEmpty()) return emptyList()
+
         return input.tasks
             .toMutableList()
             .apply {
