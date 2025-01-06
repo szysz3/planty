@@ -8,3 +8,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+.attach_pid*
+/*/.attach_pid*
