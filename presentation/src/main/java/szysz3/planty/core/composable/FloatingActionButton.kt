@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun FloatingActionButton(
     icon: ImageVector,
-    contentDescription: String,
+    contentDescription: String = "",
     onClick: () -> Unit
 ) {
     Box(

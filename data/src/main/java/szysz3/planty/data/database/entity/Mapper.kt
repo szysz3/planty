@@ -1,7 +1,9 @@
 package szysz3.planty.data.database.entity
 
 import szysz3.planty.domain.model.GardenCell
+import szysz3.planty.domain.model.MergedCell
 import szysz3.planty.domain.model.Plant
+import szysz3.planty.domain.model.SubGarden
 import szysz3.planty.domain.model.SubTask
 import szysz3.planty.domain.model.Task
 
@@ -10,7 +12,8 @@ fun GardenCellEntity.toDomain(plant: Plant?): GardenCell {
         id = id,
         row = row,
         column = column,
-        plant = plant
+        plant = plant,
+        gardenId = garden_id
     )
 }
 
@@ -19,7 +22,8 @@ fun GardenCell.toEntity(plantId: Long?): GardenCellEntity {
         id = id,
         row = row,
         column = column,
-        plantId = plantId
+        plantId = plantId,
+        garden_id = gardenId
     )
 }
 
@@ -261,4 +265,46 @@ fun Task.toEntity(): Pair<TaskEntity, List<SubTaskEntity>> {
         )
     }
     return taskEntity to subTaskEntities
+}
+
+fun MergedCellEntity.toDomain(): MergedCell {
+    return MergedCell(
+        id = id,
+        parentGardenId = parent_garden_id,
+        startRow = start_row,
+        startColumn = start_column,
+        endRow = end_row,
+        endColumn = end_column,
+        subGardenId = sub_garden_id
+    )
+}
+
+fun MergedCell.toEntity(): MergedCellEntity {
+    return MergedCellEntity(
+        id = id,
+        parent_garden_id = parentGardenId,
+        start_row = startRow,
+        start_column = startColumn,
+        end_row = endRow,
+        end_column = endColumn,
+        sub_garden_id = subGardenId
+    )
+}
+
+fun SubGardenEntity.toDomain(): SubGarden {
+    return SubGarden(
+        id = id,
+        parentMergedCellId = parentMergedCellId,
+        rows = rows,
+        columns = columns
+    )
+}
+
+fun SubGarden.toEntity(): SubGardenEntity {
+    return SubGardenEntity(
+        id = id,
+        parentMergedCellId = parentMergedCellId,
+        rows = rows,
+        columns = columns
+    )
 }

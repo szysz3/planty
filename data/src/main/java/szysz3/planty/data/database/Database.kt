@@ -6,13 +6,17 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import szysz3.planty.data.database.dao.GardenCellDao
 import szysz3.planty.data.database.dao.GardenPlantDao
+import szysz3.planty.data.database.dao.MergedCellDao
 import szysz3.planty.data.database.dao.PlantDao
 import szysz3.planty.data.database.dao.PlantImageDao
+import szysz3.planty.data.database.dao.SubGardenDao
 import szysz3.planty.data.database.dao.TaskDao
 import szysz3.planty.data.database.entity.GardenCellEntity
 import szysz3.planty.data.database.entity.GardenPlantEntity
+import szysz3.planty.data.database.entity.MergedCellEntity
 import szysz3.planty.data.database.entity.PlantEntity
 import szysz3.planty.data.database.entity.PlantImageEntity
+import szysz3.planty.data.database.entity.SubGardenEntity
 import szysz3.planty.data.database.entity.SubTaskEntity
 import szysz3.planty.data.database.entity.TaskEntity
 
@@ -24,6 +28,8 @@ import szysz3.planty.data.database.entity.TaskEntity
         PlantImageEntity::class,
         TaskEntity::class,
         SubTaskEntity::class,
+        SubGardenEntity::class,
+        MergedCellEntity::class,
     ],
     version = 4
 )
@@ -37,6 +43,10 @@ abstract class GardenDatabase : RoomDatabase() {
     abstract fun plantImageDao(): PlantImageDao
 
     abstract fun taskDao(): TaskDao
+
+    abstract fun subGardenDao(): SubGardenDao
+
+    abstract fun mergedCellDao(): MergedCellDao
 
     companion object {
         private const val GARDEN_DATABASE_NAME = "garden_db"

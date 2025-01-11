@@ -12,6 +12,12 @@ import androidx.room.PrimaryKey
             parentColumns = ["id"],
             childColumns = ["plantId"],
             onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = SubGardenEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["garden_id"],
+            onDelete = ForeignKey.CASCADE
         )
     ]
 )
@@ -19,5 +25,7 @@ data class GardenCellEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val row: Int,
     val column: Int,
-    val plantId: Long?
+    val plantId: Long?,
+    // TODO: revisit
+    val garden_id: Int? // Added this field to match database schema
 )

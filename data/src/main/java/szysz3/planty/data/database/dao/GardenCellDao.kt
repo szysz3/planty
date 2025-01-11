@@ -19,6 +19,9 @@ interface GardenCellDao {
     @Query("SELECT * FROM garden_cells WHERE row = :row AND column = :column LIMIT 1")
     suspend fun getCell(row: Int, column: Int): GardenCellEntity?
 
+    @Query("SELECT * FROM garden_cells WHERE garden_id = :gardenId")
+    suspend fun getCellsForGarden(gardenId: Int): List<GardenCellEntity>
+
     @Query("SELECT * FROM garden_cells")
     fun observeAllCells(): Flow<List<GardenCellEntity>>
 
@@ -30,4 +33,7 @@ interface GardenCellDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSingle(cell: GardenCellEntity)
+
+    @Query("SELECT * FROM garden_cells WHERE garden_id = :gardenId")
+    fun observeCellsForGarden(gardenId: Int): Flow<List<GardenCellEntity>>
 }

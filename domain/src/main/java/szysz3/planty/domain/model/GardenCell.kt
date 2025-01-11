@@ -4,5 +4,6 @@ data class GardenCell(
     val id: Int,
     val row: Int,
     val column: Int,
-    val plant: Plant?
+    val plant: Plant?,
+    val gardenId: Int? = null
 )
