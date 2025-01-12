@@ -33,7 +33,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -53,7 +52,6 @@ fun GardenMap(
     onCellClick: (Int, Int) -> Unit,
     onMergedCellClick: (MergedCell) -> Unit
 ) {
-    val density = LocalDensity.current
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val cellSize = minOf(
         screenWidth / columns,
@@ -158,7 +156,7 @@ private fun MergedCellContent(
             .height(cellSize * height)
             .padding(2.dp)
             .background(
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
                 shape = RoundedCornerShape(4.dp)
             )
             .border(
@@ -189,7 +187,7 @@ private fun MergedCellContent(
                 Text(
                     text = "Tap to create\nsub-garden",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     textAlign = TextAlign.Center
                 )
             }

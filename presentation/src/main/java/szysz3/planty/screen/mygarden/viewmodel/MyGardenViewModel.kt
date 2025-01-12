@@ -90,7 +90,6 @@ class MyGardenViewModel @Inject constructor(
             return
         }
 
-        // Calculate merged cell dimensions
         val minRow = currentState.selectedCells.minOf { it.first }
         val maxRow = currentState.selectedCells.maxOf { it.first }
         val minCol = currentState.selectedCells.minOf { it.second }
@@ -154,7 +153,7 @@ class MyGardenViewModel @Inject constructor(
             Timber.d("Toggling edit mode from ${currentState.isEditMode} to ${!currentState.isEditMode}")
             currentState.copy(
                 isEditMode = !currentState.isEditMode,
-                selectedCells = emptySet()  // Clear selection when toggling mode
+                selectedCells = emptySet()
             )
         }
     }
@@ -187,7 +186,6 @@ class MyGardenViewModel @Inject constructor(
         Timber.d("onMergedCellClick: Merged cell tapped with ID=${mergedCell.id}, subGardenId=${mergedCell.subGardenId}")
 
         if (mergedCell.subGardenId != null) {
-            // Navigate to sub-garden
             _uiState.update {
                 it.copy(
                     currentGardenId = mergedCell.subGardenId,
@@ -195,7 +193,6 @@ class MyGardenViewModel @Inject constructor(
                 )
             }
         } else {
-            // Show dialog to create sub-garden
             showCreateSubGardenDialog(mergedCell.id)
         }
     }
