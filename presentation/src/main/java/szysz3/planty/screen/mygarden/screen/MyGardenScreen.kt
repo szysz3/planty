@@ -72,17 +72,18 @@ fun MyGardenScreen(
         showTopBar = true,
         showBottomBar = true,
         topBarActions = {
-            if (!uiState.isEditMode) {
-                TopBarDeleteButton(
-                    showDeleteButton = uiState.dataLoaded,
-                    onDeleteClick = {
-                        myGardenViewModel.showDeleteDialog(true)
-                    }
-                )
+            if (uiState.dataLoaded && !uiState.isEditMode) {
                 IconButton(onClick = { myGardenViewModel.toggleEditMode() }) {
                     Icon(Icons.Default.Edit, "Enter edit mode")
                 }
             }
+
+            TopBarDeleteButton(
+                showDeleteButton = uiState.dataLoaded,
+                onDeleteClick = {
+                    myGardenViewModel.showDeleteDialog(true)
+                }
+            )
         },
         navController = navController
     ) { padding ->
