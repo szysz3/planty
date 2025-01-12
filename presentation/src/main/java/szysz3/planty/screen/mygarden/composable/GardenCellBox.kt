@@ -36,7 +36,7 @@ fun GardenCellBox(
             .padding(2.dp)
             .background(
                 color = when {
-                    isSelected && isEditMode -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                    isSelected && isEditMode -> MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f)
                     cell?.plant != null -> MaterialTheme.colorScheme.secondaryContainer
                     else -> MaterialTheme.colorScheme.surface
                 },

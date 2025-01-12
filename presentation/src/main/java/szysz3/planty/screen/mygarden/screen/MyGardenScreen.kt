@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
@@ -77,7 +78,9 @@ fun MyGardenScreen(
                 .padding(padding),
             contentAlignment = Alignment.Center
         ) {
-            Column {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 if (uiState.currentGardenPath.isNotEmpty()) {
                     GardenBreadcrumb(
                         gardenPath = uiState.currentGardenPath,
@@ -87,21 +90,26 @@ fun MyGardenScreen(
                     )
                 }
 
-                if (uiState.isEditMode) {
-                    Timber.d("Edit mode active, showing toolbar with selection: ${uiState.selectedCells}")
-                    GardenEditToolbar(
-                        onConfirmMerge = {
-                            Timber.d("Merge button clicked")
-                            myGardenViewModel.mergeCells()
-                        },
-                        onCancelEdit = {
-                            Timber.d("Cancel edit clicked")
-                            myGardenViewModel.toggleEditMode()
-                        },
-                        isMergeEnabled = uiState.selectedCells.size >= 2 &&
-                                myGardenViewModel.isValidRectangularSelection(uiState.selectedCells)
-                    )
-                }
+                Timber.d("Edit mode active, showing toolbar with selection: ${uiState.selectedCells}")
+                GardenEditToolbar(
+                    modifier = Modifier.alpha(
+                        if (uiState.isEditMode) {
+                            1f
+                        } else {
+                            0f
+                        }
+                    ),
+                    onConfirmMerge = {
+                        Timber.d("Merge button clicked")
+                        myGardenViewModel.mergeCells()
+                    },
+                    onCancelEdit = {
+                        Timber.d("Cancel edit clicked")
+                        myGardenViewModel.toggleEditMode()
+                    },
+                    isMergeEnabled = uiState.selectedCells.size >= 2 &&
+                            myGardenViewModel.isValidRectangularSelection(uiState.selectedCells)
+                )
 
                 if (uiState.dataLoaded && uiState.gardenState.rows > 0 && uiState.gardenState.columns > 0) {
                     GardenMap(

@@ -38,7 +38,7 @@ fun GardenMergedCellBox(
             .size(cellSize * mergedCell.width, cellSize * mergedCell.height)
             .padding(2.dp)
             .background(
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
                 shape = RoundedCornerShape(4.dp)
             )
             .border(
