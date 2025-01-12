@@ -5,9 +5,9 @@ import szysz3.planty.core.model.GardenCell
 data class GardenState(
     val rows: Int = 0,
     val columns: Int = 0,
-    val cells: List<GardenCell> = emptyList()
+    val cells: List<GardenCell> = emptyList(),
+    val mergedCells: List<MergedCell> = emptyList()  // Added this field
 ) {
-
     companion object {
         fun empty(rows: Int, columns: Int): GardenState {
             val cells = List(rows * columns) { index ->
@@ -19,4 +19,3 @@ data class GardenState(
         }
     }
 }
-
