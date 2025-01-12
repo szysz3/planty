@@ -131,8 +131,8 @@ class MyGardenViewModel @Inject constructor(
                 )
 
                 // 4) (Optional) If you still need to save a domain model
-                Timber.d("Saving updated garden state with newMergedCell ID=${newMergedCell.id}")
-                saveGardenStateUseCase(updatedState.toDomainModel())
+//                Timber.d("Saving updated garden state with newMergedCell ID=${newMergedCell.id}")
+//                saveGardenStateUseCase(updatedState.toDomainModel())
 
                 // 5) Update UI to reflect the merge is done
                 _uiState.update { state ->
