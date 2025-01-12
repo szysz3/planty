@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import szysz3.planty.R
 import szysz3.planty.core.composable.DeleteAlertDialog
@@ -31,6 +32,7 @@ import szysz3.planty.screen.mygarden.composable.GardenBreadcrumb
 import szysz3.planty.screen.mygarden.composable.GardenDimensionsInput
 import szysz3.planty.screen.mygarden.composable.GardenEditToolbar
 import szysz3.planty.screen.mygarden.composable.GardenMap
+import szysz3.planty.screen.mygarden.model.MyGardenScreenUiEvent
 import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
 import timber.log.Timber
 
@@ -49,6 +51,20 @@ fun MyGardenScreen(
 
     LaunchedEffect(Unit) {
         myGardenViewModel.observeGardenState()
+    }
+
+    LaunchedEffect(myGardenViewModel.uiEvent) {
+        myGardenViewModel.uiEvent.collectLatest { event ->
+            when (event) {
+                is MyGardenScreenUiEvent.OnPlantChosen -> {
+                    onPlantChosen(event.plant.id, event.row, event.column)
+                }
+
+                is MyGardenScreenUiEvent.OnEmptyCellChosen -> {
+                    onEmptyGardenFieldChosen(event.row, event.column)
+                }
+            }
+        }
     }
 
     BaseScreen(

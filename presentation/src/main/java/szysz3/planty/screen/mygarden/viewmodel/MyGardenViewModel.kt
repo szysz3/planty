@@ -3,8 +3,11 @@ package szysz3.planty.screen.mygarden.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -16,6 +19,7 @@ import szysz3.planty.domain.usecase.garden.SaveGardenStateUseCase
 import szysz3.planty.screen.mygarden.model.GardenState
 import szysz3.planty.screen.mygarden.model.MergedCell
 import szysz3.planty.screen.mygarden.model.MyGardenScreenState
+import szysz3.planty.screen.mygarden.model.MyGardenScreenUiEvent
 import szysz3.planty.screen.mygarden.model.toDomainModel
 import szysz3.planty.screen.mygarden.model.toPresentationModel
 import timber.log.Timber
@@ -30,6 +34,9 @@ class MyGardenViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(MyGardenScreenState())
     val uiState: StateFlow<MyGardenScreenState> = _uiState
+
+    private val _uiEvent = MutableSharedFlow<MyGardenScreenUiEvent>()
+    val uiEvent: SharedFlow<MyGardenScreenUiEvent> = _uiEvent.asSharedFlow()
 
     fun updateSelectedCell(row: Int, column: Int) {
         _uiState.update { it.copy(selectedCell = Pair(row, column)) }
@@ -209,7 +216,22 @@ class MyGardenViewModel @Inject constructor(
     private fun handleCellClickInPreviewMode(row: Int, column: Int) {
         updateSelectedCell(row, column)
         val plantForSelectedCell = getPlantForSelectedCell()
-        // TODO: handled outside
+
+        if (plantForSelectedCell != null) {
+            viewModelScope.launch {
+                _uiEvent.emit(
+                    MyGardenScreenUiEvent.OnPlantChosen(
+                        plantForSelectedCell,
+                        row,
+                        column
+                    )
+                )
+            }
+        } else {
+            viewModelScope.launch {
+                _uiEvent.emit(MyGardenScreenUiEvent.OnEmptyCellChosen(row, column))
+            }
+        }
     }
 
     fun observeGardenState() {
