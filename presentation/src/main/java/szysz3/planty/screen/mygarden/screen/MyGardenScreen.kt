@@ -1,8 +1,9 @@
+package szysz3.planty.screen.mygarden.screen
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.rounded.Add
@@ -37,7 +38,7 @@ import szysz3.planty.screen.mygarden.model.MyGardenScreenUiEvent
 import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
 import timber.log.Timber
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyGardenScreen(
     title: String,

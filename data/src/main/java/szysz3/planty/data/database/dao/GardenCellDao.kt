@@ -16,7 +16,7 @@ interface GardenCellDao {
     @Query("SELECT * FROM garden_cells")
     suspend fun getAllCells(): List<GardenCellEntity>
 
-    @Query("SELECT * FROM garden_cells WHERE row = :row AND column = :column LIMIT 1")
+    @Query("SELECT * FROM garden_cells WHERE `row` = :row AND `column` = :column LIMIT 1")
     suspend fun getCell(row: Int, column: Int): GardenCellEntity?
 
     @Query("SELECT * FROM garden_cells")

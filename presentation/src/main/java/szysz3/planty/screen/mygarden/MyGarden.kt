@@ -1,10 +1,10 @@
 package szysz3.planty.screen.mygarden
 
-import MyGardenScreen
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import szysz3.planty.navigation.FeatureRoute
 import szysz3.planty.navigation.staticComposable
+import szysz3.planty.screen.mygarden.screen.MyGardenScreen
 
 object MyGardenFeature : FeatureRoute {
     const val TITLE = "My Garden"

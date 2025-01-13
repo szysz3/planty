@@ -1,7 +1,7 @@
 package szysz3.planty.data.network
 
 open class HttpException(
-    val errorResponse: HttpErrorResponse?
+    private val errorResponse: HttpErrorResponse?
 ) : Exception(errorResponse?.message)
 
 class BadRequestException(errorResponse: HttpErrorResponse? = null) : HttpException(errorResponse)

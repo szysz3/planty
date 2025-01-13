@@ -142,12 +142,12 @@ class IdentifyPlantUseCaseTest {
             plantRepository.searchPlants("Monstera deliciosa", 1, 0)
         } returns listOf(monsteraDeliciosa)
 
-        val result: PlantIdResponse? = useCase.invoke(params)
+        val result: PlantIdResponse = useCase.invoke(params)
 
         assertNotNull(result)
-        assertEquals(2, result?.results?.size)
-        assertEquals("Fiddle Leaf Fig", result?.results?.get(0)?.plant?.commonName)
-        assertEquals("Swiss Cheese Plant", result?.results?.get(1)?.plant?.commonName)
+        assertEquals(2, result.results.size)
+        assertEquals("Fiddle Leaf Fig", result.results[0].plant?.commonName)
+        assertEquals("Swiss Cheese Plant", result.results[1].plant?.commonName)
 
         coVerify(exactly = 1) { contentResolver.openInputStream(testUri) }
         coVerify(exactly = 1) { idRepo.identifyPlant(imageData, apiKey) }
@@ -176,11 +176,11 @@ class IdentifyPlantUseCaseTest {
             plantRepository.searchPlants("Unknown Species", 1, 0)
         } returns emptyList()
 
-        val result: PlantIdResponse? = useCase.invoke(params)
+        val result: PlantIdResponse = useCase.invoke(params)
 
         assertNotNull(result)
-        assertEquals(1, result?.results?.size)
-        assertNull(result?.results?.get(0)?.plant)
+        assertEquals(1, result.results.size)
+        assertNull(result.results.get(0).plant)
 
         coVerify(exactly = 1) { contentResolver.openInputStream(testUri) }
         coVerify(exactly = 1) { idRepo.identifyPlant(imageData, apiKey) }
@@ -218,12 +218,12 @@ class IdentifyPlantUseCaseTest {
             plantRepository.searchPlants("Monstera deliciosa", 1, 0)
         } returns listOf(monsteraDeliciosa)
 
-        val result: PlantIdResponse? = useCase.invoke(params)
+        val result: PlantIdResponse = useCase.invoke(params)
 
         assertNotNull(result)
-        assertEquals(2, result?.results?.size)
-        assertEquals("Fiddle Leaf Fig", result?.results?.get(0)?.plant?.commonName)
-        assertEquals("Swiss Cheese Plant", result?.results?.get(1)?.plant?.commonName)
+        assertEquals(2, result.results.size)
+        assertEquals("Fiddle Leaf Fig", result.results[0].plant?.commonName)
+        assertEquals("Swiss Cheese Plant", result.results[1].plant?.commonName)
 
         coVerify(exactly = 1) { contentResolver.openInputStream(testUri1) }
         coVerify(exactly = 0) { contentResolver.openInputStream(testUri2) }

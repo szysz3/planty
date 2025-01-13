@@ -14,7 +14,7 @@ class IdentifyPlantUseCase @Inject constructor(
     private val plantRepository: PlantRepository,
     @ApplicationContext private val context: Context
 ) : BaseUseCase<IdentifyPlantsParams, PlantIdResponse?>() {
-    override suspend fun invoke(input: IdentifyPlantsParams): PlantIdResponse? {
+    override suspend fun invoke(input: IdentifyPlantsParams): PlantIdResponse {
         val imageData: ByteArray =
             context.contentResolver.openInputStream(input.imageUris.first()).use { inputStream ->
                 inputStream?.readBytes()

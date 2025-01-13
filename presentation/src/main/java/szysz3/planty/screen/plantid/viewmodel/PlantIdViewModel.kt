@@ -44,7 +44,7 @@ class PlantIdViewModel @Inject constructor(
 
             try {
                 val result = identifyPlantUseCase(idParams)
-                val plants = result?.toPresentationModel() ?: emptyList()
+                val plants = result.toPresentationModel()
 
                 _uiState.update { state ->
                     state.copy(
