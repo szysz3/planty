@@ -2,14 +2,51 @@ package szysz3.planty.screen.mygarden.model
 
 data class MyGardenScreenState(
     val gardenState: GardenState = GardenState(),
+    val navigationState: GardenNavigationState = GardenNavigationState(),
+    val editState: GardenEditState = GardenEditState(),
+    val dialogState: GardenDialogState = GardenDialogState(),
+    val selectionState: GardenSelectionState = GardenSelectionState(),
+    val dataLoaded: Boolean = false
+)
+
+data class GardenNavigationState(
+    val currentGardenId: Int? = null,
+    val currentGardenPath: List<Int> = emptyList()
+)
+
+data class GardenEditState(
+    val isEditMode: Boolean = false,
+    val selectedCells: Set<Pair<Int, Int>> = emptySet()
+)
+
+data class GardenDialogState(
     val isDeleteDialogVisible: Boolean = false,
     val isBottomSheetVisible: Boolean = false,
-    val dataLoaded: Boolean = false,
+    val showCreateSubGardenDialog: Boolean = false
+)
+
+data class GardenSelectionState(
     val selectedCell: Pair<Int, Int>? = null,
-    val isEditMode: Boolean = false,
-    val selectedCells: Set<Pair<Int, Int>> = emptySet(),
-    val currentGardenId: Int? = null,
-    val currentGardenPath: List<Int> = emptyList(),
-    val showCreateSubGardenDialog: Boolean = false,
     val selectedMergedCellId: Int? = null
 )
+
+fun MyGardenScreenState.updateDialogState(update: GardenDialogState.() -> GardenDialogState): MyGardenScreenState =
+    copy(dialogState = dialogState.update())
+
+fun MyGardenScreenState.updateEditState(update: GardenEditState.() -> GardenEditState): MyGardenScreenState =
+    copy(editState = editState.update())
+
+fun MyGardenScreenState.updateNavigationState(update: GardenNavigationState.() -> GardenNavigationState): MyGardenScreenState =
+    copy(navigationState = navigationState.update())
+
+fun MyGardenScreenState.updateSelectionState(update: GardenSelectionState.() -> GardenSelectionState): MyGardenScreenState =
+    copy(selectionState = selectionState.update())
+
+fun GardenEditState.getCellBounds(): CellBounds? {
+    return if (selectedCells.isNotEmpty()) {
+        CellBounds.from(selectedCells)
+    } else null
+}
+
+val MyGardenScreenState.selectedCellBounds: CellBounds?
+    get() = editState.getCellBounds()

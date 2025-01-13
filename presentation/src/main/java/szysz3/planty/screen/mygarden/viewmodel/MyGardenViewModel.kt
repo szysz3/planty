@@ -3,6 +3,7 @@ package szysz3.planty.screen.mygarden.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -16,12 +17,18 @@ import szysz3.planty.domain.usecase.base.NoParams
 import szysz3.planty.domain.usecase.garden.ClearGardenUseCase
 import szysz3.planty.domain.usecase.garden.ObserveGardenStateUseCase
 import szysz3.planty.domain.usecase.garden.SaveGardenStateUseCase
+import szysz3.planty.screen.mygarden.model.CellBounds
+import szysz3.planty.screen.mygarden.model.GardenSelectionState
 import szysz3.planty.screen.mygarden.model.GardenState
 import szysz3.planty.screen.mygarden.model.MergedCell
 import szysz3.planty.screen.mygarden.model.MyGardenScreenState
 import szysz3.planty.screen.mygarden.model.MyGardenScreenUiEvent
 import szysz3.planty.screen.mygarden.model.toDomainModel
 import szysz3.planty.screen.mygarden.model.toPresentationModel
+import szysz3.planty.screen.mygarden.model.updateDialogState
+import szysz3.planty.screen.mygarden.model.updateEditState
+import szysz3.planty.screen.mygarden.model.updateNavigationState
+import szysz3.planty.screen.mygarden.model.updateSelectionState
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -38,16 +45,22 @@ class MyGardenViewModel @Inject constructor(
     private val _uiEvent = MutableSharedFlow<MyGardenScreenUiEvent>()
     val uiEvent: SharedFlow<MyGardenScreenUiEvent> = _uiEvent.asSharedFlow()
 
-    fun updateSelectedCell(row: Int, column: Int) {
-        _uiState.update { it.copy(selectedCell = Pair(row, column)) }
+    private fun updateSelectedCell(row: Int, column: Int) {
+        _uiState.update {
+            it.updateSelectionState { copy(selectedCell = Pair(row, column)) }
+        }
     }
 
     fun showDeleteDialog(show: Boolean) {
-        _uiState.update { it.copy(isDeleteDialogVisible = show) }
+        _uiState.update {
+            it.updateDialogState { copy(isDeleteDialogVisible = show) }
+        }
     }
 
     fun showBottomSheet(show: Boolean) {
-        _uiState.update { it.copy(isBottomSheetVisible = show) }
+        _uiState.update {
+            it.updateDialogState { copy(isBottomSheetVisible = show) }
+        }
     }
 
     fun createGarden(rows: Int, columns: Int) {
@@ -62,7 +75,7 @@ class MyGardenViewModel @Inject constructor(
     }
 
     private fun saveGardenState(gardenState: GardenState) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 saveGardenStateUseCase(gardenState.toDomainModel())
             } catch (e: Exception) {
@@ -71,104 +84,62 @@ class MyGardenViewModel @Inject constructor(
         }
     }
 
-    fun isValidRectangularSelection(cells: Set<Pair<Int, Int>>): Boolean {
-        if (cells.isEmpty()) return true
-
-        val minRow = cells.minOf { it.first }
-        val maxRow = cells.maxOf { it.first }
-        val minCol = cells.minOf { it.second }
-        val maxCol = cells.maxOf { it.second }
-
-        val expectedSize = (maxRow - minRow + 1) * (maxCol - minCol + 1)
-        return cells.size == expectedSize
+    fun isValidRectangularSelection(): Boolean {
+        val selectedCells = _uiState.value.editState.selectedCells
+        if (selectedCells.isEmpty()) return true
+        return CellBounds.from(selectedCells).isValidRectangularSelection(selectedCells)
     }
 
     fun mergeCells() {
         val currentState = _uiState.value
-        Timber.d("Attempting to merge cells. Selected cells: ${currentState.selectedCells}")
+        val selectedCells = currentState.editState.selectedCells
 
-        if (currentState.selectedCells.size < 2) {
-            Timber.d("Cannot merge: Need at least 2 cells selected")
-            return
-        }
+        if (selectedCells.size < 2) return
+        if (!isValidRectangularSelection()) return
 
-        if (!isValidRectangularSelection(currentState.selectedCells)) {
-            Timber.d("Cannot merge: Selection does not form a valid rectangle")
-            return
-        }
+        val bounds = CellBounds.from(selectedCells)
 
-        val minRow = currentState.selectedCells.minOf { it.first }
-        val maxRow = currentState.selectedCells.maxOf { it.first }
-        val minCol = currentState.selectedCells.minOf { it.second }
-        val maxCol = currentState.selectedCells.maxOf { it.second }
-
-        // This might be 0 (main garden) or a sub-garden ID
-        val parentId = currentState.currentGardenId ?: 0
-        Timber.d("Using parentId: $parentId")
-        Timber.d("Merge dimensions: ($minRow, $minCol) to ($maxRow, $maxCol)")
+        val newMergedCell = bounds.toMergedCell(
+            parentGardenId = currentState.navigationState.currentGardenId ?: 0
+        )
 
         viewModelScope.launch {
             try {
-                // 1) Merge the cells in the DB => get the real inserted ID
-                Timber.d("Merging cells in the DB for parentGardenId=$parentId, selection=${currentState.selectedCells}")
-//                val mergedCellDbId = mergeCellsUseCase(
-//                    MergeCellsParams(
-//                        parentGardenId = parentId,
-//                        selectedCells = currentState.selectedCells
-//                    )
-//                )
-//                Timber.d("DB returned mergedCellDbId=$mergedCellDbId")
-
-                // 2) Create a new MergedCell *in-memory* for UI state
-                val newMergedCell = MergedCell(
-                    id = 0, //mergedCellDbId.toInt(), // Use the real DB ID
-                    parentGardenId = parentId,
-                    startRow = minRow,
-                    startColumn = minCol,
-                    endRow = maxRow,
-                    endColumn = maxCol,
-                    subGardenId = null
-                )
-                Timber.d("Created newMergedCell in VM: $newMergedCell")
-
-                // 3) Update your local UI state
                 val updatedState = currentState.gardenState.copy(
                     mergedCells = currentState.gardenState.mergedCells + newMergedCell
                 )
 
-                // 4) (Optional) If you still need to save a domain model
-//                Timber.d("Saving updated garden state with newMergedCell ID=${newMergedCell.id}")
-//                saveGardenStateUseCase(updatedState.toDomainModel())
-
-                // 5) Update UI to reflect the merge is done
                 _uiState.update { state ->
                     state.copy(
-                        isEditMode = false,
-                        selectedCells = emptySet(),
-                        gardenState = updatedState
+                        gardenState = updatedState,
+                        editState = state.editState.copy(
+                            isEditMode = false,
+                            selectedCells = emptySet()
+                        )
                     )
                 }
             } catch (e: Exception) {
                 Timber.e(e, "Error while merging cells")
-                // Optionally revert UI state if needed
             }
         }
     }
 
     fun toggleEditMode() {
         _uiState.update { currentState ->
-            Timber.d("Toggling edit mode from ${currentState.isEditMode} to ${!currentState.isEditMode}")
-            currentState.copy(
-                isEditMode = !currentState.isEditMode,
-                selectedCells = emptySet()
-            )
+            Timber.d("Toggling edit mode from ${currentState.editState.isEditMode} to ${!currentState.editState.isEditMode}")
+            currentState.updateEditState {
+                copy(
+                    isEditMode = !isEditMode,
+                    selectedCells = emptySet()
+                )
+            }
         }
     }
 
     fun onCellClick(row: Int, column: Int) {
         val currentState = _uiState.value
-        Timber.d("Cell clicked at row=$row, col=$column, isEditMode=${currentState.isEditMode}")
-        if (currentState.isEditMode) {
+        Timber.d("Cell clicked at row=$row, col=$column, isEditMode=${currentState.editState.isEditMode}")
+        if (currentState.editState.isEditMode) {
             handleCellSelectionInEditMode(row, column)
         } else {
             handleCellClickInPreviewMode(row, column)
@@ -178,14 +149,14 @@ class MyGardenViewModel @Inject constructor(
     private fun handleCellSelectionInEditMode(row: Int, column: Int) {
         _uiState.update { currentState ->
             val position = Pair(row, column)
-            val currentSelection = currentState.selectedCells
+            val currentSelection = currentState.editState.selectedCells
             val newSelection = if (position in currentSelection) {
                 currentSelection - position
             } else {
                 currentSelection + position
             }
             Timber.d("Updating selection from $currentSelection to $newSelection")
-            currentState.copy(selectedCells = newSelection)
+            currentState.updateEditState { copy(selectedCells = newSelection) }
         }
     }
 
@@ -194,10 +165,12 @@ class MyGardenViewModel @Inject constructor(
 
         if (mergedCell.subGardenId != null) {
             _uiState.update {
-                it.copy(
-                    currentGardenId = mergedCell.subGardenId,
-                    currentGardenPath = it.currentGardenPath + mergedCell.subGardenId
-                )
+                it.updateNavigationState {
+                    copy(
+                        currentGardenId = mergedCell.subGardenId,
+                        currentGardenPath = currentGardenPath + mergedCell.subGardenId
+                    )
+                }
             }
         } else {
             showCreateSubGardenDialog(mergedCell.id)
@@ -207,8 +180,8 @@ class MyGardenViewModel @Inject constructor(
     private fun showCreateSubGardenDialog(mergedCellId: Int) {
         _uiState.update {
             it.copy(
-                showCreateSubGardenDialog = true,
-                selectedMergedCellId = mergedCellId
+                dialogState = it.dialogState.copy(showCreateSubGardenDialog = true),
+                selectionState = it.selectionState.copy(selectedMergedCellId = mergedCellId)
             )
         }
     }
@@ -217,8 +190,8 @@ class MyGardenViewModel @Inject constructor(
         updateSelectedCell(row, column)
         val plantForSelectedCell = getPlantForSelectedCell()
 
-        if (plantForSelectedCell != null) {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            if (plantForSelectedCell != null) {
                 _uiEvent.emit(
                     MyGardenScreenUiEvent.OnPlantChosen(
                         plantForSelectedCell,
@@ -226,9 +199,7 @@ class MyGardenViewModel @Inject constructor(
                         column
                     )
                 )
-            }
-        } else {
-            viewModelScope.launch {
+            } else {
                 _uiEvent.emit(MyGardenScreenUiEvent.OnEmptyCellChosen(row, column))
             }
         }
@@ -264,7 +235,7 @@ class MyGardenViewModel @Inject constructor(
                     it.copy(
                         gardenState = GardenState(),
                         dataLoaded = false,
-                        selectedCell = null
+                        selectionState = GardenSelectionState()
                     )
                 }
             } catch (e: Exception) {
@@ -273,10 +244,10 @@ class MyGardenViewModel @Inject constructor(
         }
     }
 
-    fun getPlantForSelectedCell(): Plant? {
+    private fun getPlantForSelectedCell(): Plant? {
+        val selectedCell = _uiState.value.selectionState.selectedCell
         return _uiState.value.gardenState.cells.find {
-            it.row == _uiState.value.selectedCell?.first &&
-                    it.column == _uiState.value.selectedCell?.second
+            it.row == selectedCell?.first && it.column == selectedCell.second
         }?.plant
     }
 }

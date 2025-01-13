@@ -72,7 +72,7 @@ fun MyGardenScreen(
         showTopBar = true,
         showBottomBar = true,
         topBarActions = {
-            if (uiState.dataLoaded && !uiState.isEditMode) {
+            if (uiState.dataLoaded && !uiState.editState.isEditMode) {
                 IconButton(onClick = { myGardenViewModel.toggleEditMode() }) {
                     Icon(Icons.Default.Edit, "Enter edit mode")
                 }
@@ -98,23 +98,18 @@ fun MyGardenScreen(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (uiState.currentGardenPath.isNotEmpty()) {
+                if (uiState.navigationState.currentGardenPath.isNotEmpty()) {
                     GardenBreadcrumb(
-                        gardenPath = uiState.currentGardenPath,
+                        gardenPath = uiState.navigationState.currentGardenPath,
                         onNavigate = {
-                            // TODO
+                            // TODO: Implement navigation
                         }
                     )
                 }
 
-                Timber.d("Edit mode active, showing toolbar with selection: ${uiState.selectedCells}")
                 GardenEditToolbar(
                     modifier = Modifier.alpha(
-                        if (uiState.isEditMode) {
-                            1f
-                        } else {
-                            0f
-                        }
+                        if (uiState.editState.isEditMode) 1f else 0f
                     ),
                     onConfirmMerge = {
                         Timber.d("Merge button clicked")
@@ -124,8 +119,8 @@ fun MyGardenScreen(
                         Timber.d("Cancel edit clicked")
                         myGardenViewModel.toggleEditMode()
                     },
-                    isMergeEnabled = uiState.selectedCells.size >= 2 &&
-                            myGardenViewModel.isValidRectangularSelection(uiState.selectedCells)
+                    isMergeEnabled = uiState.editState.selectedCells.size >= 2 &&
+                            myGardenViewModel.isValidRectangularSelection()
                 )
 
                 if (uiState.dataLoaded && uiState.gardenState.rows > 0 && uiState.gardenState.columns > 0) {
@@ -133,13 +128,13 @@ fun MyGardenScreen(
                         rows = uiState.gardenState.rows,
                         columns = uiState.gardenState.columns,
                         state = uiState.gardenState,
-                        isEditMode = uiState.isEditMode,
-                        selectedCells = uiState.selectedCells,
-                        onCellClick = { row, col -> myGardenViewModel.onCellClick(row, col) },
+                        isEditMode = uiState.editState.isEditMode,
+                        selectedCells = uiState.editState.selectedCells,
+                        onCellClick = { row, col ->
+                            myGardenViewModel.onCellClick(row, col)
+                        },
                         onMergedCellClick = { mergedCell ->
-                            myGardenViewModel.onMergedCellClick(
-                                mergedCell
-                            )
+                            myGardenViewModel.onMergedCellClick(mergedCell)
                         }
                     )
                 } else {
@@ -148,11 +143,12 @@ fun MyGardenScreen(
                         contentDescription = "Add garden",
                         onClick = {
                             myGardenViewModel.showBottomSheet(true)
-                        })
+                        }
+                    )
                 }
             }
 
-            if (uiState.isDeleteDialogVisible) {
+            if (uiState.dialogState.isDeleteDialogVisible) {
                 DeleteAlertDialog(
                     title = "Delete Garden",
                     message = "Are you sure you want to delete this garden?",
@@ -168,16 +164,20 @@ fun MyGardenScreen(
                 )
             }
 
-            if (uiState.isBottomSheetVisible) {
+            if (uiState.dialogState.isBottomSheetVisible) {
                 GardenDimensionsInput(
                     bottomSheetState = bottomSheetState,
-                    onDismissRequest = { myGardenViewModel.showBottomSheet(false) },
+                    onDismissRequest = {
+                        myGardenViewModel.showBottomSheet(false)
+                    },
                     onDimensionsSubmitted = { height, width ->
                         myGardenViewModel.createGarden(height, width)
                         coroutineScope.launch {
                             bottomSheetState.hide()
                         }.invokeOnCompletion {
-                            if (!bottomSheetState.isVisible) myGardenViewModel.showBottomSheet(false)
+                            if (!bottomSheetState.isVisible) {
+                                myGardenViewModel.showBottomSheet(false)
+                            }
                         }
                     }
                 )
