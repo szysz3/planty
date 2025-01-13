@@ -1,11 +1,13 @@
 package szysz3.planty.screen.mygarden.composable
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import szysz3.planty.screen.mygarden.model.GardenState
 import szysz3.planty.screen.mygarden.model.MergedCell
@@ -21,46 +23,51 @@ fun GardenMap(
     onCellClick: (Int, Int) -> Unit,
     onMergedCellClick: (MergedCell) -> Unit
 ) {
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-    val cellSize = minOf(screenWidth / columns, 100.dp)
     val skipMap = mutableSetOf<Pair<Int, Int>>()
 
-    Box(
-        modifier = modifier
-            .width(cellSize * columns)
-            .height(cellSize * rows)
+    BoxWithConstraints(
+        modifier = modifier.fillMaxWidth()
     ) {
-        for (row in 0 until rows) {
-            for (col in 0 until columns) {
-                val position = row to col
-                if (position in skipMap) continue
+        val cellSize = minOf(maxWidth / columns, 100.dp)
 
-                val mergedCell = state.mergedCells.find { cell ->
-                    row in cell.startRow..cell.endRow && col in cell.startColumn..cell.endColumn
-                }
+        Box(
+            modifier = Modifier
+                .width(cellSize * columns)
+                .height(cellSize * rows)
+                .align(Alignment.Center)
+        ) {
+            for (row in 0 until rows) {
+                for (col in 0 until columns) {
+                    val position = row to col
+                    if (position in skipMap) continue
 
-                if (mergedCell != null) {
-                    if (row == mergedCell.startRow && col == mergedCell.startColumn) {
-                        GardenMergedCellBox(
-                            mergedCell = mergedCell,
-                            cellSize = cellSize,
-                            onClick = { onMergedCellClick(mergedCell) }
-                        )
-                        markMergedCells(mergedCell, skipMap)
-                    } else {
-                        skipMap.add(position)
+                    val mergedCell = state.mergedCells.find { cell ->
+                        row in cell.startRow..cell.endRow && col in cell.startColumn..cell.endColumn
                     }
-                } else {
-                    val isSelected = position in selectedCells
-                    GardenCellBox(
-                        row = row,
-                        col = col,
-                        cellSize = cellSize,
-                        isSelected = isSelected,
-                        isEditMode = isEditMode,
-                        state = state,
-                        onClick = { onCellClick(row, col) }
-                    )
+
+                    if (mergedCell != null) {
+                        if (row == mergedCell.startRow && col == mergedCell.startColumn) {
+                            GardenMergedCellBox(
+                                mergedCell = mergedCell,
+                                cellSize = cellSize,
+                                onClick = { onMergedCellClick(mergedCell) }
+                            )
+                            markMergedCells(mergedCell, skipMap)
+                        } else {
+                            skipMap.add(position)
+                        }
+                    } else {
+                        val isSelected = position in selectedCells
+                        GardenCellBox(
+                            row = row,
+                            col = col,
+                            cellSize = cellSize,
+                            isSelected = isSelected,
+                            isEditMode = isEditMode,
+                            state = state,
+                            onClick = { onCellClick(row, col) }
+                        )
+                    }
                 }
             }
         }
