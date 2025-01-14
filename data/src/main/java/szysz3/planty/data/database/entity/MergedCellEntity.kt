@@ -6,29 +6,32 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "garden_cells",
+    tableName = "merged_cells",
     foreignKeys = [
-        ForeignKey(
-            entity = GardenPlantEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["plantId"],
-            onDelete = ForeignKey.CASCADE
-        ),
         ForeignKey(
             entity = GardenEntity::class,
             parentColumns = ["id"],
             childColumns = ["gardenId"],
             onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = GardenEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["subGardenId"],
+            onDelete = ForeignKey.SET_NULL
         )
     ],
     indices = [
-        Index("gardenId")
+        Index("gardenId"),
+        Index("subGardenId")
     ]
 )
-data class GardenCellEntity(
+data class MergedCellEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val row: Int,
-    val column: Int,
-    val plantId: Long?,
-    val gardenId: Int
+    val gardenId: Int,
+    val startRow: Int,
+    val startColumn: Int,
+    val endRow: Int,
+    val endColumn: Int,
+    val subGardenId: Int?
 )

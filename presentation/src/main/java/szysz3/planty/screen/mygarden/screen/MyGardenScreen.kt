@@ -103,7 +103,7 @@ fun MyGardenScreen(
             ) {
                 if (uiState.navigationState.currentGardenPath.isNotEmpty()) {
                     GardenBreadcrumb(
-                        gardenPath = uiState.navigationState.currentGardenPath,
+                        gardenPath = uiState.navigationState.currentGardenPath.map { it.id },
                         onNavigate = {
                             // TODO: Implement navigation
                         }
@@ -174,7 +174,7 @@ fun MyGardenScreen(
                         myGardenViewModel.showBottomSheet(false)
                     },
                     onDimensionsSubmitted = { height, width ->
-                        myGardenViewModel.createGarden(height, width)
+                        myGardenViewModel.createGardenFromDimensions("name", height, width)
                         coroutineScope.launch {
                             bottomSheetState.hide()
                         }.invokeOnCompletion {

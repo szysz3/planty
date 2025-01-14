@@ -1,6 +1,9 @@
 package szysz3.planty.data.database.entity
 
+import szysz3.planty.domain.model.CellRange
+import szysz3.planty.domain.model.Garden
 import szysz3.planty.domain.model.GardenCell
+import szysz3.planty.domain.model.MergedCell
 import szysz3.planty.domain.model.Plant
 import szysz3.planty.domain.model.SubTask
 import szysz3.planty.domain.model.Task
@@ -14,12 +17,16 @@ fun GardenCellEntity.toDomain(plant: Plant?): GardenCell {
     )
 }
 
-fun GardenCell.toEntity(plantId: Long?): GardenCellEntity {
+fun GardenCell.toEntity(
+    plantId: Long?,
+    gardenId: Int
+): GardenCellEntity {  // Updated to include gardenId
     return GardenCellEntity(
         id = id,
         row = row,
         column = column,
-        plantId = plantId
+        plantId = plantId,
+        gardenId = gardenId
     )
 }
 
@@ -261,4 +268,50 @@ fun Task.toEntity(): Pair<TaskEntity, List<SubTaskEntity>> {
         )
     }
     return taskEntity to subTaskEntities
+}
+
+fun MergedCellEntity.toDomain(): MergedCell {
+    return MergedCell(
+        id = id,
+        gardenId = gardenId,
+        cellRange = CellRange(
+            startRow = startRow,
+            startColumn = startColumn,
+            endRow = endRow,
+            endColumn = endColumn
+        ),
+        subGardenId = subGardenId
+    )
+}
+
+fun MergedCell.toEntity(): MergedCellEntity {
+    return MergedCellEntity(
+        id = id,
+        gardenId = gardenId,
+        startRow = cellRange.startRow,
+        startColumn = cellRange.startColumn,
+        endRow = cellRange.endRow,
+        endColumn = cellRange.endColumn,
+        subGardenId = subGardenId
+    )
+}
+
+fun GardenEntity.toDomain(): Garden {
+    return Garden(
+        id = id,
+        name = name,
+        parentGardenId = parentGardenId,
+        rows = rows,
+        columns = columns
+    )
+}
+
+fun Garden.toEntity(): GardenEntity {
+    return GardenEntity(
+        id = id,
+        name = name,
+        parentGardenId = parentGardenId,
+        rows = rows,
+        columns = columns
+    )
 }

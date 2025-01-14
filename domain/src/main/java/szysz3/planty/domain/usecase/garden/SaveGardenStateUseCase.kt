@@ -9,6 +9,6 @@ class SaveGardenStateUseCase @Inject constructor(
     private val repository: GardenRepository
 ) : BaseUseCase<GardenState, Unit>() {
     override suspend fun invoke(input: GardenState) {
-        return repository.saveGardenState(input)
+        repository.saveGardenState(input)
     }
 }

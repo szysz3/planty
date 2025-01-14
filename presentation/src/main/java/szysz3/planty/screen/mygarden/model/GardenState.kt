@@ -3,6 +3,8 @@ package szysz3.planty.screen.mygarden.model
 import szysz3.planty.core.model.GardenCell
 
 data class GardenState(
+    val id: Int = 0,
+    val name: String = "",
     val rows: Int = 0,
     val columns: Int = 0,
     val cells: List<GardenCell> = emptyList(),
@@ -15,7 +17,7 @@ data class GardenState(
                 val column = index % columns
                 GardenCell(id = 0, row = row, column = column, plant = null)
             }
-            return GardenState(rows = rows, columns = columns, cells = cells)
+            return GardenState(rows = rows, columns = columns, cells = cells, name = "")
         }
     }
 }

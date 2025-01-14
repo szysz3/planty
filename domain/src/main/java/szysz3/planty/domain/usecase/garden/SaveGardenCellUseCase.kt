@@ -12,9 +12,15 @@ class SaveGardenCellUseCase @Inject constructor(
         repository.updateGardenCell(
             row = input.row,
             column = input.column,
-            plant = input.plant
+            plant = input.plant,
+            gardenId = input.gardenId
         )
     }
 }
 
-data class SaveGardenCellUseCaseParams(val row: Int, val column: Int, val plant: Plant?)
+data class SaveGardenCellUseCaseParams(
+    val row: Int,
+    val column: Int,
+    val plant: Plant?,
+    val gardenId: Int
+)

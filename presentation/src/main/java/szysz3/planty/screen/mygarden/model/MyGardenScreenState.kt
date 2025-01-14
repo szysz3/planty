@@ -1,5 +1,7 @@
 package szysz3.planty.screen.mygarden.model
 
+import szysz3.planty.domain.model.Garden
+
 data class MyGardenScreenState(
     val gardenState: GardenState = GardenState(),
     val navigationState: GardenNavigationState = GardenNavigationState(),
@@ -11,7 +13,8 @@ data class MyGardenScreenState(
 
 data class GardenNavigationState(
     val currentGardenId: Int? = null,
-    val currentGardenPath: List<Int> = emptyList()
+    val currentGarden: Garden? = null,
+    val currentGardenPath: List<Garden> = emptyList()  // Changed from List<Int> to List<Garden>
 )
 
 data class GardenEditState(

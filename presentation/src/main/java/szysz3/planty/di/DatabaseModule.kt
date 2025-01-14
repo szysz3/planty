@@ -8,7 +8,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import szysz3.planty.data.database.GardenDatabase
 import szysz3.planty.data.database.dao.GardenCellDao
+import szysz3.planty.data.database.dao.GardenDao
 import szysz3.planty.data.database.dao.GardenPlantDao
+import szysz3.planty.data.database.dao.MergedCellDao
 import szysz3.planty.data.database.dao.PlantDao
 import szysz3.planty.data.database.dao.PlantImageDao
 import szysz3.planty.data.database.dao.TaskDao
@@ -52,5 +54,17 @@ object DatabaseModule {
     @Singleton
     fun provideTaskDao(database: GardenDatabase): TaskDao {
         return database.taskDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideGardenDao(database: GardenDatabase): GardenDao {
+        return database.gardenDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideMergedCellDao(database: GardenDatabase): MergedCellDao {
+        return database.mergedCellDao()
     }
 }

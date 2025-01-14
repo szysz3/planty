@@ -60,7 +60,9 @@ class PlantDetailsViewModel @Inject constructor(
                 SaveGardenCellUseCaseParams(
                     row = row,
                     column = column,
-                    plant = plant?.toDomain()
+                    plant = plant?.toDomain(),
+                    //TODO
+                    gardenId = 1,
                 )
             )
         }
