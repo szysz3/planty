@@ -27,8 +27,6 @@ import szysz3.planty.domain.usecase.garden.ObserveGardenStateUseCase
 import szysz3.planty.domain.usecase.garden.SaveGardenCellUseCase
 import szysz3.planty.domain.usecase.garden.SaveGardenStateUseCase
 import szysz3.planty.screen.mygarden.model.CellBounds
-import szysz3.planty.screen.mygarden.model.GardenSelectionState
-import szysz3.planty.screen.mygarden.model.GardenState
 import szysz3.planty.screen.mygarden.model.MergedCell
 import szysz3.planty.screen.mygarden.model.MyGardenScreenState
 import szysz3.planty.screen.mygarden.model.MyGardenScreenUiEvent
@@ -174,14 +172,14 @@ class MyGardenViewModel @Inject constructor(
                         subGardenId = null
                     )
                 )
-//                saveGardenStateUseCase(updatedGardenState.toDomain())
 
                 _uiState.update { state ->
                     state.copy(
                         editState = state.editState.copy(
                             isEditMode = false,
                             selectedCells = emptySet()
-                        )
+                        ),
+                        gardenState = updatedGardenState
                     )
                 }
             } catch (e: Exception) {
@@ -263,16 +261,11 @@ class MyGardenViewModel @Inject constructor(
 
     fun clearGarden() {
         val currentGardenId = _uiState.value.navigationState.currentGardenId ?: return
-
         viewModelScope.launch {
             try {
                 clearGardenUseCase(GardenIdParam(currentGardenId))
                 _uiState.update {
-                    it.copy(
-                        gardenState = GardenState(id = currentGardenId),
-                        dataLoaded = false,
-                        selectionState = GardenSelectionState()
-                    )
+                    MyGardenScreenState.empty()
                 }
             } catch (e: Exception) {
                 Timber.e(e)

@@ -9,7 +9,13 @@ data class MyGardenScreenState(
     val dialogState: GardenDialogState = GardenDialogState(),
     val selectionState: GardenSelectionState = GardenSelectionState(),
     val dataLoaded: Boolean = false
-)
+) {
+    companion object {
+        fun empty(): MyGardenScreenState {
+            return MyGardenScreenState()
+        }
+    }
+}
 
 data class GardenNavigationState(
     val currentGardenId: Int? = null,

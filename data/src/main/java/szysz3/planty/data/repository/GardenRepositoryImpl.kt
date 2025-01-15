@@ -111,6 +111,7 @@ class GardenRepositoryImpl @Inject constructor(
 
     override suspend fun clearGardenState(gardenId: Int) = withContext(Dispatchers.IO) {
         gardenCellDao.clearGarden(gardenId)
+        gardenDao.deleteGarden(gardenId)
         mergedCellDao.deleteMergedCells(gardenId)
     }
 

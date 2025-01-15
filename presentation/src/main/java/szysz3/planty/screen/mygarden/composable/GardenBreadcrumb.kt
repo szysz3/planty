@@ -30,20 +30,20 @@ fun GardenBreadcrumb(
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        BreadcrumbItem(label = "Main Garden", gardenId = null, onNavigate = onNavigate)
-
-        gardenPath.forEach { gardenId ->
-            Icon(
-                imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
-                contentDescription = null,
-                modifier = Modifier.size(20.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            BreadcrumbItem(
-                label = "Sub-garden $gardenId",
-                gardenId = gardenId,
-                onNavigate = onNavigate
-            )
+        if (gardenPath.size > 1) {
+            gardenPath.forEach { gardenId ->
+                Icon(
+                    imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                BreadcrumbItem(
+                    label = "Garden-$gardenId",
+                    gardenId = gardenId,
+                    onNavigate = onNavigate
+                )
+            }
         }
     }
 }

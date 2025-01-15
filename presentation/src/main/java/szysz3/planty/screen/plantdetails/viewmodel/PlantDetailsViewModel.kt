@@ -61,7 +61,7 @@ class PlantDetailsViewModel @Inject constructor(
                     row = row,
                     column = column,
                     plant = plant?.toDomain(),
-                    //TODO
+                    //TODO: id of garden user has selected
                     gardenId = 1,
                 )
             )
