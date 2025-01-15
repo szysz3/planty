@@ -17,8 +17,8 @@ object MyGardenFeature : FeatureRoute {
 fun NavGraphBuilder.addMyGardenScreen(
     origin: String = "",
     navController: NavHostController,
-    onPlantChosen: (plantId: Int, row: Int, column: Int) -> Unit,
-    onEmptyGardenFieldChosen: (row: Int, column: Int) -> Unit,
+    onPlantChosen: (plantId: Int, row: Int, column: Int, gardenId: Int) -> Unit,
+    onEmptyGardenFieldChosen: (row: Int, column: Int, gardenId: Int) -> Unit,
 ) {
     staticComposable(
         route = MyGardenFeature.route(origin),

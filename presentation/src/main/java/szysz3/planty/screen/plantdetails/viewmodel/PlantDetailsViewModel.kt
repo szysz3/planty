@@ -30,7 +30,8 @@ class PlantDetailsViewModel @Inject constructor(
         config: PlantDetailsConfig,
         plantId: Int,
         row: Int?,
-        column: Int?
+        column: Int?,
+        gardenId: Int
     ) {
         viewModelScope.launch {
             val plant = getPlantUseCase(plantId)
@@ -41,7 +42,8 @@ class PlantDetailsViewModel @Inject constructor(
                     row = row,
                     column = column,
                     isDeleteButtonVisible = config == PlantDetailsConfig.DELETE,
-                    isPlantButtonVisible = config == PlantDetailsConfig.PLANT
+                    isPlantButtonVisible = config == PlantDetailsConfig.PLANT,
+                    gardenId = gardenId
                 )
             }
         }
@@ -55,14 +57,14 @@ class PlantDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             val row = _uiState.value.row
             val column = _uiState.value.column
+            val gardenId = _uiState.value.gardenId
             if (row == null || column == null) return@launch
             saveGardenCellUseCase(
                 SaveGardenCellUseCaseParams(
                     row = row,
                     column = column,
                     plant = plant?.toDomain(),
-                    //TODO: id of garden user has selected
-                    gardenId = 1,
+                    gardenId = gardenId
                 )
             )
         }

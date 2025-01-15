@@ -7,9 +7,11 @@ import androidx.navigation.navArgument
 import szysz3.planty.core.model.PlantCatalogConfig
 import szysz3.planty.navigation.FeatureRoute
 import szysz3.planty.navigation.buildQueryString
+import szysz3.planty.navigation.requiredIntArg
 import szysz3.planty.navigation.staticComposable
 import szysz3.planty.screen.plantcatalog.PlantCatalogFeature.PLANT_CATALOG_COLUMN_ARG_NAME
 import szysz3.planty.screen.plantcatalog.PlantCatalogFeature.PLANT_CATALOG_CONFIG_ARG_NAME
+import szysz3.planty.screen.plantcatalog.PlantCatalogFeature.PLANT_CATALOG_GARDEN_ID_ARG_NAME
 import szysz3.planty.screen.plantcatalog.PlantCatalogFeature.PLANT_CATALOG_ROW_ARG_NAME
 import szysz3.planty.screen.plantcatalog.screen.PlantCatalogScreen
 
@@ -18,6 +20,7 @@ object PlantCatalogFeature : FeatureRoute {
     const val PLANT_CATALOG_CONFIG_ARG_NAME = "config"
     const val PLANT_CATALOG_ROW_ARG_NAME = "row"
     const val PLANT_CATALOG_COLUMN_ARG_NAME = "column"
+    const val PLANT_CATALOG_GARDEN_ID_ARG_NAME = "gardenId"
 
     private const val BASE_ROUTE = "/plantCatalog"
 
@@ -27,18 +30,21 @@ object PlantCatalogFeature : FeatureRoute {
         "$basePath?" +
                 "$PLANT_CATALOG_CONFIG_ARG_NAME={$PLANT_CATALOG_CONFIG_ARG_NAME}&" +
                 "$PLANT_CATALOG_ROW_ARG_NAME={$PLANT_CATALOG_ROW_ARG_NAME}&" +
-                "$PLANT_CATALOG_COLUMN_ARG_NAME={$PLANT_CATALOG_COLUMN_ARG_NAME}"
+                "$PLANT_CATALOG_COLUMN_ARG_NAME={$PLANT_CATALOG_COLUMN_ARG_NAME}&" +
+                "$PLANT_CATALOG_GARDEN_ID_ARG_NAME={$PLANT_CATALOG_GARDEN_ID_ARG_NAME}"
 
     fun routeWithArgs(
         origin: String = "",
         config: Int,
         row: Int? = null,
         column: Int? = null,
+        gardenId: Int? = null
     ): String {
         val queryString = buildQueryString(
             PLANT_CATALOG_CONFIG_ARG_NAME to config,
             PLANT_CATALOG_ROW_ARG_NAME to row,
-            PLANT_CATALOG_COLUMN_ARG_NAME to column
+            PLANT_CATALOG_COLUMN_ARG_NAME to column,
+            PLANT_CATALOG_GARDEN_ID_ARG_NAME to gardenId
         )
         return baseRoute(origin) + queryString
     }
@@ -47,12 +53,17 @@ object PlantCatalogFeature : FeatureRoute {
 fun NavGraphBuilder.addPlantCatalogScreen(
     origin: String = "",
     navController: NavHostController,
-    onShowPlantDetails: (plantId: Int, row: Int?, column: Int?) -> Unit,
+    onShowPlantDetails: (plantId: Int, row: Int?, column: Int?, gardenId: Int?) -> Unit,
 ) {
     staticComposable(
         route = PlantCatalogFeature.route(origin),
         arguments = listOf(
             navArgument(PLANT_CATALOG_CONFIG_ARG_NAME) {
+                type = NavType.StringType
+                nullable = true
+                defaultValue = null
+            },
+            navArgument(PLANT_CATALOG_GARDEN_ID_ARG_NAME) {
                 type = NavType.StringType
                 nullable = true
                 defaultValue = null
@@ -69,6 +80,9 @@ fun NavGraphBuilder.addPlantCatalogScreen(
             }
         )
     ) { backStackEntry ->
+        val gardenId =
+            backStackEntry.requiredIntArg(PLANT_CATALOG_GARDEN_ID_ARG_NAME)
+
         val config = backStackEntry.arguments
             ?.getString(PLANT_CATALOG_CONFIG_ARG_NAME)
             ?.toIntOrNull()
@@ -91,7 +105,8 @@ fun NavGraphBuilder.addPlantCatalogScreen(
             },
             row = row,
             column = column,
-            onShowPlantDetails = onShowPlantDetails
+            onShowPlantDetails = onShowPlantDetails,
+            gardenId = gardenId
         )
     }
 }

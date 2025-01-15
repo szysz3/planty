@@ -18,6 +18,7 @@ object PlantDetailsFeature : FeatureRoute {
     const val PLANT_DETAILS_CONFIG_ARG_NAME = "config"
     const val PLANT_DETAILS_ROW_ARG_NAME = "row"
     const val PLANT_DETAILS_COLUMN_ARG_NAME = "column"
+    const val PLANT_DETAILS_GARDEN_ID_ARG_NAME = "gardenId"
 
     override val basePath: String = "/plantDetails"
 
@@ -26,20 +27,23 @@ object PlantDetailsFeature : FeatureRoute {
                 "$PLANT_DETAILS_PLANT_ID_ARG_NAME={$PLANT_DETAILS_PLANT_ID_ARG_NAME}&" +
                 "$PLANT_DETAILS_CONFIG_ARG_NAME={$PLANT_DETAILS_CONFIG_ARG_NAME}&" +
                 "$PLANT_DETAILS_ROW_ARG_NAME={$PLANT_DETAILS_ROW_ARG_NAME}&" +
-                "$PLANT_DETAILS_COLUMN_ARG_NAME={$PLANT_DETAILS_COLUMN_ARG_NAME}"
+                "$PLANT_DETAILS_COLUMN_ARG_NAME={$PLANT_DETAILS_COLUMN_ARG_NAME}&" +
+                "$PLANT_DETAILS_GARDEN_ID_ARG_NAME={$PLANT_DETAILS_GARDEN_ID_ARG_NAME}"
 
     fun routeWithArgs(
         origin: String = "",
         plantId: Int,
         config: Int,
         row: Int? = null,
-        column: Int? = null
+        column: Int? = null,
+        gardenId: Int? = null
     ): String {
         val queryString = buildQueryString(
             PLANT_DETAILS_PLANT_ID_ARG_NAME to plantId,
             PLANT_DETAILS_CONFIG_ARG_NAME to config,
             PLANT_DETAILS_ROW_ARG_NAME to row,
-            PLANT_DETAILS_COLUMN_ARG_NAME to column
+            PLANT_DETAILS_COLUMN_ARG_NAME to column,
+            PLANT_DETAILS_GARDEN_ID_ARG_NAME to gardenId
         )
         return baseRoute(origin) + queryString
     }
@@ -55,6 +59,10 @@ fun NavGraphBuilder.addPlantDetailsScreen(
         route = PlantDetailsFeature.route(origin),
         arguments = listOf(
             navArgument(PlantDetailsFeature.PLANT_DETAILS_PLANT_ID_ARG_NAME) {
+                type = NavType.StringType
+                nullable = true
+            },
+            navArgument(PlantDetailsFeature.PLANT_DETAILS_GARDEN_ID_ARG_NAME) {
                 type = NavType.StringType
                 nullable = true
             },
@@ -76,6 +84,8 @@ fun NavGraphBuilder.addPlantDetailsScreen(
             backStackEntry.requiredIntArg(PlantDetailsFeature.PLANT_DETAILS_PLANT_ID_ARG_NAME)
         val config =
             backStackEntry.requiredIntArg(PlantDetailsFeature.PLANT_DETAILS_CONFIG_ARG_NAME)
+        val gardenId =
+            backStackEntry.requiredIntArg(PlantDetailsFeature.PLANT_DETAILS_GARDEN_ID_ARG_NAME)
 
         val row = backStackEntry.arguments
             ?.getString(PlantDetailsFeature.PLANT_DETAILS_ROW_ARG_NAME)
@@ -93,7 +103,8 @@ fun NavGraphBuilder.addPlantDetailsScreen(
             row = row,
             column = column,
             onPlantChosen = onPlantChosen,
-            onPlantImageClicked = onPlantImageClicked
+            onPlantImageClicked = onPlantImageClicked,
+            gardenId = gardenId
         )
     }
 }

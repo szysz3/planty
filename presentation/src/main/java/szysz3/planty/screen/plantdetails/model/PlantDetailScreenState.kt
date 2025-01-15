@@ -7,6 +7,7 @@ data class PlantDetailScreenState(
     val selectedPlant: Plant? = null,
     val row: Int? = null,
     val column: Int? = null,
+    val gardenId: Int = -1,
     val isDeleteDialogVisible: Boolean = false,
     val isDeleteButtonVisible: Boolean = false,
     val isPlantButtonVisible: Boolean = false,

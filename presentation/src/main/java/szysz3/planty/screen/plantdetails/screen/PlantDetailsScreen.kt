@@ -44,6 +44,7 @@ fun PlantDetailsScreen(
     plantId: Int,
     row: Int?,
     column: Int?,
+    gardenId: Int,
     onPlantChosen: (() -> Unit)?,
     onPlantImageClicked: (plantId: Int) -> Unit,
     plantDetailsViewModel: PlantDetailsViewModel = hiltViewModel(),
@@ -52,7 +53,7 @@ fun PlantDetailsScreen(
     val context = LocalContext.current
 
     LaunchedEffect(plantId) {
-        plantDetailsViewModel.initialize(config, plantId, row, column)
+        plantDetailsViewModel.initialize(config, plantId, row, column, gardenId)
     }
 
     BaseScreen(

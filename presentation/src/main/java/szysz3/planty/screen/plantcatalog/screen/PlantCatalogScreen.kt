@@ -39,7 +39,8 @@ fun PlantCatalogScreen(
     origin: PlantCatalogConfig,
     row: Int?,
     column: Int?,
-    onShowPlantDetails: (plantId: Int, row: Int?, column: Int?) -> Unit,
+    gardenId: Int?,
+    onShowPlantDetails: (plantId: Int, row: Int?, column: Int?, gardenId: Int?) -> Unit,
     plantCatalogViewModel: PlantCatalogViewModel = hiltViewModel(),
 ) {
     val focusManager = LocalFocusManager.current
@@ -109,7 +110,7 @@ fun PlantCatalogScreen(
                                     plant = plant,
                                     onPlantSelected = {
                                         plant?.let {
-                                            onShowPlantDetails(it.id, row, column)
+                                            onShowPlantDetails(it.id, row, column, gardenId)
                                         }
                                     }
                                 )

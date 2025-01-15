@@ -22,24 +22,26 @@ fun NavGraphBuilder.myGardenGraph(navController: NavHostController) {
     ) {
         addMyGardenScreen(
             navController = navController,
-            onPlantChosen = { plantId, row, column ->
+            onPlantChosen = { plantId, row, column, gardenId ->
                 navController.showScreen(
                     PlantDetailsFeature.routeWithArgs(
                         origin = MyGardenFeature.baseRoute(),
                         plantId = plantId,
                         row = row,
                         column = column,
-                        config = PlantDetailsConfig.DELETE.value
+                        config = PlantDetailsConfig.DELETE.value,
+                        gardenId = gardenId
                     )
                 )
             },
-            onEmptyGardenFieldChosen = { row, column ->
+            onEmptyGardenFieldChosen = { row, column, gardenId ->
                 navController.showScreen(
                     PlantCatalogFeature.routeWithArgs(
                         origin = MyGardenFeature.baseRoute(),
                         row = row,
                         column = column,
-                        config = PlantDetailsConfig.PLANT.value
+                        config = PlantDetailsConfig.PLANT.value,
+                        gardenId = gardenId
                     )
                 )
             }
@@ -76,14 +78,15 @@ fun NavGraphBuilder.myGardenGraph(navController: NavHostController) {
 
         addPlantCatalogScreen(
             navController = navController,
-            onShowPlantDetails = { plantId, row, column ->
+            onShowPlantDetails = { plantId, row, column, gardenId ->
                 navController.showScreen(
                     PlantDetailsFeature.routeWithArgs(
                         origin = "${MyGardenFeature.baseRoute()}${PlantCatalogFeature.baseRoute()}",
                         plantId = plantId,
                         row = row,
                         column = column,
-                        config = PlantDetailsConfig.PLANT.value
+                        config = PlantDetailsConfig.PLANT.value,
+                        gardenId = gardenId
                     )
                 )
             },

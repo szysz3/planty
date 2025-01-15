@@ -43,8 +43,8 @@ import timber.log.Timber
 fun MyGardenScreen(
     title: String,
     navController: NavHostController,
-    onPlantChosen: (plantId: Int, row: Int, column: Int) -> Unit,
-    onEmptyGardenFieldChosen: (row: Int, column: Int) -> Unit,
+    onPlantChosen: (plantId: Int, row: Int, column: Int, gardenId: Int) -> Unit,
+    onEmptyGardenFieldChosen: (row: Int, column: Int, gardenId: Int) -> Unit,
     myGardenViewModel: MyGardenViewModel = hiltViewModel(),
 ) {
     val uiState by myGardenViewModel.uiState.collectAsState()
@@ -59,11 +59,11 @@ fun MyGardenScreen(
         myGardenViewModel.uiEvent.collectLatest { event ->
             when (event) {
                 is MyGardenScreenUiEvent.OnPlantChosen -> {
-                    onPlantChosen(event.plant.id, event.row, event.column)
+                    onPlantChosen(event.plant.id, event.row, event.column, event.gardenId)
                 }
 
                 is MyGardenScreenUiEvent.OnEmptyCellChosen -> {
-                    onEmptyGardenFieldChosen(event.row, event.column)
+                    onEmptyGardenFieldChosen(event.row, event.column, event.gardenId)
                 }
             }
         }

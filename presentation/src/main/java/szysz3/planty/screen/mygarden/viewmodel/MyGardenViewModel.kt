@@ -250,11 +250,12 @@ class MyGardenViewModel @Inject constructor(
                     MyGardenScreenUiEvent.OnPlantChosen(
                         plantForSelectedCell,
                         row,
-                        column
+                        column,
+                        gardenId
                     )
                 )
             } else {
-                _uiEvent.emit(MyGardenScreenUiEvent.OnEmptyCellChosen(row, column))
+                _uiEvent.emit(MyGardenScreenUiEvent.OnEmptyCellChosen(row, column, gardenId))
             }
         }
     }

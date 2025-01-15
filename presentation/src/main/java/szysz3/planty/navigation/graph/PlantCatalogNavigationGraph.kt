@@ -20,14 +20,15 @@ fun NavGraphBuilder.plantCatalogGraph(navController: NavHostController) {
     ) {
         addPlantCatalogScreen(
             navController = navController,
-            onShowPlantDetails = { plantId, row, column ->
+            onShowPlantDetails = { plantId, row, column, gardenId ->
                 navController.showScreen(
                     PlantDetailsFeature.routeWithArgs(
                         origin = PlantCatalogFeature.baseRoute(),
                         plantId = plantId,
                         row = row,
                         column = column,
-                        config = PlantDetailsConfig.PREVIEW.value
+                        config = PlantDetailsConfig.PREVIEW.value,
+                        gardenId = gardenId
                     )
                 )
             }
