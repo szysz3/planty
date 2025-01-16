@@ -14,19 +14,27 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun GardenBreadcrumb(
+    modifier: Modifier = Modifier,
     gardenPath: List<Int>,
-    onNavigate: (Int?) -> Unit
+    onNavigate: (Int?) -> Unit,
 ) {
+    val scrollState = rememberScrollState()
+
+    LaunchedEffect(gardenPath) {
+        scrollState.animateScrollTo(scrollState.maxValue)
+    }
+    
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .horizontalScroll(rememberScrollState())
+            .horizontalScroll(scrollState)
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

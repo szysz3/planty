@@ -77,6 +77,7 @@ class MyGardenViewModel @Inject constructor(
                         )
                     }
                 }
+                // TODO: do not duplicate observations
                 observeGardenState()
             }
         } catch (e: Exception) {
@@ -103,6 +104,7 @@ class MyGardenViewModel @Inject constructor(
         }
     }
 
+    // TODO: rework
     fun observeGardenState() {
         val currentGardenId = _uiState.value.navigationState.currentGardenId ?: return
 
@@ -124,7 +126,11 @@ class MyGardenViewModel @Inject constructor(
         }
     }
 
-    private fun navigateToGarden(gardenId: Int) {
+    fun navigateToGarden(gardenId: Int?) {
+        requireNotNull(gardenId) {
+            "GardenId is null."
+        }
+
         viewModelScope.launch {
             try {
                 val gardenPath = getGardenPathUseCase(GardenIdParam(gardenId))
@@ -137,6 +143,7 @@ class MyGardenViewModel @Inject constructor(
                         )
                     }
                 }
+                // TODO: do not duplicate observations
                 observeGardenState()
             } catch (e: Exception) {
                 Timber.e(e)

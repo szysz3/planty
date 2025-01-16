@@ -1,5 +1,6 @@
 package szysz3.planty.screen.mygarden.screen
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -98,56 +99,68 @@ fun MyGardenScreen(
             contentAlignment = Alignment.Center
         ) {
             Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
             ) {
-                if (uiState.navigationState.currentGardenPath.isNotEmpty()) {
-                    GardenBreadcrumb(
-                        gardenPath = uiState.navigationState.currentGardenPath.map { it.id },
-                        onNavigate = {
-                            // TODO: Implement navigation
-                        }
-                    )
-                }
-
-                GardenEditToolbar(
+                GardenBreadcrumb(
                     modifier = Modifier.alpha(
-                        if (uiState.editState.isEditMode) 1f else 0f
+                        if (uiState.navigationState.currentGardenPath.isNotEmpty()) {
+                            1f
+                        } else {
+                            0f
+                        }
                     ),
-                    onConfirmMerge = {
-                        Timber.d("Merge button clicked")
-                        myGardenViewModel.mergeCells()
-                    },
-                    onCancelEdit = {
-                        Timber.d("Cancel edit clicked")
-                        myGardenViewModel.toggleEditMode()
-                    },
-                    isMergeEnabled = uiState.editState.selectedCells.size >= 2 &&
-                            myGardenViewModel.isValidRectangularSelection()
+                    gardenPath = uiState.navigationState.currentGardenPath.map { it.id },
+                    onNavigate = { gardenId ->
+                        myGardenViewModel.navigateToGarden(gardenId)
+                    }
                 )
 
-                if (uiState.dataLoaded && uiState.gardenState.rows > 0 && uiState.gardenState.columns > 0) {
-                    GardenMap(
-                        rows = uiState.gardenState.rows,
-                        columns = uiState.gardenState.columns,
-                        state = uiState.gardenState,
-                        isEditMode = uiState.editState.isEditMode,
-                        selectedCells = uiState.editState.selectedCells,
-                        onCellClick = { row, col ->
-                            myGardenViewModel.onCellClick(row, col)
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    GardenEditToolbar(
+                        modifier = Modifier.alpha(
+                            if (uiState.editState.isEditMode) 1f else 0f
+                        ),
+                        onConfirmMerge = {
+                            Timber.d("Merge button clicked")
+                            myGardenViewModel.mergeCells()
                         },
-                        onMergedCellClick = { mergedCell ->
-                            myGardenViewModel.onMergedCellClick(mergedCell)
-                        }
+                        onCancelEdit = {
+                            Timber.d("Cancel edit clicked")
+                            myGardenViewModel.toggleEditMode()
+                        },
+                        isMergeEnabled = uiState.editState.selectedCells.size >= 2 &&
+                                myGardenViewModel.isValidRectangularSelection()
                     )
-                } else {
-                    FloatingActionButton(
-                        icon = Icons.Rounded.Add,
-                        contentDescription = "Add garden",
-                        onClick = {
-                            myGardenViewModel.showBottomSheet(true)
-                        }
-                    )
+
+                    if (uiState.dataLoaded && uiState.gardenState.rows > 0 && uiState.gardenState.columns > 0) {
+                        GardenMap(
+                            rows = uiState.gardenState.rows,
+                            columns = uiState.gardenState.columns,
+                            state = uiState.gardenState,
+                            isEditMode = uiState.editState.isEditMode,
+                            selectedCells = uiState.editState.selectedCells,
+                            onCellClick = { row, col ->
+                                myGardenViewModel.onCellClick(row, col)
+                            },
+                            onMergedCellClick = { mergedCell ->
+                                myGardenViewModel.onMergedCellClick(mergedCell)
+                            }
+                        )
+                    } else {
+                        FloatingActionButton(
+                            icon = Icons.Rounded.Add,
+                            contentDescription = "Add garden",
+                            onClick = {
+                                myGardenViewModel.showBottomSheet(true)
+                            }
+                        )
+                    }
                 }
             }
 
