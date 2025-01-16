@@ -84,8 +84,10 @@ fun NavGraphBuilder.addPlantDetailsScreen(
             backStackEntry.requiredIntArg(PlantDetailsFeature.PLANT_DETAILS_PLANT_ID_ARG_NAME)
         val config =
             backStackEntry.requiredIntArg(PlantDetailsFeature.PLANT_DETAILS_CONFIG_ARG_NAME)
-        val gardenId =
-            backStackEntry.requiredIntArg(PlantDetailsFeature.PLANT_DETAILS_GARDEN_ID_ARG_NAME)
+
+        val gardenId = backStackEntry.arguments
+            ?.getString(PlantDetailsFeature.PLANT_DETAILS_GARDEN_ID_ARG_NAME)
+            ?.toIntOrNull()
 
         val row = backStackEntry.arguments
             ?.getString(PlantDetailsFeature.PLANT_DETAILS_ROW_ARG_NAME)

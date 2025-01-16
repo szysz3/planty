@@ -7,7 +7,6 @@ import androidx.navigation.navArgument
 import szysz3.planty.core.model.PlantCatalogConfig
 import szysz3.planty.navigation.FeatureRoute
 import szysz3.planty.navigation.buildQueryString
-import szysz3.planty.navigation.requiredIntArg
 import szysz3.planty.navigation.staticComposable
 import szysz3.planty.screen.plantcatalog.PlantCatalogFeature.PLANT_CATALOG_COLUMN_ARG_NAME
 import szysz3.planty.screen.plantcatalog.PlantCatalogFeature.PLANT_CATALOG_CONFIG_ARG_NAME
@@ -80,8 +79,9 @@ fun NavGraphBuilder.addPlantCatalogScreen(
             }
         )
     ) { backStackEntry ->
-        val gardenId =
-            backStackEntry.requiredIntArg(PLANT_CATALOG_GARDEN_ID_ARG_NAME)
+        val gardenId = backStackEntry.arguments
+            ?.getString(PLANT_CATALOG_GARDEN_ID_ARG_NAME)
+            ?.toIntOrNull()
 
         val config = backStackEntry.arguments
             ?.getString(PLANT_CATALOG_CONFIG_ARG_NAME)

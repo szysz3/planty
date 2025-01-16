@@ -31,7 +31,7 @@ class PlantDetailsViewModel @Inject constructor(
         plantId: Int,
         row: Int?,
         column: Int?,
-        gardenId: Int
+        gardenId: Int?
     ) {
         viewModelScope.launch {
             val plant = getPlantUseCase(plantId)
@@ -58,7 +58,17 @@ class PlantDetailsViewModel @Inject constructor(
             val row = _uiState.value.row
             val column = _uiState.value.column
             val gardenId = _uiState.value.gardenId
-            if (row == null || column == null) return@launch
+
+            requireNotNull(row) {
+                "Row cannot be null"
+            }
+            requireNotNull(column) {
+                "Column cannot be null"
+            }
+            requireNotNull(gardenId) {
+                "GardenId cannot be null"
+            }
+
             saveGardenCellUseCase(
                 SaveGardenCellUseCaseParams(
                     row = row,

@@ -198,20 +198,22 @@ class MyGardenViewModel @Inject constructor(
         }
     }
 
-    fun createSubGardenFromMergedCell(mergedCellId: Int, name: String, rows: Int, columns: Int) {
+    fun createSubGardenFromMergedCell(name: String, rows: Int, columns: Int) {
         viewModelScope.launch {
-            try {
-                val subGardenId = createSubGardenForMergedCellUseCase(
-                    CreateSubGardenForMergedCellParams(
-                        name = name,
-                        rows = rows,
-                        columns = columns,
-                        mergedCellId = mergedCellId
+            _uiState.value.selectionState.selectedMergedCellId?.let {
+                try {
+                    val subGardenId = createSubGardenForMergedCellUseCase(
+                        CreateSubGardenForMergedCellParams(
+                            name = name,
+                            rows = rows,
+                            columns = columns,
+                            mergedCellId = it
+                        )
                     )
-                )
-                navigateToGarden(subGardenId)
-            } catch (e: Exception) {
-                Timber.e(e)
+                    navigateToGarden(subGardenId)
+                } catch (e: Exception) {
+                    Timber.e(e)
+                }
             }
         }
     }
@@ -283,6 +285,12 @@ class MyGardenViewModel @Inject constructor(
     fun showBottomSheet(show: Boolean) {
         _uiState.update {
             it.updateDialogState { copy(isBottomSheetVisible = show) }
+        }
+    }
+
+    fun showSubGardenDialog(show: Boolean) {
+        _uiState.update {
+            it.updateDialogState { copy(showCreateSubGardenDialog = show) }
         }
     }
 

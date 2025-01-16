@@ -185,6 +185,25 @@ fun MyGardenScreen(
                     }
                 )
             }
+
+            if (uiState.dialogState.showCreateSubGardenDialog) {
+                GardenDimensionsInput(
+                    bottomSheetState = bottomSheetState,
+                    onDismissRequest = {
+                        myGardenViewModel.showSubGardenDialog(false)
+                    },
+                    onDimensionsSubmitted = { height, width ->
+                        myGardenViewModel.createSubGardenFromMergedCell("name", height, width)
+                        coroutineScope.launch {
+                            bottomSheetState.hide()
+                        }.invokeOnCompletion {
+                            if (!bottomSheetState.isVisible) {
+                                myGardenViewModel.showSubGardenDialog(false)
+                            }
+                        }
+                    }
+                )
+            }
         }
     }
 }

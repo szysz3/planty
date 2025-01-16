@@ -44,7 +44,7 @@ fun PlantDetailsScreen(
     plantId: Int,
     row: Int?,
     column: Int?,
-    gardenId: Int,
+    gardenId: Int?,
     onPlantChosen: (() -> Unit)?,
     onPlantImageClicked: (plantId: Int) -> Unit,
     plantDetailsViewModel: PlantDetailsViewModel = hiltViewModel(),
