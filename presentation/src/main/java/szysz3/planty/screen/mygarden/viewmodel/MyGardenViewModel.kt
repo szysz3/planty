@@ -124,7 +124,7 @@ class MyGardenViewModel @Inject constructor(
         }
     }
 
-    fun navigateToGarden(gardenId: Int) {
+    private fun navigateToGarden(gardenId: Int) {
         viewModelScope.launch {
             try {
                 val gardenPath = getGardenPathUseCase(GardenIdParam(gardenId))
@@ -143,7 +143,6 @@ class MyGardenViewModel @Inject constructor(
             }
         }
     }
-
 
     fun mergeCells() {
         val currentState = _uiState.value
@@ -199,20 +198,31 @@ class MyGardenViewModel @Inject constructor(
     }
 
     fun createSubGardenFromMergedCell(name: String, rows: Int, columns: Int) {
+        requireNotNull(_uiState.value.selectionState.selectedMergedCellId) {
+            "Selected merged cell ID is null."
+        }
+
+        requireNotNull(_uiState.value.navigationState.currentGardenId) {
+            "Current garden ID is null."
+        }
+
         viewModelScope.launch {
-            _uiState.value.selectionState.selectedMergedCellId?.let {
-                try {
-                    val subGardenId = createSubGardenForMergedCellUseCase(
-                        CreateSubGardenForMergedCellParams(
-                            name = name,
-                            rows = rows,
-                            columns = columns,
-                            mergedCellId = it
+            _uiState.value.selectionState.selectedMergedCellId?.let { mergedCellId ->
+                _uiState.value.navigationState.currentGardenId?.let { parentGardenId ->
+                    try {
+                        val subGardenId = createSubGardenForMergedCellUseCase(
+                            CreateSubGardenForMergedCellParams(
+                                name = name,
+                                rows = rows,
+                                columns = columns,
+                                mergedCellId = mergedCellId,
+                                parentGardenId = parentGardenId
+                            )
                         )
-                    )
-                    navigateToGarden(subGardenId)
-                } catch (e: Exception) {
-                    Timber.e(e)
+                        navigateToGarden(subGardenId)
+                    } catch (e: Exception) {
+                        Timber.e(e)
+                    }
                 }
             }
         }

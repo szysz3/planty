@@ -13,7 +13,7 @@ class CreateSubGardenForMergedCellUseCase @Inject constructor(
             name = input.name,
             rows = input.rows,
             columns = input.columns,
-            parentGardenId = input.mergedCellId
+            parentGardenId = input.parentGardenId
         )
 
         // Link it to merged cell
@@ -30,5 +30,6 @@ data class CreateSubGardenForMergedCellParams(
     val name: String,
     val rows: Int,
     val columns: Int,
-    val mergedCellId: Int
+    val mergedCellId: Int,
+    val parentGardenId: Int
 )

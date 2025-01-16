@@ -189,7 +189,7 @@ class GardenRepositoryImpl @Inject constructor(
         mergedCellId: Int,
         subGardenId: Int
     ) = withContext(Dispatchers.IO) {
-        val mergedCell = mergedCellDao.getMergedCellForSubGarden(mergedCellId)
+        val mergedCell = mergedCellDao.getMergedCellById(mergedCellId)
             ?: throw IllegalStateException("Merged cell not found")
 
         mergedCellDao.updateMergedCell(

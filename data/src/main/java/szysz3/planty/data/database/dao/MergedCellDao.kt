@@ -18,8 +18,8 @@ interface MergedCellDao {
     @Query("SELECT * FROM merged_cells WHERE gardenId = :gardenId")
     suspend fun getMergedCellsForGarden(gardenId: Int): List<MergedCellEntity>
 
-    @Query("SELECT * FROM merged_cells WHERE subGardenId = :subGardenId")
-    suspend fun getMergedCellForSubGarden(subGardenId: Int): MergedCellEntity?
+    @Query("SELECT * FROM merged_cells WHERE id = :mergedCellId")
+    suspend fun getMergedCellById(mergedCellId: Int): MergedCellEntity?
 
     @Query("DELETE FROM merged_cells WHERE gardenId = :gardenId")
     suspend fun deleteMergedCells(gardenId: Int)
