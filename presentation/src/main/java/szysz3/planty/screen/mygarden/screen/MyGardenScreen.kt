@@ -52,8 +52,10 @@ fun MyGardenScreen(
     val bottomSheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(Unit) {
-        myGardenViewModel.observeGardenState()
+    LaunchedEffect(uiState.navigationState.currentGardenId) {
+        uiState.navigationState.currentGardenId?.let {
+            myGardenViewModel.observeGardenState()
+        }
     }
 
     LaunchedEffect(myGardenViewModel.uiEvent) {

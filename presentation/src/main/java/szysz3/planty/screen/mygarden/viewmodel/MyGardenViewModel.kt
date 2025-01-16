@@ -77,8 +77,6 @@ class MyGardenViewModel @Inject constructor(
                         )
                     }
                 }
-                // TODO: do not duplicate observations
-                observeGardenState()
             }
         } catch (e: Exception) {
             Timber.e(e)
@@ -104,7 +102,6 @@ class MyGardenViewModel @Inject constructor(
         }
     }
 
-    // TODO: rework
     fun observeGardenState() {
         val currentGardenId = _uiState.value.navigationState.currentGardenId ?: return
 
@@ -143,8 +140,6 @@ class MyGardenViewModel @Inject constructor(
                         )
                     }
                 }
-                // TODO: do not duplicate observations
-                observeGardenState()
             } catch (e: Exception) {
                 Timber.e(e)
             }
