@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import szysz3.planty.R
@@ -39,11 +40,12 @@ fun GardenBreadcrumb(
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (gardenPath.size > 1) {
-            gardenPath.forEach { gardenId ->
+            gardenPath.forEachIndexed { index, gardenId ->
                 BreadcrumbItem(
                     label = "Garden-$gardenId",
                     gardenId = gardenId,
-                    onNavigate = onNavigate
+                    onNavigate = onNavigate,
+                    isLastItem = index == gardenPath.lastIndex
                 )
             }
         }
@@ -51,11 +53,17 @@ fun GardenBreadcrumb(
 }
 
 @Composable
-private fun BreadcrumbItem(label: String, gardenId: Int?, onNavigate: (Int?) -> Unit) {
+private fun BreadcrumbItem(
+    label: String,
+    gardenId: Int?,
+    onNavigate: (Int?) -> Unit,
+    isLastItem: Boolean
+) {
     Box(
         modifier = Modifier
             .height(36.dp)
             .clickable { onNavigate(gardenId) }
+            .alpha(if (isLastItem) 1f else 0.5f)
     ) {
         Icon(
             painter = painterResource(id = R.drawable.chevron_button),
@@ -66,9 +74,10 @@ private fun BreadcrumbItem(label: String, gardenId: Int?, onNavigate: (Int?) -> 
         Text(
             text = label,
             modifier = Modifier
-                .padding(horizontal = 12.dp)
+                .padding(18.dp, 0.dp, 12.dp, 0.dp)
                 .align(Alignment.Center),
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }
