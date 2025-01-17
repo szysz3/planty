@@ -61,14 +61,14 @@ private fun BreadcrumbItem(label: String, gardenId: Int?, onNavigate: (Int?) -> 
             painter = painterResource(id = R.drawable.chevron_button),
             contentDescription = null,
             modifier = Modifier.height(36.dp),
-            tint = MaterialTheme.colorScheme.primaryContainer
+            tint = MaterialTheme.colorScheme.surface
         )
         Text(
             text = label,
             modifier = Modifier
                 .padding(horizontal = 12.dp)
                 .align(Alignment.Center),
-            color = MaterialTheme.colorScheme.onPrimaryContainer
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
