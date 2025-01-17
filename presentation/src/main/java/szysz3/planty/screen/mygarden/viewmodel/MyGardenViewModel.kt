@@ -23,6 +23,7 @@ import szysz3.planty.domain.usecase.garden.CreateSubGardenForMergedCellUseCase
 import szysz3.planty.domain.usecase.garden.GardenIdParam
 import szysz3.planty.domain.usecase.garden.GetGardenPathUseCase
 import szysz3.planty.domain.usecase.garden.GetRootGardenUseCase
+import szysz3.planty.domain.usecase.garden.LoadGardenStateUseCase
 import szysz3.planty.domain.usecase.garden.ObserveGardenStateUseCase
 import szysz3.planty.domain.usecase.garden.SaveGardenCellUseCase
 import szysz3.planty.domain.usecase.garden.SaveGardenStateUseCase
@@ -49,7 +50,8 @@ class MyGardenViewModel @Inject constructor(
     private val getGardenPathUseCase: GetGardenPathUseCase,
     private val createMergedCellUseCase: CreateMergedCellUseCase,
     private val getRootGardenUseCase: GetRootGardenUseCase,  // Added
-    private val createSubGardenForMergedCellUseCase: CreateSubGardenForMergedCellUseCase
+    private val createSubGardenForMergedCellUseCase: CreateSubGardenForMergedCellUseCase,
+    private val loadGardenStateUseCase: LoadGardenStateUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MyGardenScreenState())
@@ -124,21 +126,22 @@ class MyGardenViewModel @Inject constructor(
     }
 
     fun navigateToGarden(gardenId: Int?) {
-        requireNotNull(gardenId) {
-            "GardenId is null."
-        }
+        requireNotNull(gardenId) { "GardenId is null." }
 
         viewModelScope.launch {
             try {
                 val gardenPath = getGardenPathUseCase(GardenIdParam(gardenId))
+                val newGardenState = loadGardenStateUseCase(GardenIdParam(gardenId))
+
                 _uiState.update { current ->
-                    current.updateNavigationState {
-                        copy(
+                    current.copy(
+                        navigationState = current.navigationState.copy(
                             currentGardenId = gardenId,
                             currentGarden = gardenPath.lastOrNull(),
                             currentGardenPath = gardenPath
-                        )
-                    }
+                        ),
+                        gardenState = newGardenState.toPresentationModel()
+                    )
                 }
             } catch (e: Exception) {
                 Timber.e(e)

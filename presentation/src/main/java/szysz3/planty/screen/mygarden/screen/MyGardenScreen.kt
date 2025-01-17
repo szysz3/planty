@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -106,13 +107,15 @@ fun MyGardenScreen(
                     .padding(16.dp)
             ) {
                 GardenBreadcrumb(
-                    modifier = Modifier.alpha(
-                        if (uiState.navigationState.currentGardenPath.isNotEmpty()) {
-                            1f
-                        } else {
-                            0f
-                        }
-                    ),
+                    modifier = Modifier
+                        .alpha(
+                            if (uiState.navigationState.currentGardenPath.isNotEmpty()) {
+                                1f
+                            } else {
+                                0f
+                            }
+                        )
+                        .height(56.dp),
                     gardenPath = uiState.navigationState.currentGardenPath.map { it.id },
                     onNavigate = { gardenId ->
                         myGardenViewModel.navigateToGarden(gardenId)
