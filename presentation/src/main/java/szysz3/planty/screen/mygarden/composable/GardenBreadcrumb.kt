@@ -29,11 +29,12 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import szysz3.planty.R
+import szysz3.planty.domain.model.Garden
 
 @Composable
 fun GardenBreadcrumb(
     modifier: Modifier = Modifier,
-    gardenPath: List<Int>,
+    gardenPath: List<Garden>,
     onNavigate: (Int?) -> Unit,
     isVisible: Boolean = true
 ) {
@@ -65,10 +66,12 @@ fun GardenBreadcrumb(
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                breadcrumbContent.forEachIndexed { index, gardenId ->
+                breadcrumbContent.forEachIndexed { index, garden ->
                     BreadcrumbItem(
-                        label = "Garden-$gardenId",
-                        gardenId = gardenId,
+                        label = garden.name.ifEmpty {
+                            "Garden-${garden.id}"
+                        },
+                        gardenId = garden.id,
                         onNavigate = onNavigate,
                         isLastItem = index == breadcrumbContent.lastIndex
                     )
@@ -81,7 +84,7 @@ fun GardenBreadcrumb(
 @Composable
 private fun BreadcrumbItem(
     label: String,
-    gardenId: Int?,
+    gardenId: Int,
     onNavigate: (Int?) -> Unit,
     isLastItem: Boolean
 ) {

@@ -32,10 +32,12 @@ fun GardenDimensionsInput(
     bottomSheetState: SheetState,
     maxDimension: Int = 20,
     onDismissRequest: () -> Unit,
-    onDimensionsSubmitted: (Int, Int) -> Unit
+    onDimensionsSubmitted: (String, Int, Int) -> Unit
 ) {
+    var nameInput by remember { mutableStateOf("") }
     var widthInput by remember { mutableStateOf("") }
     var heightInput by remember { mutableStateOf("") }
+    var nameError by remember { mutableStateOf(false) }
     var widthError by remember { mutableStateOf(false) }
     var heightError by remember { mutableStateOf(false) }
 
@@ -49,8 +51,34 @@ fun GardenDimensionsInput(
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Enter Garden Dimensions", style = MaterialTheme.typography.titleLarge)
-            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "Enter Garden Details", style = MaterialTheme.typography.titleLarge)
+            Spacer(modifier = Modifier.height(22.dp))
+
+            // Garden Name Input
+            TextField(
+                value = nameInput,
+                onValueChange = { input ->
+                    if (input.length <= 10) {
+                        nameInput = input.filter { it.isLetterOrDigit() }
+                        nameError = nameInput.isEmpty()
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp)),
+                label = { Text("Name (max 10 characters)") },
+                singleLine = true,
+                isError = nameError
+            )
+            if (nameError) {
+                Text(
+                    text = "Garden name is required",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
 
             // Width Input
             TextField(
@@ -75,6 +103,8 @@ fun GardenDimensionsInput(
                 )
             }
 
+            Spacer(modifier = Modifier.height(12.dp))
+
             // Height Input
             TextField(
                 value = heightInput,
@@ -98,18 +128,20 @@ fun GardenDimensionsInput(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(22.dp))
             RoundedButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     val width = widthInput.toIntOrNull() ?: 1
                     val height = heightInput.toIntOrNull() ?: 1
 
-                    if (!widthError && !heightError && width > 0 && height > 0) {
-                        onDimensionsSubmitted(height, width)
+                    if (!nameError && !widthError && !heightError &&
+                        width > 0 && height > 0 && nameInput.isNotEmpty()
+                    ) {
+                        onDimensionsSubmitted(nameInput, height, width)
                     }
                 },
-                enabled = !widthError && !heightError,
+                enabled = !nameError && !widthError && !heightError && nameInput.isNotEmpty(),
                 text = "Confirm"
             )
         }

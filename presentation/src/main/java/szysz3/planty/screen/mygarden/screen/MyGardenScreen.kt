@@ -109,7 +109,7 @@ fun MyGardenScreen(
             ) {
                 GardenBreadcrumb(
                     modifier = Modifier.height(56.dp),
-                    gardenPath = uiState.navigationState.currentGardenPath.map { it.id },
+                    gardenPath = uiState.navigationState.currentGardenPath,
                     onNavigate = { gardenId ->
                         myGardenViewModel.navigateToGarden(gardenId)
                     },
@@ -184,8 +184,8 @@ fun MyGardenScreen(
                     onDismissRequest = {
                         myGardenViewModel.showBottomSheet(false)
                     },
-                    onDimensionsSubmitted = { height, width ->
-                        myGardenViewModel.createGardenFromDimensions("name", height, width)
+                    onDimensionsSubmitted = { gardenName, height, width ->
+                        myGardenViewModel.createGardenFromDimensions(gardenName, height, width)
                         coroutineScope.launch {
                             bottomSheetState.hide()
                         }.invokeOnCompletion {
@@ -203,8 +203,8 @@ fun MyGardenScreen(
                     onDismissRequest = {
                         myGardenViewModel.showSubGardenDialog(false)
                     },
-                    onDimensionsSubmitted = { height, width ->
-                        myGardenViewModel.createSubGardenFromMergedCell("name", height, width)
+                    onDimensionsSubmitted = { gardenName, height, width ->
+                        myGardenViewModel.createSubGardenFromMergedCell(gardenName, height, width)
                         coroutineScope.launch {
                             bottomSheetState.hide()
                         }.invokeOnCompletion {
