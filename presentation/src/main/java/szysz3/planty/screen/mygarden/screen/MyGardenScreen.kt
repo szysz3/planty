@@ -10,8 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,7 +28,7 @@ import szysz3.planty.core.composable.DeleteAlertDialog
 import szysz3.planty.core.composable.EllipticalBackground
 import szysz3.planty.core.composable.FloatingActionButton
 import szysz3.planty.screen.base.BaseScreen
-import szysz3.planty.screen.base.topbar.TopBarDeleteButton
+import szysz3.planty.screen.base.topbar.TopBarActionButton
 import szysz3.planty.screen.mygarden.composable.GardenBreadcrumb
 import szysz3.planty.screen.mygarden.composable.GardenDimensionsInput
 import szysz3.planty.screen.mygarden.composable.GardenEditToolbar
@@ -78,17 +76,21 @@ fun MyGardenScreen(
         showBottomBar = true,
         topBarActions = {
             if (uiState.dataLoaded && !uiState.editState.isEditMode) {
-                IconButton(onClick = { myGardenViewModel.toggleEditMode() }) {
-                    Icon(Icons.Default.Edit, "Enter edit mode")
-                }
+                TopBarActionButton(
+                    icon = Icons.Default.Edit,
+                    showButton = uiState.dataLoaded && !uiState.editState.isEditMode,
+                    onAction = {
+                        myGardenViewModel.toggleEditMode()
+                    }
+                )
+            } else if (uiState.dataLoaded) {
+                TopBarActionButton(
+                    showButton = uiState.dataLoaded,
+                    onAction = {
+                        myGardenViewModel.showDeleteDialog(true)
+                    }
+                )
             }
-
-            TopBarDeleteButton(
-                showDeleteButton = uiState.dataLoaded,
-                onDeleteClick = {
-                    myGardenViewModel.showDeleteDialog(true)
-                }
-            )
         },
         navController = navController
     ) { padding ->

@@ -9,6 +9,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -93,7 +94,11 @@ private fun BreadcrumbItem(
     Box(
         modifier = Modifier
             .height(36.dp)
-            .clickable(enabled = !isLastItem) { onNavigate(gardenId) }
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                enabled = !isLastItem
+            ) { onNavigate(gardenId) }
             .alpha(itemAlpha)
     ) {
         Icon(

@@ -22,8 +22,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import szysz3.planty.core.composable.DeleteAlertDialog
 import szysz3.planty.screen.base.BaseScreen
+import szysz3.planty.screen.base.topbar.TopBarActionButton
 import szysz3.planty.screen.base.topbar.TopBarBackButton
-import szysz3.planty.screen.base.topbar.TopBarDeleteButton
 import szysz3.planty.screen.taskdetails.composable.NewTaskButton
 import szysz3.planty.screen.taskdetails.composable.SubTaskRow
 import szysz3.planty.screen.taskdetails.composable.TaskFooter
@@ -54,9 +54,9 @@ fun TaskDetailsScreen(
         showTopBar = true,
         showBottomBar = true,
         topBarActions = {
-            TopBarDeleteButton(
-                showDeleteButton = taskId != null,
-                onDeleteClick = {
+            TopBarActionButton(
+                showButton = taskId != null,
+                onAction = {
                     taskDetailsViewModel.showDeleteDialog(true)
                 }
             )

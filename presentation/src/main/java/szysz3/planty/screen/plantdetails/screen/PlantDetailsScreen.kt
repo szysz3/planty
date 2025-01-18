@@ -27,8 +27,8 @@ import szysz3.planty.core.model.Plant
 import szysz3.planty.core.model.PlantDetailsConfig
 import szysz3.planty.core.util.openWebSearch
 import szysz3.planty.screen.base.BaseScreen
+import szysz3.planty.screen.base.topbar.TopBarActionButton
 import szysz3.planty.screen.base.topbar.TopBarBackButton
-import szysz3.planty.screen.base.topbar.TopBarDeleteButton
 import szysz3.planty.screen.plantdetails.composable.CultivationDetailsSection
 import szysz3.planty.screen.plantdetails.composable.PlantDetailsGrid
 import szysz3.planty.screen.plantdetails.composable.PlantImageSection
@@ -61,9 +61,9 @@ fun PlantDetailsScreen(
         showTopBar = true,
         showBottomBar = true,
         topBarActions = {
-            TopBarDeleteButton(
-                showDeleteButton = uiState.isDeleteButtonVisible,
-                onDeleteClick = { plantDetailsViewModel.showDeleteDialog(true) }
+            TopBarActionButton(
+                showButton = uiState.isDeleteButtonVisible,
+                onAction = { plantDetailsViewModel.showDeleteDialog(true) }
             )
         },
         topBarBackNavigation = {

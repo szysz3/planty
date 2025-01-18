@@ -10,12 +10,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TopBarDeleteButton(
-    showDeleteButton: Boolean = false,
-    onDeleteClick: () -> Unit = {}
+fun TopBarActionButton(
+    icon: ImageVector = Icons.Rounded.Delete,
+    showButton: Boolean = false,
+    onAction: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -23,9 +25,9 @@ fun TopBarDeleteButton(
             .width(48.dp),
         contentAlignment = Alignment.Center
     ) {
-        if (showDeleteButton) {
-            IconButton(onClick = onDeleteClick) {
-                Icon(Icons.Rounded.Delete, contentDescription = "Delete")
+        if (showButton) {
+            IconButton(onClick = onAction) {
+                Icon(icon, contentDescription = null)
             }
         }
     }
