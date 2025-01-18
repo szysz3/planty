@@ -145,11 +145,11 @@ fun MyGardenScreen(
 
                     if (uiState.dataLoaded && uiState.gardenState.rows > 0 && uiState.gardenState.columns > 0) {
                         GardenMap(
-                            gardenRows = uiState.gardenState.rows,
-                            gardenColumns = uiState.gardenState.columns,
-                            gardenState = uiState.gardenState,
+                            rows = uiState.gardenState.rows,
+                            columns = uiState.gardenState.columns,
+                            state = uiState.gardenState,
                             isEditMode = uiState.editState.isEditMode,
-                            selectedCellPositions = uiState.editState.selectedCells,
+                            selectedCells = uiState.editState.selectedCells,
                             onCellClick = { row, col ->
                                 myGardenViewModel.onCellClick(row, col)
                             },
