@@ -20,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -107,19 +106,12 @@ fun MyGardenScreen(
                     .padding(16.dp)
             ) {
                 GardenBreadcrumb(
-                    modifier = Modifier
-                        .alpha(
-                            if (uiState.navigationState.currentGardenPath.isNotEmpty()) {
-                                1f
-                            } else {
-                                0f
-                            }
-                        )
-                        .height(56.dp),
+                    modifier = Modifier.height(56.dp),
                     gardenPath = uiState.navigationState.currentGardenPath.map { it.id },
                     onNavigate = { gardenId ->
                         myGardenViewModel.navigateToGarden(gardenId)
-                    }
+                    },
+                    isVisible = uiState.navigationState.currentGardenPath.isNotEmpty()
                 )
 
                 Column(
