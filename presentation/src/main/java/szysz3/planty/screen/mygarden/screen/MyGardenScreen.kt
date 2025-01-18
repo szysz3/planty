@@ -128,9 +128,8 @@ fun MyGardenScreen(
                     verticalArrangement = Arrangement.Center
                 ) {
                     GardenEditToolbar(
-                        modifier = Modifier.alpha(
-                            if (uiState.editState.isEditMode) 1f else 0f
-                        ),
+                        modifier = Modifier,
+                        isVisible = uiState.editState.isEditMode,
                         onConfirmMerge = {
                             Timber.d("Merge button clicked")
                             myGardenViewModel.mergeCells()
