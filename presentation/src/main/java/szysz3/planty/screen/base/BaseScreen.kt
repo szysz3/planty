@@ -1,6 +1,8 @@
 package szysz3.planty.screen.base
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -23,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.delay
 import szysz3.planty.screen.base.bottombar.BottomNavigationBar
 import szysz3.planty.screen.base.topbar.TopBarActionButton
 import szysz3.planty.screen.base.topbar.TopBarBackButton
@@ -44,9 +47,12 @@ fun BaseScreen(
     content: @Composable (PaddingValues) -> Unit
 ) {
     var isContentVisible by remember { mutableStateOf(false) }
+    var isTitleVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         isContentVisible = true
+        delay(150) // Delay the title animation by 150ms
+        isTitleVisible = true
     }
 
     Scaffold(
@@ -63,7 +69,12 @@ fun BaseScreen(
                         navigationIconContentColor = MaterialTheme.colorScheme.onBackground,
                         actionIconContentColor = MaterialTheme.colorScheme.onBackground
                     ),
-                    title = { TopBarTitle(title) },
+                    title = {
+                        AnimatedTopBarTitle(
+                            title = title,
+                            isVisible = isTitleVisible
+                        )
+                    },
                     navigationIcon = {
                         topBarBackNavigation.invoke()
                     },
@@ -80,6 +91,40 @@ fun BaseScreen(
         }
     ) { innerPadding ->
         AnimatedContent(isContentVisible, innerPadding, content)
+    }
+}
+
+@Composable
+fun AnimatedTopBarTitle(
+    title: String,
+    isVisible: Boolean
+) {
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = fadeIn(
+            animationSpec = tween(
+                durationMillis = 300,
+                easing = LinearEasing
+            )
+        ) + slideInHorizontally(
+            animationSpec = tween(
+                durationMillis = 300,
+                easing = FastOutSlowInEasing
+            )
+        ) { fullWidth -> fullWidth / 3 },
+        exit = fadeOut(
+            animationSpec = tween(
+                durationMillis = 300,
+                easing = LinearEasing
+            )
+        ) + slideOutHorizontally(
+            animationSpec = tween(
+                durationMillis = 300,
+                easing = FastOutSlowInEasing
+            )
+        ) { fullWidth -> -fullWidth / 3 }
+    ) {
+        TopBarTitle(title)
     }
 }
 
