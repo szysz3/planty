@@ -25,8 +25,6 @@ import szysz3.planty.domain.usecase.garden.GetGardenPathUseCase
 import szysz3.planty.domain.usecase.garden.GetRootGardenUseCase
 import szysz3.planty.domain.usecase.garden.LoadGardenStateUseCase
 import szysz3.planty.domain.usecase.garden.ObserveGardenStateUseCase
-import szysz3.planty.domain.usecase.garden.SaveGardenCellUseCase
-import szysz3.planty.domain.usecase.garden.SaveGardenStateUseCase
 import szysz3.planty.screen.mygarden.model.CellBounds
 import szysz3.planty.screen.mygarden.model.MergedCell
 import szysz3.planty.screen.mygarden.model.MyGardenScreenState
@@ -42,14 +40,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyGardenViewModel @Inject constructor(
-    private val saveGardenStateUseCase: SaveGardenStateUseCase,
-    private val saveGardenCellUseCase: SaveGardenCellUseCase,
     private val observeGardenStateUseCase: ObserveGardenStateUseCase,
     private val clearGardenUseCase: ClearGardenUseCase,
     private val createGardenUseCase: CreateGardenUseCase,
     private val getGardenPathUseCase: GetGardenPathUseCase,
     private val createMergedCellUseCase: CreateMergedCellUseCase,
-    private val getRootGardenUseCase: GetRootGardenUseCase,  // Added
+    private val getRootGardenUseCase: GetRootGardenUseCase,
     private val createSubGardenForMergedCellUseCase: CreateSubGardenForMergedCellUseCase,
     private val loadGardenStateUseCase: LoadGardenStateUseCase
 ) : ViewModel() {

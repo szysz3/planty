@@ -1,20 +1,30 @@
 package szysz3.planty.domain.usecase.garden
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import szysz3.planty.domain.model.GardenState
 import szysz3.planty.domain.repository.GardenRepository
+import szysz3.planty.domain.repository.PlantRepository
 import szysz3.planty.domain.usecase.base.BaseUseCase
 import javax.inject.Inject
 
 class ObserveGardenStateUseCase @Inject constructor(
-    private val repository: GardenRepository
+    private val gardenRepository: GardenRepository,
+    private val plantRepository: PlantRepository
 ) : BaseUseCase<GardenIdParam, Flow<GardenState>>() {
     override suspend fun invoke(input: GardenIdParam): Flow<GardenState> {
-        Log.d(
-            "ObserveGardenStateUseCase",
-            "ObserveGardenStateUseCase invoked with gardenId: ${input.gardenId}"
-        )
-        return repository.observeGardenState(input.gardenId)
+        return gardenRepository.observeGardenState(input.gardenId)
+            .map { gardenState ->
+                gardenState.copy(
+                    cells = gardenState.cells.map { cell ->
+                        if (cell.plant != null) {
+                            val plantWithImages = plantRepository.getPlantById(cell.plant.id)
+                            cell.copy(plant = plantWithImages)
+                        } else {
+                            cell
+                        }
+                    }
+                )
+            }
     }
 }
