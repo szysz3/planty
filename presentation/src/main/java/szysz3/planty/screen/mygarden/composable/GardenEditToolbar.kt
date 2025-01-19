@@ -20,6 +20,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 
+private const val TOOLBAR_ANIMATION_DURATION = 300
+
+/**
+ * A toolbar for garden editing operations with cell merge functionality.
+ * Animates its visibility and supports enabling/disabling the merge action.
+ *
+ * @param onConfirmMerge Called when merge action is confirmed
+ * @param onCancelEdit Called when editing is cancelled
+ * @param isMergeEnabled Whether the merge action is available
+ * @param isVisible Controls toolbar visibility with animation
+ * @param modifier Optional modifier for the layout
+ */
 @Composable
 fun GardenEditToolbar(
     onConfirmMerge: () -> Unit,
@@ -30,7 +42,7 @@ fun GardenEditToolbar(
 ) {
     val alpha by animateFloatAsState(
         targetValue = if (isVisible) 1f else 0f,
-        animationSpec = tween(durationMillis = 300),
+        animationSpec = tween(durationMillis = TOOLBAR_ANIMATION_DURATION),
         label = "toolbar_alpha"
     )
 

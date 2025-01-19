@@ -21,6 +21,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import szysz3.planty.screen.mygarden.model.MergedCell
 
+/**
+ * Displays a merged cell in the garden grid that shows either existing sub-garden info or an empty state.
+ *
+ * @param mergedCell Cell information including position, size and sub-garden details
+ * @param cellSize Base size of a single grid cell
+ * @param onClick Called when the cell is clicked
+ */
 @Composable
 fun GardenMergedCellBox(
     mergedCell: MergedCell,
@@ -47,43 +54,48 @@ fun GardenMergedCellBox(
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically),
-            modifier = Modifier.padding(8.dp)
-        ) {
-            if (mergedCell.subGardenId != null) {
-                mergedCell.subGardenName?.let { name ->
-                    Text(
-                        text = name,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        textAlign = TextAlign.Center,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                if (mergedCell.subGardenRows != null && mergedCell.subGardenColumns != null) {
-                    Text(
-                        text = "${mergedCell.subGardenColumns}×${mergedCell.subGardenRows}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
-                    )
-                }
-            } else {
+        GardenCellContent(mergedCell)
+    }
+}
+
+@Composable
+private fun GardenCellContent(mergedCell: MergedCell) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically),
+        modifier = Modifier.padding(8.dp)
+    ) {
+        if (mergedCell.subGardenId != null) {
+            mergedCell.subGardenName?.let { name ->
                 Text(
-                    text = "Tap to create\nsub-garden",
-                    style = MaterialTheme.typography.bodySmall,
+                    text = name,
+                    style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onPrimary,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
+            }
+            if (mergedCell.subGardenRows != null && mergedCell.subGardenColumns != null) {
                 Text(
-                    text = "${mergedCell.width}×${mergedCell.height}",
-                    style = MaterialTheme.typography.labelSmall,
+                    text = "${mergedCell.subGardenColumns}×${mergedCell.subGardenRows}",
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
                 )
             }
+        } else {
+            Text(
+                text = "Tap to create\nsub-garden",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onPrimary,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                text = "${mergedCell.width}×${mergedCell.height}",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
+            )
         }
     }
 }

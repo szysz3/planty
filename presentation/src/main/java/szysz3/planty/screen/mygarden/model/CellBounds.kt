@@ -1,45 +1,39 @@
 package szysz3.planty.screen.mygarden.model
 
+/**
+ * Represents the boundaries of a rectangular cell selection in a grid.
+ * All coordinates are inclusive.
+ */
 data class CellBounds(
     val minRow: Int,
-    val maxRow: Int,
     val minCol: Int,
+    val maxRow: Int,
     val maxCol: Int
 ) {
     companion object {
-        fun from(cells: Set<Pair<Int, Int>>): CellBounds {
+        fun from(cells: Set<CellPosition>): CellBounds {
             require(cells.isNotEmpty()) { "Cell set cannot be empty" }
-
             return CellBounds(
-                minRow = cells.minOf { it.first },
-                maxRow = cells.maxOf { it.first },
-                minCol = cells.minOf { it.second },
-                maxCol = cells.maxOf { it.second }
+                minRow = cells.minOf { it.row },
+                minCol = cells.minOf { it.column },
+                maxRow = cells.maxOf { it.row },
+                maxCol = cells.maxOf { it.column }
             )
         }
     }
 
-    val width: Int get() = maxCol - minCol + 1
-    val height: Int get() = maxRow - minRow + 1
-    val area: Int get() = width * height
+    private fun isRowInBounds(row: Int): Boolean = row in minRow..maxRow
 
-    fun isValidRectangularSelection(cells: Set<Pair<Int, Int>>): Boolean {
-        return cells.size == area
+    private fun isColumnInBounds(column: Int): Boolean = column in minCol..maxCol
+
+    fun isValidRectangularSelection(cells: Set<CellPosition>): Boolean {
+        val width = maxCol - minCol + 1
+        val height = maxRow - minRow + 1
+        val expectedSize = width * height
+
+        return cells.size == expectedSize &&
+                cells.all { cell ->
+                    isRowInBounds(cell.row) && isColumnInBounds(cell.column)
+                }
     }
-
-    fun toMergedCell(parentGardenId: Int): MergedCell {
-        return MergedCell(
-            id = 0,
-            parentGardenId = parentGardenId,
-            startRow = minRow,
-            startColumn = minCol,
-            endRow = maxRow,
-            endColumn = maxCol,
-            subGardenId = null
-        )
-    }
-}
-
-fun Set<Pair<Int, Int>>.toCellBounds(): CellBounds {
-    return CellBounds.from(this)
 }

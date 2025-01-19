@@ -26,6 +26,7 @@ import szysz3.planty.domain.usecase.garden.GetRootGardenUseCase
 import szysz3.planty.domain.usecase.garden.LoadGardenStateUseCase
 import szysz3.planty.domain.usecase.garden.ObserveGardenStateUseCase
 import szysz3.planty.screen.mygarden.model.CellBounds
+import szysz3.planty.screen.mygarden.model.CellPosition
 import szysz3.planty.screen.mygarden.model.MergedCell
 import szysz3.planty.screen.mygarden.model.MyGardenScreenState
 import szysz3.planty.screen.mygarden.model.MyGardenScreenUiEvent
@@ -242,7 +243,7 @@ class MyGardenViewModel @Inject constructor(
 
     private fun handleCellSelectionInEditMode(row: Int, column: Int) {
         _uiState.update { currentState ->
-            val position = Pair(row, column)
+            val position = CellPosition(row, column)
             val currentSelection = currentState.editState.selectedCells
             val newSelection = if (position in currentSelection) {
                 currentSelection - position
@@ -328,14 +329,14 @@ class MyGardenViewModel @Inject constructor(
 
     private fun updateSelectedCell(row: Int, column: Int) {
         _uiState.update {
-            it.updateSelectionState { copy(selectedCell = Pair(row, column)) }
+            it.updateSelectionState { copy(selectedCell = CellPosition(row, column)) }
         }
     }
 
     private fun getPlantForSelectedCell(): Plant? {
         val selectedCell = _uiState.value.selectionState.selectedCell
         return _uiState.value.gardenState.cells.find {
-            it.row == selectedCell?.first && it.column == selectedCell.second
+            it.row == selectedCell?.row && it.column == selectedCell.column
         }?.plant
     }
 

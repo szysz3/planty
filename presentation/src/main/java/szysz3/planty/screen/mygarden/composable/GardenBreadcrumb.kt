@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -31,6 +32,23 @@ import androidx.compose.ui.unit.dp
 import szysz3.planty.R
 import szysz3.planty.domain.model.Garden
 
+private object BreadcrumbConstants {
+    const val ANIMATION_DURATION = 300
+    const val ALPHA_ANIMATION_DURATION = 200
+    const val ACTIVE_ITEM_ALPHA = 1f
+    const val INACTIVE_ITEM_ALPHA = 0.5f
+    const val MIN_PATH_LENGTH_FOR_VISIBILITY = 1
+}
+
+/**
+ * A breadcrumb navigation component that displays the current garden hierarchy path.
+ * Supports animations and click navigation to previous levels.
+ *
+ * @param modifier Modifier for the component
+ * @param gardenPath List of gardens representing the navigation hierarchy
+ * @param onNavigate Callback triggered when a breadcrumb item is clicked
+ * @param isVisible Controls the visibility of the breadcrumb
+ */
 @Composable
 fun GardenBreadcrumb(
     modifier: Modifier = Modifier,
@@ -39,58 +57,60 @@ fun GardenBreadcrumb(
     isVisible: Boolean = true
 ) {
     val scrollState = rememberScrollState()
-
-    // Ensure state is preserved during animations
-    val breadcrumbContent = remember(gardenPath) {
-        gardenPath.map { it }
-    }
+    val breadcrumbContent = remember(gardenPath) { gardenPath.toList() }
 
     LaunchedEffect(breadcrumbContent) {
         scrollState.animateScrollTo(scrollState.maxValue)
     }
 
-    Box(
-        modifier = modifier.fillMaxWidth()
-    ) {
+    Box(modifier = modifier.fillMaxWidth()) {
         AnimatedVisibility(
-            visible = isVisible && breadcrumbContent.size > 1,
-            enter = fadeIn(animationSpec = tween(300)) +
-                    slideInHorizontally(animationSpec = tween(300)) { fullWidth -> -fullWidth },
-            exit = fadeOut(animationSpec = tween(300)) +
-                    slideOutHorizontally(animationSpec = tween(300)) { fullWidth -> -fullWidth }
+            visible = isVisible && breadcrumbContent.size > BreadcrumbConstants.MIN_PATH_LENGTH_FOR_VISIBILITY,
+            enter = createEnterAnimation(),
+            exit = createExitAnimation()
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(scrollState)
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                breadcrumbContent.forEachIndexed { index, garden ->
-                    BreadcrumbItem(
-                        label = garden.name.ifEmpty {
-                            "Garden-${garden.id}"
-                        },
-                        gardenId = garden.id,
-                        onNavigate = onNavigate,
-                        isLastItem = index == breadcrumbContent.lastIndex
-                    )
-                }
-            }
+            BreadcrumbRow(
+                items = breadcrumbContent,
+                onNavigate = onNavigate,
+                scrollState = scrollState
+            )
+        }
+    }
+}
+
+@Composable
+private fun BreadcrumbRow(
+    items: List<Garden>,
+    onNavigate: (Int?) -> Unit,
+    scrollState: ScrollState
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(scrollState)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        items.forEachIndexed { index, garden ->
+            BreadcrumbItem(
+                garden = garden,
+                onNavigate = onNavigate,
+                isLastItem = index == items.lastIndex
+            )
         }
     }
 }
 
 @Composable
 private fun BreadcrumbItem(
-    label: String,
-    gardenId: Int,
+    garden: Garden,
     onNavigate: (Int?) -> Unit,
     isLastItem: Boolean
 ) {
     val itemAlpha by animateFloatAsState(
-        targetValue = if (isLastItem) 1f else 0.5f,
-        animationSpec = tween(durationMillis = 200),
+        targetValue = if (isLastItem) BreadcrumbConstants.ACTIVE_ITEM_ALPHA
+        else BreadcrumbConstants.INACTIVE_ITEM_ALPHA,
+        animationSpec = tween(durationMillis = BreadcrumbConstants.ALPHA_ANIMATION_DURATION),
         label = "item_alpha"
     )
 
@@ -101,22 +121,34 @@ private fun BreadcrumbItem(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 enabled = !isLastItem
-            ) { onNavigate(gardenId) }
+            ) { onNavigate(garden.id) }
             .alpha(itemAlpha)
     ) {
         Icon(
             painter = painterResource(id = R.drawable.chevron_button),
-            contentDescription = null,
+            contentDescription = if (!isLastItem)
+                "Navigate to ${garden.name.ifEmpty { "Garden-${garden.id}" }}"
+            else null,
             modifier = Modifier.height(36.dp),
             tint = MaterialTheme.colorScheme.surface
         )
         Text(
-            text = label,
+            text = garden.name.ifEmpty { "Garden-${garden.id}" },
             modifier = Modifier
-                .padding(18.dp, 0.dp, 12.dp, 0.dp)
+                .padding(horizontal = 18.dp)
                 .align(Alignment.Center),
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.bodyLarge
         )
     }
 }
+
+private fun createEnterAnimation() =
+    fadeIn(animationSpec = tween(BreadcrumbConstants.ANIMATION_DURATION)) +
+            slideInHorizontally(animationSpec = tween(BreadcrumbConstants.ANIMATION_DURATION))
+            { fullWidth -> -fullWidth }
+
+private fun createExitAnimation() =
+    fadeOut(animationSpec = tween(BreadcrumbConstants.ANIMATION_DURATION)) +
+            slideOutHorizontally(animationSpec = tween(BreadcrumbConstants.ANIMATION_DURATION))
+            { fullWidth -> -fullWidth }

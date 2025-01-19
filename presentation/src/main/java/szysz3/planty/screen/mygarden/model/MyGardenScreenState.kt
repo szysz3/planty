@@ -25,7 +25,7 @@ data class GardenNavigationState(
 
 data class GardenEditState(
     val isEditMode: Boolean = false,
-    val selectedCells: Set<Pair<Int, Int>> = emptySet()
+    val selectedCells: Set<CellPosition> = emptySet()
 )
 
 data class GardenDialogState(
@@ -35,7 +35,7 @@ data class GardenDialogState(
 )
 
 data class GardenSelectionState(
-    val selectedCell: Pair<Int, Int>? = null,
+    val selectedCell: CellPosition? = null,
     val selectedMergedCellId: Int? = null
 )
 
