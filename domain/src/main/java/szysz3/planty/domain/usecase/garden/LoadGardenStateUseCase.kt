@@ -20,6 +20,18 @@ class LoadGardenStateUseCase @Inject constructor(
                 } else {
                     cell
                 }
+            },
+            mergedCells = gardenState.mergedCells.map { mergedCell ->
+                if (mergedCell.subGardenId != null) {
+                    val subGarden = gardenRepository.getGarden(mergedCell.subGardenId)
+                    mergedCell.copy(
+                        subGardenName = subGarden?.name,
+                        subGardenRows = subGarden?.rows,
+                        subGardenColumns = subGarden?.columns
+                    )
+                } else {
+                    mergedCell
+                }
             }
         )
     }

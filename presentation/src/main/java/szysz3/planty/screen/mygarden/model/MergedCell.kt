@@ -7,7 +7,10 @@ data class MergedCell(
     val startColumn: Int,
     val endRow: Int,
     val endColumn: Int,
-    val subGardenId: Int?
+    val subGardenId: Int?,
+    val subGardenName: String? = null,
+    val subGardenRows: Int? = null,
+    val subGardenColumns: Int? = null
 ) {
     val width: Int = endColumn - startColumn + 1
     val height: Int = endRow - startRow + 1

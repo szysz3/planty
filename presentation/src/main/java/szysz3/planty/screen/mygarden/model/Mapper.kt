@@ -37,7 +37,10 @@ fun MergedCellDomain.toPresentation(): MergedCell {
         startColumn = cellRange.startColumn,
         endRow = cellRange.endRow,
         endColumn = cellRange.endColumn,
-        subGardenId = subGardenId
+        subGardenId = subGardenId,
+        subGardenName = subGardenName,
+        subGardenRows = subGardenRows,
+        subGardenColumns = subGardenColumns
     )
 }
 
@@ -49,7 +52,7 @@ fun MergedCell.toDomain(): MergedCellDomain {
             startRow = startRow,
             startColumn = startColumn,
             endRow = endRow,
-            endColumn = endColumn
+            endColumn = endColumn,
         ),
         subGardenId = subGardenId
     )
