@@ -76,7 +76,7 @@ fun GardenCellBox(
                     contentDescription = plant.commonName,
                     colorFilter = ColorFilter.colorMatrix(
                         ColorMatrix().apply {
-                            setToSaturation(0f)
+                            setToSaturation(0.3f)
                         }
                     ),
                     modifier = Modifier
