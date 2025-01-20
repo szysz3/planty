@@ -59,11 +59,11 @@ class MyGardenViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            loadRootGardenIfExists()
+            loadRootGarden()
         }
     }
 
-    private suspend fun loadRootGardenIfExists() {
+    private suspend fun loadRootGarden() {
         try {
             val rootGarden = getRootGardenUseCase(NoParams())
             if (rootGarden != null) {
@@ -86,12 +86,7 @@ class MyGardenViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val gardenId = createGardenUseCase(
-                    CreateGardenParams(
-                        name = name,
-                        rows = rows,
-                        columns = columns,
-                        parentGardenId = null
-                    )
+                    CreateGardenParams(name, rows, columns, parentGardenId = null)
                 )
                 navigateToGarden(gardenId)
                 showBottomSheet(false)
@@ -146,24 +141,59 @@ class MyGardenViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Handles the merging of multiple selected cells into a single merged cell.
+     *
+     * Performs validation checks through [canMergeCells] before proceeding with the merge operation.
+     * Creates a new merged cell from the selected cells' bounds and updates the garden state.
+     * Clears the selection and exits edit mode after successful merge.
+     *
+     * Requirements:
+     * - At least 2 cells must be selected
+     * - Current garden ID must be valid
+     * - Selected cells must form a valid rectangular selection
+     */
     fun mergeCells() {
-        val currentState = _uiState.value
-        val selectedCells = currentState.editState.selectedCells
-        val currentGardenId = currentState.navigationState.currentGardenId ?: return
-
-        if (selectedCells.size < 2 || !isValidRectangularSelection()) return
+        if (!canMergeCells()) return
 
         viewModelScope.launch {
             try {
-                val bounds = CellBounds.from(selectedCells)
-                val cellRange = bounds.toDomain()
+                val currentState = _uiState.value
+                val bounds = CellBounds.from(currentState.editState.selectedCells)
                 val mergedCellId = createMergedCellUseCase(
-                    CreateMergedCellParams(currentGardenId, cellRange)
+                    CreateMergedCellParams(
+                        currentState.navigationState.currentGardenId!!,
+                        bounds.toDomain()
+                    )
                 )
+                createMergedCellState(bounds, mergedCellId)
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
+        }
+    }
 
-                // Update garden state to reflect new merged cell
-                val updatedGardenState = currentState.gardenState.copy(
-                    mergedCells = currentState.gardenState.mergedCells + MergedCell(
+    // TODO: move to use case
+    private fun canMergeCells(): Boolean {
+        val selectedCells = _uiState.value.editState.selectedCells
+        val currentGardenId = _uiState.value.navigationState.currentGardenId
+
+        return selectedCells.size >= 2 &&
+                currentGardenId != null &&
+                isValidRectangularSelection()
+    }
+
+    private fun createMergedCellState(bounds: CellBounds, mergedCellId: Int) {
+        val currentGardenId = _uiState.value.navigationState.currentGardenId ?: return
+
+        _uiState.update { state ->
+            state.copy(
+                editState = state.editState.copy(
+                    isEditMode = false,
+                    selectedCells = emptySet()
+                ),
+                gardenState = state.gardenState.copy(
+                    mergedCells = state.gardenState.mergedCells + MergedCell(
                         id = mergedCellId,
                         parentGardenId = currentGardenId,
                         startRow = bounds.minRow,
@@ -173,59 +203,51 @@ class MyGardenViewModel @Inject constructor(
                         subGardenId = null
                     )
                 )
-
-                _uiState.update { state ->
-                    state.copy(
-                        editState = state.editState.copy(
-                            isEditMode = false,
-                            selectedCells = emptySet()
-                        ),
-                        gardenState = updatedGardenState
-                    )
-                }
-            } catch (e: Exception) {
-                Timber.e(e, "Error while merging cells")
-            }
+            )
         }
     }
 
     fun onMergedCellClick(mergedCell: MergedCell) {
-        Timber.d("onMergedCellClick: Merged cell tapped with ID=${mergedCell.id}, subGardenId=${mergedCell.subGardenId}")
-
-        if (mergedCell.subGardenId != null) {
-            navigateToGarden(mergedCell.subGardenId)
-        } else {
-            showCreateSubGardenDialog(mergedCell.id)
-        }
+        mergedCell.subGardenId?.let {
+            navigateToGarden(it)
+        } ?: showCreateSubGardenDialog(mergedCell.id)
     }
 
+    /**
+     * Creates a sub-garden within a merged cell.
+     *
+     * @param name The name of the new sub-garden
+     * @param rows The number of rows in the sub-garden
+     * @param columns The number of columns in the sub-garden
+     *
+     * Requires:
+     * - A valid selected merged cell ID
+     * - A valid current garden ID
+     *
+     * After creation, automatically navigates to the new sub-garden.
+     * @throws IllegalArgumentException if required IDs are null
+     */
     fun createSubGardenFromMergedCell(name: String, rows: Int, columns: Int) {
-        requireNotNull(_uiState.value.selectionState.selectedMergedCellId) {
-            "Selected merged cell ID is null."
-        }
+        val mergedCellId = _uiState.value.selectionState.selectedMergedCellId
+        val parentGardenId = _uiState.value.navigationState.currentGardenId
 
-        requireNotNull(_uiState.value.navigationState.currentGardenId) {
-            "Current garden ID is null."
-        }
+        requireNotNull(mergedCellId) { "Selected merged cell ID is null." }
+        requireNotNull(parentGardenId) { "Current garden ID is null." }
 
         viewModelScope.launch {
-            _uiState.value.selectionState.selectedMergedCellId?.let { mergedCellId ->
-                _uiState.value.navigationState.currentGardenId?.let { parentGardenId ->
-                    try {
-                        val subGardenId = createSubGardenForMergedCellUseCase(
-                            CreateSubGardenForMergedCellParams(
-                                name = name,
-                                rows = rows,
-                                columns = columns,
-                                mergedCellId = mergedCellId,
-                                parentGardenId = parentGardenId
-                            )
-                        )
-                        navigateToGarden(subGardenId)
-                    } catch (e: Exception) {
-                        Timber.e(e)
-                    }
-                }
+            try {
+                val subGardenId = createSubGardenForMergedCellUseCase(
+                    CreateSubGardenForMergedCellParams(
+                        name = name,
+                        rows = rows,
+                        columns = columns,
+                        mergedCellId = mergedCellId,
+                        parentGardenId = parentGardenId
+                    )
+                )
+                navigateToGarden(subGardenId)
+            } catch (e: Exception) {
+                Timber.e(e)
             }
         }
     }
@@ -235,43 +257,58 @@ class MyGardenViewModel @Inject constructor(
         val currentGardenId = currentState.navigationState.currentGardenId ?: return
 
         if (currentState.editState.isEditMode) {
-            handleCellSelectionInEditMode(row, column)
+            handleCellSelection(row, column)
         } else {
-            handleCellClickInPreviewMode(currentGardenId, row, column)
+            handlePlantSelection(row, column, currentGardenId)
         }
     }
 
-    private fun handleCellSelectionInEditMode(row: Int, column: Int) {
-        _uiState.update { currentState ->
-            val position = CellPosition(row, column)
-            val currentSelection = currentState.editState.selectedCells
-            val newSelection = if (position in currentSelection) {
-                currentSelection - position
-            } else {
-                currentSelection + position
+    private fun handleCellSelection(row: Int, column: Int) {
+        val position = CellPosition(row, column)
+        _uiState.update { state ->
+            val currentSelection = state.editState.selectedCells
+            state.updateEditState {
+                copy(
+                    selectedCells = if (position in currentSelection) {
+                        currentSelection - position
+                    } else {
+                        currentSelection + position
+                    }
+                )
             }
-            currentState.updateEditState { copy(selectedCells = newSelection) }
         }
     }
 
-    private fun handleCellClickInPreviewMode(gardenId: Int, row: Int, column: Int) {
-        updateSelectedCell(row, column)
-        val plantForSelectedCell = getPlantForSelectedCell()
+    private fun handlePlantSelection(row: Int, column: Int, gardenId: Int) {
+        _uiState.update {
+            it.updateSelectionState { copy(selectedCell = CellPosition(row, column)) }
+        }
 
         viewModelScope.launch {
-            if (plantForSelectedCell != null) {
-                _uiEvent.emit(
-                    MyGardenScreenUiEvent.OnPlantChosen(
-                        plantForSelectedCell,
-                        row,
-                        column,
-                        gardenId
-                    )
-                )
-            } else {
-                _uiEvent.emit(MyGardenScreenUiEvent.OnEmptyCellChosen(row, column, gardenId))
-            }
+            val plant = findPlantAt(row, column)
+            emitPlantSelectionEvent(plant, row, column, gardenId)
         }
+    }
+
+    private fun findPlantAt(row: Int, column: Int): Plant? {
+        return _uiState.value.gardenState.cells.find {
+            it.row == row && it.column == column
+        }?.plant
+    }
+
+    private suspend fun emitPlantSelectionEvent(
+        plant: Plant?,
+        row: Int,
+        column: Int,
+        gardenId: Int
+    ) {
+        _uiEvent.emit(
+            if (plant != null) {
+                MyGardenScreenUiEvent.OnPlantChosen(plant, row, column, gardenId)
+            } else {
+                MyGardenScreenUiEvent.OnEmptyCellChosen(row, column, gardenId)
+            }
+        )
     }
 
     fun clearGarden() {
@@ -279,9 +316,7 @@ class MyGardenViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 clearGardenUseCase(GardenIdParam(currentGardenId))
-                _uiState.update {
-                    MyGardenScreenState.empty()
-                }
+                _uiState.update { MyGardenScreenState.empty() }
             } catch (e: Exception) {
                 Timber.e(e)
             }
@@ -289,21 +324,15 @@ class MyGardenViewModel @Inject constructor(
     }
 
     fun showDeleteDialog(show: Boolean) {
-        _uiState.update {
-            it.updateDialogState { copy(isDeleteDialogVisible = show) }
-        }
+        _uiState.update { it.updateDialogState { copy(isDeleteDialogVisible = show) } }
     }
 
     fun showBottomSheet(show: Boolean) {
-        _uiState.update {
-            it.updateDialogState { copy(isBottomSheetVisible = show) }
-        }
+        _uiState.update { it.updateDialogState { copy(isBottomSheetVisible = show) } }
     }
 
     fun showSubGardenDialog(show: Boolean) {
-        _uiState.update {
-            it.updateDialogState { copy(showCreateSubGardenDialog = show) }
-        }
+        _uiState.update { it.updateDialogState { copy(showCreateSubGardenDialog = show) } }
     }
 
     private fun showCreateSubGardenDialog(mergedCellId: Int) {
@@ -316,28 +345,11 @@ class MyGardenViewModel @Inject constructor(
     }
 
     fun toggleEditMode() {
-        _uiState.update { currentState ->
-            Timber.d("Toggling edit mode from ${currentState.editState.isEditMode} to ${!currentState.editState.isEditMode}")
-            currentState.updateEditState {
-                copy(
-                    isEditMode = !isEditMode,
-                    selectedCells = emptySet()
-                )
+        _uiState.update { state ->
+            state.updateEditState {
+                copy(isEditMode = !isEditMode, selectedCells = emptySet())
             }
         }
-    }
-
-    private fun updateSelectedCell(row: Int, column: Int) {
-        _uiState.update {
-            it.updateSelectionState { copy(selectedCell = CellPosition(row, column)) }
-        }
-    }
-
-    private fun getPlantForSelectedCell(): Plant? {
-        val selectedCell = _uiState.value.selectionState.selectedCell
-        return _uiState.value.gardenState.cells.find {
-            it.row == selectedCell?.row && it.column == selectedCell.column
-        }?.plant
     }
 
     fun isValidRectangularSelection(): Boolean {
