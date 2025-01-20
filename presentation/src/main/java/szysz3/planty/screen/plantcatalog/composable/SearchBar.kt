@@ -16,12 +16,25 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 
+/**
+ * A search bar component that allows users to search for plants.
+ *
+ * @param query Current search query text
+ * @param onQueryChange Callback invoked when the search query changes
+ * @param onClearQuery Callback invoked when the clear button is clicked
+ * @param modifier Optional modifier for the search bar
+ */
 @Composable
 fun SearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
-    onClearQuery: () -> Unit
+    onClearQuery: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
+    val searchBarModifier = modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp, vertical = 8.dp)
+
     OutlinedTextField(
         value = query,
         onValueChange = onQueryChange,
@@ -30,9 +43,7 @@ fun SearchBar(
             imeAction = ImeAction.Done
         ),
         maxLines = 1,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier = searchBarModifier,
         label = { Text("Search for a plant...") },
         leadingIcon = {
             Icon(

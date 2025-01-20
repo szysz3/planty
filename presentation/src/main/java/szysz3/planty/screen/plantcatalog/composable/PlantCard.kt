@@ -29,6 +29,20 @@ import coil.request.ImageRequest
 import szysz3.planty.R
 import szysz3.planty.core.model.Plant
 
+private object PlantCardDefaults {
+    const val CARD_ASPECT_RATIO = 0.8f
+    const val IMAGE_HEIGHT_FRACTION = 0.7f
+    val DEFAULT_ELEVATION = 4.dp
+    val CONTENT_PADDING = 8.dp
+}
+
+/**
+ * A composable that displays a card containing plant information with an image and text details.
+ *
+ * @param modifier Modifier to be applied to the card
+ * @param plant Plant data to be displayed. If null, placeholder content will be shown
+ * @param onPlantSelected Callback triggered when the card is clicked. If null, the card won't be clickable
+ */
 @Composable
 fun PlantCard(
     modifier: Modifier = Modifier,
@@ -38,57 +52,59 @@ fun PlantCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .aspectRatio(0.8f)
-            .clickable {
-                if (onPlantSelected != null) {
-                    onPlantSelected()
-                }
-            },
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            .aspectRatio(PlantCardDefaults.CARD_ASPECT_RATIO)
+            .then(onPlantSelected?.let { Modifier.clickable(onClick = it) } ?: Modifier),
+        elevation = CardDefaults.cardElevation(defaultElevation = PlantCardDefaults.DEFAULT_ELEVATION)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp)
-
+                .padding(PlantCardDefaults.CONTENT_PADDING)
         ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(plant?.imageUrls?.firstOrNull())
-                    .crossfade(true)
-                    .placeholder(R.drawable.plant_placeholder)
-                    .error(R.drawable.plant_placeholder)
-                    .build(),
-                contentScale = ContentScale.Crop,
-                contentDescription = plant?.commonName,
-                modifier = Modifier
-                    .fillMaxHeight(0.7f)
-                    .aspectRatio(1f)
-                    .clip(CircleShape)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = plant?.latinName ?: "Lorem ipsum",
-                textAlign = TextAlign.Center,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth()
-            )
-            if (plant?.commonName?.isNotBlank() == true) {
-                Text(
-                    text = plant.commonName,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth()
-                )
-            }
+            PlantImage(plant)
+            Spacer(modifier = Modifier.height(PlantCardDefaults.CONTENT_PADDING))
+            PlantDetails(plant)
         }
+    }
+}
+
+@Composable
+private fun PlantImage(plant: Plant?) {
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(plant?.imageUrls?.firstOrNull())
+            .crossfade(true)
+            .placeholder(R.drawable.plant_placeholder)
+            .error(R.drawable.plant_placeholder)
+            .build(),
+        contentScale = ContentScale.Crop,
+        contentDescription = plant?.commonName,
+        modifier = Modifier
+            .fillMaxHeight(PlantCardDefaults.IMAGE_HEIGHT_FRACTION)
+            .aspectRatio(1f)
+            .clip(CircleShape)
+    )
+}
+
+@Composable
+private fun PlantDetails(plant: Plant?) {
+    Text(
+        text = plant?.latinName ?: "Lorem ipsum",
+        textAlign = TextAlign.Center,
+        overflow = TextOverflow.Ellipsis,
+        style = MaterialTheme.typography.titleMedium,
+        modifier = Modifier.fillMaxWidth()
+    )
+
+    if (plant?.commonName?.isNotBlank() == true) {
+        Text(
+            text = plant.commonName,
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.Gray,
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }

@@ -17,6 +17,7 @@ fun BottomNavigationBar(
 ) {
     val items = BottomBarNavigationItems.items
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val unselectedAlpha = 0.4f
 
     BottomNavigation(
         backgroundColor = MaterialTheme.colorScheme.background,
@@ -29,17 +30,19 @@ fun BottomNavigationBar(
                     Icon(
                         item.icon,
                         contentDescription = item.title,
-                        tint = if (isSelected) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onBackground.copy(
-                            alpha = 0.4f
+                        tint = if (isSelected) MaterialTheme.colorScheme.onBackground
+                        else MaterialTheme.colorScheme.onBackground.copy(
+                            alpha = unselectedAlpha
                         )
                     )
                 },
                 label = {
                     Text(
                         item.title,
-                        style = MaterialTheme.typography.labelLarge, // Using theme's label style
-                        color = if (isSelected) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onBackground.copy(
-                            alpha = 0.4f
+                        style = MaterialTheme.typography.labelLarge,
+                        color = if (isSelected) MaterialTheme.colorScheme.onBackground
+                        else MaterialTheme.colorScheme.onBackground.copy(
+                            alpha = unselectedAlpha
                         )
                     )
                 },
@@ -58,8 +61,8 @@ fun BottomNavigationBar(
                         restoreState = true
                     }
                 },
-                selectedContentColor = MaterialTheme.colorScheme.primary, // Selected item color
-                unselectedContentColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.4f) // Unselected item color with reduced opacity
+                selectedContentColor = MaterialTheme.colorScheme.primary,
+                unselectedContentColor = MaterialTheme.colorScheme.secondary.copy(alpha = unselectedAlpha)
             )
         }
     }

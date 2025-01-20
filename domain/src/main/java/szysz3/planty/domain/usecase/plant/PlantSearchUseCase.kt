@@ -9,8 +9,8 @@ class PlantSearchUseCase @Inject constructor(
     private val repository: PlantRepository
 ) : BaseUseCase<PlantSearchUseCaseParams, List<Plant>>() {
     override suspend fun invoke(input: PlantSearchUseCaseParams): List<Plant> {
-        return repository.searchPlants(input.query, input.startRange, input.endRange)
+        return repository.searchPlants(input.query, input.limit, input.offset)
     }
 }
 
-data class PlantSearchUseCaseParams(val query: String?, val startRange: Int, val endRange: Int)
+data class PlantSearchUseCaseParams(val query: String?, val limit: Int, val offset: Int)

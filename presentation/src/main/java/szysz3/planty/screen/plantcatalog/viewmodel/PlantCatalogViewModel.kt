@@ -15,8 +15,15 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 import szysz3.planty.domain.usecase.plant.PlantSearchUseCase
 import szysz3.planty.screen.plantcatalog.utils.PlantPagingSource
+import szysz3.planty.screen.plantcatalog.utils.PlantPagingSource.Companion.DEFAULT_PAGE_SIZE
 import javax.inject.Inject
 
+/**
+ * ViewModel responsible for managing plant catalog screen state and user interactions.
+ * Handles plant search functionality with pagination support.
+ *
+ * @property plantSearchUseCase Use case for searching plants in the catalog
+ */
 @HiltViewModel
 class PlantCatalogViewModel @Inject constructor(
     private val plantSearchUseCase: PlantSearchUseCase,
@@ -27,11 +34,11 @@ class PlantCatalogViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     val pagedPlants = searchQuery
-        .debounce(300)
+        .debounce(SEARCH_DEBOUNCE_MS)
         .flatMapLatest { searchQuery ->
             Pager(
                 config = PagingConfig(
-                    pageSize = 20,
+                    pageSize = DEFAULT_PAGE_SIZE,
                     enablePlaceholders = true
                 ),
                 pagingSourceFactory = { PlantPagingSource(plantSearchUseCase, searchQuery) }
@@ -40,5 +47,9 @@ class PlantCatalogViewModel @Inject constructor(
 
     fun updateSearchQuery(query: String) {
         _searchQuery.update { query }
+    }
+
+    private companion object {
+        const val SEARCH_DEBOUNCE_MS = 300L
     }
 }
