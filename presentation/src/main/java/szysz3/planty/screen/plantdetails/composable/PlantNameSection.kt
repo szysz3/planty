@@ -9,6 +9,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import szysz3.planty.core.model.Plant
 
+/**
+ * Displays the plant's Latin name and optional common name in a centered column layout.
+ *
+ * @param plant The plant model containing the names to display
+ */
 @Composable
 fun PlantNameSection(plant: Plant) {
     Column(

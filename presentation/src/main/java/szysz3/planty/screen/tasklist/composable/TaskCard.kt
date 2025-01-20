@@ -1,5 +1,6 @@
 package szysz3.planty.screen.tasklist.composable
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,123 +23,137 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import szysz3.planty.core.model.Task
+import szysz3.planty.screen.tasklist.model.TaskCardUiState
 
+/**
+ * A composable that displays a task card with details including title, completion status, and optional cost information.
+ *
+ * @param uiState The UI state containing all necessary data to display the task card
+ * @param modifier The modifier to be applied to the card
+ * @param onClicked Callback invoked when the card is clicked
+ */
 @Composable
 fun TaskCardView(
-    task: Task,
+    uiState: TaskCardUiState,
     modifier: Modifier = Modifier,
-    onClicked: (Task?) -> Unit,
+    onClicked: () -> Unit,
 ) {
-    // TODO: move to ViewModel / UseCase
-    val completedSubTasks = task.subTasks.count { it.isCompleted }
-    val totalSubTasks = task.subTasks.size
-    val completedCost = task.subTasks.filter { it.isCompleted }.sumOf { it.cost?.toDouble() ?: 0.0 }
-    val totalCost = task.subTasks.sumOf { it.cost?.toDouble() ?: 0.0 }
-
     Card(
         modifier = modifier
             .fillMaxWidth()
             .height(120.dp)
             .padding(8.dp)
-            .alpha(
-                if (completedSubTasks == totalSubTasks) {
-                    0.6f
-                } else {
-                    1f
-                }
-            )
+            .alpha(if (uiState.isCompleted) 0.6f else 1f)
             .clip(MaterialTheme.shapes.medium),
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        onClick = { onClicked(task) }
+        onClick = onClicked
     ) {
-
         Row(modifier = Modifier.fillMaxSize()) {
             Box(
                 Modifier
                     .fillMaxHeight()
                     .fillMaxWidth(0.25f)
-                    .background(color = task.color)
+                    .background(color = uiState.color)
                     .clip(MaterialTheme.shapes.medium)
             )
 
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(8.dp)
-                    .weight(1f)
-            ) {
-                Text(
-                    text = task.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    textAlign = TextAlign.Start,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier
-                        .align(Alignment.Start)
-                        .padding(start = 8.dp)
+            TaskDetailsContent(
+                title = uiState.title,
+                completedTasks = uiState.completedSubTasks,
+                totalTasks = uiState.totalSubTasks,
+                modifier = Modifier.weight(1f)
+            )
+
+            if (uiState.totalCost > 0) {
+                CostSection(
+                    completedCost = uiState.completedCost,
+                    totalCost = uiState.totalCost,
+                    modifier = Modifier.align(Alignment.CenterVertically)
                 )
-
-                Row(
-                    modifier = Modifier
-                        .align(Alignment.Start)
-                        .padding(start = 32.dp, top = 8.dp)
-                ) {
-                    Text(
-                        text = "$completedSubTasks",
-                        style = MaterialTheme.typography.displaySmall.copy(
-                            fontWeight = FontWeight.Bold
-                        ),
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                    )
-                    Text(
-                        text = " / ",
-                        style = MaterialTheme.typography.displaySmall.copy(
-                            fontWeight = FontWeight.Bold
-                        ),
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                    )
-                    Text(
-                        text = "$totalSubTasks",
-                        style = MaterialTheme.typography.displaySmall.copy(
-                            fontWeight = FontWeight.Bold
-                        ),
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-                    )
-                }
-            }
-
-            if (totalCost > 0) {
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(end = 16.dp)
-                ) {
-                    Text(
-                        text = String.format("%.2f", completedCost),
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-                    Text(
-                        text = " out of ",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-                    Text(
-                        text = String.format("%.2f", totalCost),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-                }
             }
         }
+    }
+}
+
+@Composable
+private fun TaskDetailsContent(
+    title: String,
+    completedTasks: Int,
+    totalTasks: Int,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxHeight()
+            .padding(8.dp)
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Start,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(start = 8.dp)
+        )
+
+        Row(
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(start = 32.dp, top = 8.dp)
+        ) {
+            Text(
+                text = "$completedTasks",
+                style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            )
+            Text(
+                text = " / ",
+                style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+            )
+            Text(
+                text = "$totalTasks",
+                style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+            )
+        }
+    }
+}
+
+@SuppressLint("DefaultLocale")
+@Composable
+private fun CostSection(
+    completedCost: Double,
+    totalCost: Double,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.padding(end = 16.dp)
+    ) {
+        Text(
+            text = String.format("%.2f", completedCost),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+        Text(
+            text = " out of ",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+        Text(
+            text = String.format("%.2f", totalCost),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
     }
 }

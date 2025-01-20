@@ -10,6 +10,13 @@ import szysz3.planty.core.composable.ImageWithTextHorizontal
 import szysz3.planty.core.model.Plant
 import szysz3.planty.screen.plantdetails.model.mapGrowthRateToString
 
+/**
+ * A composable that displays additional information about a plant including its width, height,
+ * and growth rate. Each piece of information is displayed with a corresponding icon.
+ *
+ * @param plant The plant model containing the information to be displayed
+ * @param modifier Optional modifier for customizing the layout
+ */
 @Composable
 fun PlantAdditionalInfoSection(
     plant: Plant,

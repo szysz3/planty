@@ -12,6 +12,12 @@ import androidx.compose.ui.unit.dp
 import szysz3.planty.R
 import szysz3.planty.core.composable.ImageWithTextHorizontal
 
+/**
+ * A composable section that displays cultivation details for a plant.
+ * This component shows an info icon with a title, followed by detailed cultivation instructions.
+ *
+ * @param details The cultivation instructions text to be displayed.
+ */
 @Composable
 fun CultivationDetailsSection(details: String) {
     Column {

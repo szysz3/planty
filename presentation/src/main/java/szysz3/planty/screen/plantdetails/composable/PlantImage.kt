@@ -13,6 +13,12 @@ import coil.request.ImageRequest
 import szysz3.planty.R
 import szysz3.planty.core.model.Plant
 
+/**
+ * Displays a plant image within card with elevation.
+ *
+ * @param plant The plant model containing image URLs and common name for content description
+ * @param modifier Optional modifier for customizing the card's layout
+ */
 @Composable
 fun PlantImage(
     plant: Plant,

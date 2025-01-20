@@ -22,6 +22,7 @@ import szysz3.planty.core.composable.EllipticalBackground
 import szysz3.planty.core.composable.FloatingActionButton
 import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.tasklist.composable.TaskCardView
+import szysz3.planty.screen.tasklist.model.toTaskCardUiState
 import szysz3.planty.screen.tasklist.utils.dragContainer
 import szysz3.planty.screen.tasklist.utils.draggableItems
 import szysz3.planty.screen.tasklist.utils.rememberDragDropState
@@ -77,12 +78,10 @@ fun TaskListScreen(
                     dragDropState = dragDropState
                 ) { modifier, task ->
                     TaskCardView(
-                        task = task,
+                        uiState = task.toTaskCardUiState(),
                         modifier = modifier,
-                        onClicked = { task ->
-                            task?.let {
-                                onShowTaskDetails(task.id)
-                            }
+                        onClicked = {
+                            onShowTaskDetails(task.id)
                         }
                     )
                 }

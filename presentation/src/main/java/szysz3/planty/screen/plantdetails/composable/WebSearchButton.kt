@@ -8,6 +8,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import szysz3.planty.core.composable.ImageButton
 
+/**
+ * A search button with an icon that triggers a web search when clicked.
+ *
+ * @param onClick Callback invoked when the button is clicked
+ */
 @Composable
 fun WebSearchButton(
     onClick: () -> Unit

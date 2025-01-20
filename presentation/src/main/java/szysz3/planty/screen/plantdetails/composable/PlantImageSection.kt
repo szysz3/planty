@@ -12,6 +12,13 @@ import androidx.compose.ui.unit.dp
 import szysz3.planty.core.model.Plant
 import szysz3.planty.screen.plantdetails.model.hasAdditionalInfo
 
+/**
+ * A horizontal section displaying a clickable plant image and optional additional information.
+ *
+ * @param plant The plant model containing the image and additional information
+ * @param onImageClick Callback invoked when the plant image is clicked
+ * @param modifier Optional modifier for customizing the section's layout
+ */
 @Composable
 fun PlantImageSection(
     plant: Plant,
