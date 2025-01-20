@@ -8,7 +8,6 @@ class CreateSubGardenForMergedCellUseCase @Inject constructor(
     private val repository: GardenRepository,
 ) : BaseUseCase<CreateSubGardenForMergedCellParams, Int>() {
     override suspend fun invoke(input: CreateSubGardenForMergedCellParams): Int {
-        // Create new garden
         val subGardenId = repository.createGarden(
             name = input.name,
             rows = input.rows,
@@ -16,7 +15,6 @@ class CreateSubGardenForMergedCellUseCase @Inject constructor(
             parentGardenId = input.parentGardenId
         )
 
-        // Link it to merged cell
         repository.linkSubGardenToMergedCell(
             mergedCellId = input.mergedCellId,
             subGardenId = subGardenId
