@@ -10,6 +10,12 @@ import net.engawapg.lib.zoomable.rememberZoomState
 import net.engawapg.lib.zoomable.zoomable
 import szysz3.planty.R
 
+/**
+ * A zoomable image component that loads and displays an image from a URL.
+ * Supports zoom gestures and displays a placeholder while loading.
+ *
+ * @param imageUrl URL of the image to display
+ */
 @Composable
 fun ZoomableImage(
     imageUrl: String,
