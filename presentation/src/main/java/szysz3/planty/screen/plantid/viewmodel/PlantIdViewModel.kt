@@ -19,6 +19,10 @@ import szysz3.planty.screen.plantid.model.toPresentationModel
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * ViewModel responsible for managing plant identification functionality.
+ * Handles photo capture, plant identification API calls, and related UI state management.
+ */
 @HiltViewModel
 class PlantIdViewModel @Inject constructor(
     private val identifyPlantUseCase: IdentifyPlantUseCase,
@@ -29,6 +33,11 @@ class PlantIdViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(PlantIdScreenState())
     val uiState: StateFlow<PlantIdScreenState> = _uiState
 
+    /**
+     * Initiates the plant identification process using the currently captured photo.
+     * Updates the UI state with loading, success, or error states accordingly.
+     * Automatically cleans up temporary photo files after identification attempt.
+     */
     fun identifyPlant() {
         viewModelScope.launch {
             val uri = _uiState.value.photoUri ?: return@launch
@@ -67,6 +76,11 @@ class PlantIdViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Creates a temporary file for storing the captured photo.
+     * Updates the UI state with the new file URI and resets identification results.
+     * Should be called before capturing a new photo.
+     */
     fun createPhotoFile() {
         viewModelScope.launch {
             val uri = createFileUseCase(NoParams())
@@ -80,6 +94,11 @@ class PlantIdViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Resets the plant identification screen to its initial state.
+     * Clears photo URI, identification results, and upload status.
+     * Use this method to start fresh or handle user-initiated resets.
+     */
     fun clearResults() {
         _uiState.update { state ->
             state.copy(

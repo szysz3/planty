@@ -20,10 +20,9 @@ fun PlantImageSection(
 ) {
     Row(
         modifier = modifier
-            .height(200.dp), // Fixed height to match original
+            .height(200.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Plant Image with weight
         PlantImage(
             plant = plant,
             modifier = Modifier

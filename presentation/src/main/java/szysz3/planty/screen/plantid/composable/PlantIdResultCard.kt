@@ -32,8 +32,17 @@ import szysz3.planty.R
 import szysz3.planty.core.model.Plant
 import szysz3.planty.screen.plantid.model.PlantResult
 
+/**
+ * A card component that displays plant identification results.
+ *
+ * @param plantResult The result containing plant details and identification confidence
+ * @param onCardClick Callback invoked when the card is clicked, provides the identified plant or null
+ */
 @Composable
-fun PlantResultCard(plantResult: PlantResult, onCardClick: (plant: Plant?) -> Unit) {
+fun PlantResultCard(
+    plantResult: PlantResult,
+    onCardClick: (plant: Plant?) -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -41,69 +50,15 @@ fun PlantResultCard(plantResult: PlantResult, onCardClick: (plant: Plant?) -> Un
             .clip(MaterialTheme.shapes.medium),
         elevation = CardDefaults.cardElevation(4.dp),
         shape = MaterialTheme.shapes.medium,
-        onClick = {
-            onCardClick(plantResult.plant)
-        }
+        onClick = { onCardClick(plantResult.plant) }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             if (plantResult.plant != null) {
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .size(64.dp)
-                        .rotate(45f)
-                        .offset(y = (-48).dp)
-                        .background(color = MaterialTheme.colorScheme.primary)
-                )
+                PlantCardDecorator(Modifier.align(Alignment.TopEnd))
             }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(top = 16.dp, start = 16.dp, end = 16.dp)
-                ) {
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(plantResult.plant?.imageUrls?.firstOrNull())
-                            .crossfade(true)
-                            .placeholder(R.drawable.plant_placeholder)
-                            .error(R.drawable.plant_placeholder)
-                            .build(),
-                        contentScale = ContentScale.Crop,
-                        contentDescription = plantResult.plant?.commonName,
-                        modifier = Modifier
-                            .size(100.dp)
-                            .clip(CircleShape)
-                            .align(Alignment.CenterVertically)
-                    )
-
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .padding(start = 16.dp)
-                    ) {
-                        plantResult.name?.let {
-                            Text(
-                                text = it,
-                                style = MaterialTheme.typography.titleMedium,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-                        plantResult.scientificName?.let {
-                            Text(
-                                text = "($it)",
-                                style = MaterialTheme.typography.bodyMedium,
-                                overflow = TextOverflow.Ellipsis,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-                            )
-                        }
-                    }
-                }
+            Column(modifier = Modifier.fillMaxSize()) {
+                PlantInfo(plantResult)
 
                 Spacer(modifier = Modifier.weight(1f))
 
@@ -113,10 +68,74 @@ fun PlantResultCard(plantResult: PlantResult, onCardClick: (plant: Plant?) -> Un
                         .fillMaxWidth()
                         .height(8.dp)
                         .align(Alignment.CenterHorizontally),
-                    startColor = MaterialTheme.colorScheme.surface,
-                    endColor = MaterialTheme.colorScheme.secondary
+                    config = PlantMatchingBarConfig(
+                        startColor = MaterialTheme.colorScheme.surface,
+                        endColor = MaterialTheme.colorScheme.secondary
+                    ),
                 )
             }
         }
     }
+}
+
+@Composable
+private fun PlantCardDecorator(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .size(64.dp)
+            .rotate(45f)
+            .offset(y = (-48).dp)
+            .background(color = MaterialTheme.colorScheme.primary)
+    )
+}
+
+@Composable
+private fun PlantInfo(plantResult: PlantResult) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+    ) {
+        PlantImage(plantResult.plant)
+
+        Column(
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .padding(start = 16.dp)
+        ) {
+            plantResult.name?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.titleMedium,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            plantResult.scientificName?.let {
+                Text(
+                    text = "($it)",
+                    style = MaterialTheme.typography.bodyMedium,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PlantImage(plant: Plant?) {
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(plant?.imageUrls?.firstOrNull())
+            .crossfade(true)
+            .placeholder(R.drawable.plant_placeholder)
+            .error(R.drawable.plant_placeholder)
+            .build(),
+        contentScale = ContentScale.Crop,
+        contentDescription = plant?.commonName,
+        modifier = Modifier
+            .size(100.dp)
+            .clip(CircleShape)
+    )
 }

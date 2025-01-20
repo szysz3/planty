@@ -11,14 +11,34 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
+/**
+ * Configuration options for customizing the appearance of [PlantMatchingBar].
+ *
+ * @property cornerRadius The radius of bar corners
+ * @property startColor The color representing low match level
+ * @property endColor The color representing high match level
+ * @property backgroundColor The background color of the bar
+ */
+data class PlantMatchingBarConfig(
+    val cornerRadius: Float = 16f,
+    val startColor: Color = Color.Transparent,
+    val endColor: Color = Color.Transparent,
+    val backgroundColor: Color = Color.Transparent
+)
+
+/**
+ * A composable that displays a horizontal progress bar indicating the plant matching level.
+ * The bar color transitions between configured colors based on the matching level.
+ *
+ * @param matchLevel The matching confidence level between 0.0 and 1.0
+ * @param modifier Optional modifier for customizing the layout
+ * @param config Configuration options for customizing the appearance
+ */
 @Composable
 fun PlantMatchingBar(
     matchLevel: Float,
     modifier: Modifier = Modifier,
-    cornerRadius: Float = 16f,
-    startColor: Color = Color.Red,
-    endColor: Color = Color.Green,
-    backgroundColor: Color = Color.Transparent
+    config: PlantMatchingBarConfig = PlantMatchingBarConfig()
 ) {
     Row(
         modifier = modifier,
@@ -26,18 +46,18 @@ fun PlantMatchingBar(
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             drawRect(
-                color = backgroundColor,
+                color = config.backgroundColor
             )
             val barWidth = size.width * matchLevel
             drawRoundRect(
                 brush = Brush.horizontalGradient(
-                    colors = listOf(startColor, endColor),
+                    colors = listOf(config.startColor, config.endColor),
                     startX = 0f,
                     endX = barWidth
                 ),
                 size = size.copy(width = barWidth),
                 topLeft = Offset(0f, 0f),
-                cornerRadius = CornerRadius(cornerRadius, cornerRadius)
+                cornerRadius = CornerRadius(config.cornerRadius, config.cornerRadius)
             )
         }
     }

@@ -37,6 +37,7 @@ import szysz3.planty.core.util.PermissionUtils
 import szysz3.planty.core.util.openWebSearch
 import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.plantid.composable.PlantResultCard
+import szysz3.planty.screen.plantid.model.PlantIdScreenState
 import szysz3.planty.screen.plantid.model.PlantIdState
 import szysz3.planty.screen.plantid.viewmodel.PlantIdViewModel
 
@@ -83,84 +84,95 @@ fun PlantIdScreen(
         showBottomBar = true,
         navController = navController
     ) { padding ->
-
         EllipticalBackground(R.drawable.bcg4)
-
-        Box(
+        PlantIdContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
-            contentAlignment = Alignment.Center
-        ) {
-            when (val result = uiState.plantIdResult) {
-                is PlantIdState.Idle -> {
-                    // Nothing to show..
-                    // or maybe placeholder in the future
+            uiState = uiState,
+            onIdentifyPlant = {
+                if (PermissionUtils.hasCameraPermission(context)) {
+                    viewModel.createPhotoFile()
+                    shouldLaunchCamera = true
+                } else {
+                    permissionLauncher.launch(Manifest.permission.CAMERA)
                 }
+            },
+            onClearResults = viewModel::clearResults,
+            onShowPlantDetails = onShowPlantDetails,
+            context = context
+        )
+    }
+}
 
-                is PlantIdState.Loading -> {
-                    CircularProgressIndicator(color = MaterialTheme.colorScheme.onBackground)
-                }
+@Composable
+private fun PlantIdContent(
+    modifier: Modifier = Modifier,
+    uiState: PlantIdScreenState,
+    onIdentifyPlant: () -> Unit,
+    onClearResults: () -> Unit,
+    onShowPlantDetails: (plantId: Int) -> Unit,
+    context: android.content.Context
+) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        when (val result = uiState.plantIdResult) {
+            is PlantIdState.Idle -> { //Empty state
+            }
 
-                is PlantIdState.Success -> {
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        contentPadding = PaddingValues(vertical = 8.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        items(result.plants) { plantIdResult ->
-                            PlantResultCard(plantResult = plantIdResult) { plant ->
-                                if (plant != null) {
-                                    onShowPlantDetails(plant.id)
-                                } else {
-                                    openWebSearch(plantIdResult.scientificName, context)
-                                }
+            is PlantIdState.Loading -> {
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.onBackground)
+            }
+
+            is PlantIdState.Success -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    contentPadding = PaddingValues(vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(result.plants) { plantIdResult ->
+                        PlantResultCard(plantResult = plantIdResult) { plant ->
+                            if (plant != null) {
+                                onShowPlantDetails(plant.id)
+                            } else {
+                                openWebSearch(plantIdResult.scientificName, context)
                             }
                         }
                     }
                 }
+            }
 
-                is PlantIdState.Error -> {
-                    Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
-
-                    LaunchedEffect(Unit) {
-                        viewModel.clearResults()
-                    }
+            is PlantIdState.Error -> {
+                Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                LaunchedEffect(Unit) {
+                    onClearResults()
                 }
             }
-
-            AnimatedVisibility(
-                visible = (uiState.plantIdResult is PlantIdState.Idle
-                        || uiState.plantIdResult is PlantIdState.Error)
-            ) {
-                FloatingActionButton(
-                    icon = Icons.Rounded.Search,
-                    contentDescription = "Identify plant",
-                    onClick = {
-                        if (PermissionUtils.hasCameraPermission(context)) {
-                            viewModel.createPhotoFile()
-                            shouldLaunchCamera = true
-                        } else {
-                            permissionLauncher.launch(Manifest.permission.CAMERA)
-                        }
-                    })
-            }
-
-            AnimatedVisibility(
-                uiState.plantIdResult is PlantIdState.Success
-            ) {
-                FloatingActionButton(
-                    icon = Icons.Rounded.Clear,
-                    contentDescription = "Second action",
-                    onClick = {
-                        viewModel.clearResults()
-                    }
-                )
-            }
-
         }
 
+        AnimatedVisibility(
+            visible = (uiState.plantIdResult is PlantIdState.Idle
+                    || uiState.plantIdResult is PlantIdState.Error)
+        ) {
+            FloatingActionButton(
+                icon = Icons.Rounded.Search,
+                contentDescription = "Identify plant",
+                onClick = onIdentifyPlant
+            )
+        }
+
+        AnimatedVisibility(
+            visible = uiState.plantIdResult is PlantIdState.Success
+        ) {
+            FloatingActionButton(
+                icon = Icons.Rounded.Clear,
+                contentDescription = "Clear results",
+                onClick = onClearResults
+            )
+        }
     }
 }
