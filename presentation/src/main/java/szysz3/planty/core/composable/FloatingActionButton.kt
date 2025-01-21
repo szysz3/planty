@@ -13,6 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
+/**
+ * A composable that creates a Material Design 3 Floating Action Button (FAB)
+ * positioned at the bottom end of its container. The FAB displays an icon and responds to click events.
+ *
+ * @param icon The vector icon to display inside the FAB
+ * @param contentDescription Accessibility description for the icon
+ * @param onClick Callback to be invoked when the FAB is clicked
+ */
 @Composable
 fun FloatingActionButton(
     icon: ImageVector,

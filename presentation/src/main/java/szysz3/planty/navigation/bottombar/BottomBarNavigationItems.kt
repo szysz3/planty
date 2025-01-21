@@ -10,6 +10,10 @@ import szysz3.planty.screen.plantcatalog.PlantCatalogFeature
 import szysz3.planty.screen.plantid.PlantIdFeature
 import szysz3.planty.screen.tasklist.TaskListFeature
 
+/**
+ * Contains the bottom navigation items.
+ * Each item represents a main navigation destination with its associated route, title, and icon.
+ */
 object BottomBarNavigationItems {
     private const val GRAPH = "graph"
 

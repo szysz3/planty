@@ -19,9 +19,31 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.toSize
+import szysz3.planty.core.composable.EllipticalBackgroundConstants.DEFAULT_TINT_LEVEL_CENTER
+import szysz3.planty.core.composable.EllipticalBackgroundConstants.FULL_TINT_LEVEL
+import szysz3.planty.core.composable.EllipticalBackgroundConstants.OUTER_TINT_LEVEL
+import szysz3.planty.core.composable.EllipticalBackgroundConstants.RADIAL_GRADIENT_RADIUS
 
+private object EllipticalBackgroundConstants {
+    const val DEFAULT_TINT_LEVEL_CENTER = 0.3f
+    const val OUTER_TINT_LEVEL = 0.7f
+    const val FULL_TINT_LEVEL = 1.0f
+    const val RADIAL_GRADIENT_RADIUS = 900f
+}
+
+/**
+ * A composable that displays a background image with a radial gradient overlay.
+ * The gradient creates an elliptical vignette effect using the current theme's background color.
+ *
+ * @param backgroundImageId Resource ID of the background image to display
+ * @param tintLevelCenter Alpha value for the center of the radial gradient overlay.
+ *                        Lower values make the center more transparent.
+ */
 @Composable
-fun EllipticalBackground(@DrawableRes backgroundImageId: Int, tintLevelCenter: Float = 0.3f) {
+fun EllipticalBackground(
+    @DrawableRes backgroundImageId: Int,
+    tintLevelCenter: Float = DEFAULT_TINT_LEVEL_CENTER
+) {
     var size by remember { mutableStateOf(Size.Zero) }
 
     Image(
@@ -41,14 +63,14 @@ fun EllipticalBackground(@DrawableRes backgroundImageId: Int, tintLevelCenter: F
                 brush = Brush.radialGradient(
                     colors = listOf(
                         MaterialTheme.colorScheme.background.copy(alpha = tintLevelCenter),
-                        MaterialTheme.colorScheme.background.copy(alpha = 0.7f),
-                        MaterialTheme.colorScheme.background
+                        MaterialTheme.colorScheme.background.copy(alpha = OUTER_TINT_LEVEL),
+                        MaterialTheme.colorScheme.background.copy(alpha = FULL_TINT_LEVEL)
                     ),
                     center = Offset(
                         size.width / 2,
                         size.height / 2
                     ),
-                    radius = 900f
+                    radius = RADIAL_GRADIENT_RADIUS
                 )
             )
     )

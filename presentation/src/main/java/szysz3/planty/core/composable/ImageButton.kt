@@ -10,6 +10,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 
+/**
+ * A composable that combines an [IconButton] with accompanying text in a horizontal layout.
+ * The text appears to the right of the icon and both elements share the same semi-transparent color.
+ *
+ * @param icon The [ImageVector] to be displayed as the button's icon
+ * @param text The text label to be displayed next to the icon
+ * @param modifier Optional [Modifier] for customizing the layout
+ * @param onClick Callback invoked when the button is clicked
+ */
 @Composable
 fun ImageButton(
     icon: ImageVector,

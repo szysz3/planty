@@ -16,6 +16,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
+/**
+ * A composable that displays an image and text horizontally aligned.
+ * The image is placed on the left side with the text following it.
+ *
+ * @param imageRes Resource ID of the image to be displayed
+ * @param title Text to be displayed next to the image
+ * @param iconSize Size of the image in dp (default: 36)
+ * @param textStyle Style to be applied to the text (default: MaterialTheme.typography.titleMedium)
+ * @param modifier Modifier to be applied to the composable (default: Modifier)
+ */
 @Composable
 fun ImageWithTextHorizontal(
     imageRes: Int,

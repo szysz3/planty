@@ -4,6 +4,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 open class NavigationItem(val route: String, val title: String)
 
+/**
+ * Navigation item specifically for bottom navigation bar entries.
+ * Extends [NavigationItem] with additional icon and graph route handling.
+ *
+ * @property icon Vector icon to display in the bottom navigation bar
+ * @property graphRoute The base route prefix for the navigation graph containing this item
+ */
 open class BottomNavItem(
     route: String,
     title: String,

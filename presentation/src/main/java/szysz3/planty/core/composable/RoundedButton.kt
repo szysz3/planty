@@ -9,6 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+/**
+ * A customized Material 3 button with rounded corners and elevation.
+ *
+ * @param onClick Lambda to be invoked when the button is clicked
+ * @param text Text to be displayed inside the button
+ * @param enabled Controls the enabled state of the button. When false, the button will be grayed out and non-clickable
+ * @param modifier Optional modifier for customizing the button's layout and appearance
+ */
 @Composable
 fun RoundedButton(
     onClick: () -> Unit,
