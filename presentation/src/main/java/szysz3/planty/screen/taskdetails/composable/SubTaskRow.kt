@@ -20,6 +20,15 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import szysz3.planty.core.model.SubTask
 
+/**
+ * A composable that displays a subtask row with a checkbox, description field and cost field.
+ *
+ * @param modifier Modifier to be applied to the row
+ * @param subTask The subtask data to be displayed
+ * @param onCheckedChange Callback invoked when the checkbox state changes
+ * @param onDescriptionChange Callback invoked when the description text changes
+ * @param onCostChange Callback invoked when the cost value changes
+ */
 @Composable
 fun SubTaskRow(
     modifier: Modifier = Modifier,
@@ -39,45 +48,61 @@ fun SubTaskRow(
             onCheckedChange = onCheckedChange,
             enabled = !subTask.isCompleted
         )
-        TextField(
-            modifier = Modifier
-                .fillMaxWidth(0.7f)
-                .padding(end = 4.dp),
-            value = subTask.description,
-            onValueChange = { newText -> onDescriptionChange?.invoke(newText) },
-            textStyle = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.onSurface,
-                textDecoration = if (subTask.isCompleted) TextDecoration.LineThrough else null
-            ),
-            placeholder = {
-                Text(
-                    text = "Sub task title",
-                    textDecoration = if (subTask.isCompleted) TextDecoration.LineThrough else null,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
-            },
-            singleLine = true,
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Color.Transparent,
-                focusedContainerColor = Color.Transparent,
-                disabledContainerColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            )
+
+        SubTaskDescription(
+            description = subTask.description,
+            isCompleted = subTask.isCompleted,
+            onDescriptionChange = onDescriptionChange
         )
+
         Spacer(modifier = Modifier.width(4.dp))
         VerticalDivider(
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
             thickness = 1.dp,
-            modifier = Modifier
-                .height(18.dp)
+            modifier = Modifier.height(18.dp)
         )
         Spacer(modifier = Modifier.width(4.dp))
+
         TaskCostField(
             modifier = Modifier.padding(start = 4.dp),
             initialValue = subTask.cost?.toString() ?: "",
-            onCostChange = {
-                onCostChange?.invoke(it)
-            })
+            onCostChange = onCostChange
+        )
     }
+}
+
+@Composable
+private fun SubTaskDescription(
+    description: String,
+    isCompleted: Boolean,
+    onDescriptionChange: ((String) -> Unit)?
+) {
+    val textDecoration = if (isCompleted) TextDecoration.LineThrough else null
+
+    TextField(
+        modifier = Modifier
+            .fillMaxWidth(0.7f)
+            .padding(end = 4.dp),
+        value = description,
+        onValueChange = { newText -> onDescriptionChange?.invoke(newText) },
+        textStyle = MaterialTheme.typography.bodyMedium.copy(
+            color = MaterialTheme.colorScheme.onSurface,
+            textDecoration = textDecoration
+        ),
+        placeholder = {
+            Text(
+                text = "Sub task title",
+                textDecoration = textDecoration,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )
+        },
+        singleLine = true,
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = Color.Transparent,
+            focusedContainerColor = Color.Transparent,
+            disabledContainerColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        )
+    )
 }

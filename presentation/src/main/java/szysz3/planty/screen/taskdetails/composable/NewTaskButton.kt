@@ -11,6 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+/**
+ * A composable button that allows adding new subtasks.
+ * Displays as a text with "+" prefix in a row layout.
+ *
+ * @param onClick Callback invoked when the button is clicked
+ */
 @Composable
 fun NewTaskButton(onClick: () -> Unit) {
     Row(

@@ -12,6 +12,14 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+/**
+ * A composable that displays an editable text field for a task title.
+ * Uses transparent background and no indicator for a clean look.
+ *
+ * @param title Current text value of the title
+ * @param onTitleChange Callback invoked when the title text changes
+ * @param focusRequester Handles the focus state of the text field
+ */
 @Composable
 fun TaskTitle(
     title: String,
