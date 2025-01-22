@@ -20,7 +20,7 @@ fun GardenCellEntity.toDomain(plant: Plant?): GardenCell {
 fun GardenCell.toEntity(
     plantId: Long?,
     gardenId: Int
-): GardenCellEntity {  // Updated to include gardenId
+): GardenCellEntity {
     return GardenCellEntity(
         id = id,
         row = row,

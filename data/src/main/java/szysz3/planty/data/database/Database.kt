@@ -28,8 +28,8 @@ import szysz3.planty.data.database.entity.TaskEntity
         PlantImageEntity::class,
         TaskEntity::class,
         SubTaskEntity::class,
-        GardenEntity::class,        // Added
-        MergedCellEntity::class,    // Added
+        GardenEntity::class,
+        MergedCellEntity::class,
     ],
     version = 4
 )
@@ -44,9 +44,9 @@ abstract class GardenDatabase : RoomDatabase() {
 
     abstract fun taskDao(): TaskDao
 
-    abstract fun gardenDao(): GardenDao           // Added
+    abstract fun gardenDao(): GardenDao
 
-    abstract fun mergedCellDao(): MergedCellDao   // Added
+    abstract fun mergedCellDao(): MergedCellDao
 
     companion object {
         private const val GARDEN_DATABASE_NAME = "garden_db"

@@ -18,9 +18,6 @@ interface GardenDao {
     @Query("SELECT * FROM gardens WHERE id = :gardenId")
     suspend fun getGardenById(gardenId: Int): GardenEntity?
 
-    @Query("SELECT * FROM gardens WHERE parentGardenId = :parentId")
-    suspend fun getSubGardens(parentId: Int): List<GardenEntity>
-
     @Query("SELECT * FROM gardens WHERE parentGardenId IS NULL")
     suspend fun getRootGarden(): GardenEntity?
 
