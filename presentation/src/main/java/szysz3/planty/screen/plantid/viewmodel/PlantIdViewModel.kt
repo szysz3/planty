@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import szysz3.planty.BuildConfig
@@ -21,7 +23,11 @@ import javax.inject.Inject
 
 /**
  * ViewModel responsible for managing plant identification functionality.
- * Handles photo capture, plant identification API calls, and related UI state management.
+ * Handles photo capture, plant identification API calls, and UI state management for the plant identification screen.
+ *
+ * @property identifyPlantUseCase Use case for plant identification functionality
+ * @property createFileUseCase Use case for creating temporary photo files
+ * @property deleteFileUseCase Use case for cleaning up temporary photo files
  */
 @HiltViewModel
 class PlantIdViewModel @Inject constructor(
@@ -36,42 +42,61 @@ class PlantIdViewModel @Inject constructor(
     /**
      * Initiates the plant identification process using the currently captured photo.
      * Updates the UI state with loading, success, or error states accordingly.
-     * Automatically cleans up temporary photo files after identification attempt.
+     * Automatically cleans up temporary photo files after the identification attempt.
+     *
+     * @throws IllegalArgumentException if no photo URI is available in the current state
      */
     fun identifyPlant() {
+        val uri = _uiState.value.photoUri ?: return
+
+        _uiState.update { it.copy(plantIdResult = PlantIdState.Loading) }
+
         viewModelScope.launch {
-            val uri = _uiState.value.photoUri ?: return@launch
-
-            _uiState.update {
-                it.copy(plantIdResult = PlantIdState.Loading)
-            }
-
-            val idParams = IdentifyPlantsParams(
-                apiKey = BuildConfig.API_KEY,
-                imageUris = listOf(uri)
-            )
-
             try {
-                val result = identifyPlantUseCase(idParams)
-                val plants = result.toPresentationModel()
+                val idParams = IdentifyPlantsParams(
+                    apiKey = BuildConfig.API_KEY,
+                    imageUris = listOf(uri)
+                )
 
-                _uiState.update { state ->
-                    state.copy(
-                        plantIdResult = PlantIdState.Success(plants),
-                        photoUploaded = true
-                    )
-                }
-            } catch (e: Exception) {
-                _uiState.update { state ->
-                    state.copy(
-                        plantIdResult = PlantIdState.Error("Error identifying plant: ${e.message}"),
-                        photoUploaded = false
-                    )
-                }
-            }
-
-            if (!deleteFileUseCase(uri)) {
-                Timber.e("Error deleting file $uri")
+                identifyPlantUseCase(idParams)
+                    .onEach { result ->
+                        result.fold(
+                            onSuccess = { response ->
+                                _uiState.update { state ->
+                                    state.copy(
+                                        plantIdResult = PlantIdState.Success(
+                                            response.toPresentationModel()
+                                        ),
+                                        photoUploaded = true
+                                    )
+                                }
+                            },
+                            onFailure = { error ->
+                                _uiState.update { state ->
+                                    state.copy(
+                                        plantIdResult = PlantIdState.Error(
+                                            "Error identifying plant: ${error.message}"
+                                        ),
+                                        photoUploaded = false
+                                    )
+                                }
+                            }
+                        )
+                    }
+                    .catch { error ->
+                        Timber.e(error, "Error in plant identification flow")
+                        _uiState.update { state ->
+                            state.copy(
+                                plantIdResult = PlantIdState.Error(
+                                    "Unexpected error: ${error.message}"
+                                ),
+                                photoUploaded = false
+                            )
+                        }
+                    }
+                    .collect { }
+            } finally {
+                cleanupPhotoFile(uri)
             }
         }
     }
@@ -97,7 +122,6 @@ class PlantIdViewModel @Inject constructor(
     /**
      * Resets the plant identification screen to its initial state.
      * Clears photo URI, identification results, and upload status.
-     * Use this method to start fresh or handle user-initiated resets.
      */
     fun clearResults() {
         _uiState.update { state ->
@@ -106,6 +130,14 @@ class PlantIdViewModel @Inject constructor(
                 photoUri = null,
                 photoUploaded = false
             )
+        }
+    }
+
+    private fun cleanupPhotoFile(uri: android.net.Uri) {
+        viewModelScope.launch {
+            if (!deleteFileUseCase(uri)) {
+                Timber.e("Error deleting file $uri")
+            }
         }
     }
 }
