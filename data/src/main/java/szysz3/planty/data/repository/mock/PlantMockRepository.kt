@@ -8,6 +8,7 @@ import szysz3.planty.domain.repository.PlantRepository
 import java.io.InputStreamReader
 import javax.inject.Inject
 
+//TODO: extend to allow demo mode
 class PlantMockRepositoryImpl @Inject constructor(@ApplicationContext context: Context) :
     PlantRepository {
 
