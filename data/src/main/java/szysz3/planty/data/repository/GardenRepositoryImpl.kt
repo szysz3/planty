@@ -22,6 +22,14 @@ import szysz3.planty.domain.repository.GardenRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Implementation of [GardenRepository] that manages garden-related data persistence using Room database.
+ *
+ * @property gardenCellDao DAO for garden cell operations
+ * @property gardenPlantDao DAO for garden plant operations
+ * @property gardenDao DAO for garden operations
+ * @property mergedCellDao DAO for merged cell operations
+ */
 @Singleton
 class GardenRepositoryImpl @Inject constructor(
     private val gardenCellDao: GardenCellDao,
@@ -30,8 +38,13 @@ class GardenRepositoryImpl @Inject constructor(
     private val mergedCellDao: MergedCellDao
 ) : GardenRepository {
 
+    /**
+     * Saves the current state of a garden including its cells, plants, and merged cells.
+     *
+     * @param gardenState The current state of the garden to be saved
+     */
+    // TODO: might need optimizations for REALLY big gardens
     override suspend fun saveGardenState(gardenState: GardenState) = withContext(Dispatchers.IO) {
-        // Clear existing cells and plants for this garden
         gardenCellDao.clearGarden(gardenState.id)
 
         // Save plants and get their IDs
@@ -58,6 +71,13 @@ class GardenRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Loads the state of a garden by its ID.
+     *
+     * @param gardenId The ID of the garden to load
+     * @return The loaded garden state
+     * @throws IllegalStateException if the garden is not found
+     */
     override suspend fun loadGardenState(gardenId: Int): GardenState = withContext(Dispatchers.IO) {
         val garden = gardenDao.getGardenById(gardenId)
             ?: throw IllegalStateException("Garden not found")
@@ -82,6 +102,13 @@ class GardenRepositoryImpl @Inject constructor(
         )
     }
 
+    /**
+     * Observes changes to a garden's state.
+     *
+     * @param gardenId The ID of the garden to observe
+     * @return Flow of garden state updates
+     * @throws IllegalStateException if the garden is not found
+     */
     override suspend fun observeGardenState(gardenId: Int): Flow<GardenState> =
         withContext(Dispatchers.IO) {
             gardenCellDao.observeAllCells(gardenId).map { cellEntities ->
@@ -109,12 +136,25 @@ class GardenRepositoryImpl @Inject constructor(
             }
         }
 
+    /**
+     * Clears all data associated with a garden.
+     *
+     * @param gardenId The ID of the garden to clear
+     */
     override suspend fun clearGardenState(gardenId: Int) = withContext(Dispatchers.IO) {
         gardenCellDao.clearGarden(gardenId)
         gardenDao.deleteGarden(gardenId)
         mergedCellDao.deleteMergedCells(gardenId)
     }
 
+    /**
+     * Updates a single cell in the garden with a new plant.
+     *
+     * @param gardenId The ID of the garden containing the cell
+     * @param row The row coordinate of the cell
+     * @param column The column coordinate of the cell
+     * @param plant The plant to place in the cell, or null to clear the cell
+     */
     override suspend fun updateGardenCell(
         gardenId: Int,
         row: Int,
@@ -139,6 +179,15 @@ class GardenRepositoryImpl @Inject constructor(
         gardenCellDao.insertSingle(updatedCellEntity)
     }
 
+    /**
+     * Creates a new garden with specified dimensions.
+     *
+     * @param name The name of the garden
+     * @param rows The number of rows in the garden
+     * @param columns The number of columns in the garden
+     * @param parentGardenId The ID of the parent garden, if this is a sub-garden
+     * @return The ID of the newly created garden
+     */
     override suspend fun createGarden(
         name: String,
         rows: Int,
@@ -154,10 +203,22 @@ class GardenRepositoryImpl @Inject constructor(
         gardenDao.insertGarden(garden).toInt()
     }
 
+    /**
+     * Retrieves a garden by its ID.
+     *
+     * @param gardenId The ID of the garden to retrieve
+     * @return The garden if found, null otherwise
+     */
     override suspend fun getGarden(gardenId: Int): Garden? = withContext(Dispatchers.IO) {
         gardenDao.getGardenById(gardenId)?.toDomain()
     }
 
+    /**
+     * Gets the path from root garden to the specified garden.
+     *
+     * @param gardenId The ID of the target garden
+     * @return List of gardens representing the path from root to target garden
+     */
     override suspend fun getGardenPath(gardenId: Int): List<Garden> = withContext(Dispatchers.IO) {
         val path = mutableListOf<Garden>()
         var currentGarden = gardenDao.getGardenById(gardenId)
@@ -172,6 +233,14 @@ class GardenRepositoryImpl @Inject constructor(
         path
     }
 
+
+    /**
+     * Creates a merged cell in the garden spanning multiple cells.
+     *
+     * @param gardenId The ID of the garden
+     * @param cellRange The range of cells to merge
+     * @return The ID of the newly created merged cell
+     */
     override suspend fun createMergedCell(gardenId: Int, cellRange: CellRange): Int =
         withContext(Dispatchers.IO) {
             val mergedCell = MergedCellEntity(
@@ -185,6 +254,13 @@ class GardenRepositoryImpl @Inject constructor(
             mergedCellDao.insertMergedCell(mergedCell).toInt()
         }
 
+    /**
+     * Links a sub-garden to a merged cell.
+     *
+     * @param mergedCellId The ID of the merged cell
+     * @param subGardenId The ID of the sub-garden to link
+     * @throws IllegalStateException if the merged cell is not found
+     */
     override suspend fun linkSubGardenToMergedCell(
         mergedCellId: Int,
         subGardenId: Int
@@ -197,6 +273,11 @@ class GardenRepositoryImpl @Inject constructor(
         )
     }
 
+    /**
+     * Gets the root garden of the hierarchy.
+     *
+     * @return The root garden if it exists, null otherwise
+     */
     override suspend fun getRootGarden(): Garden? = withContext(Dispatchers.IO) {
         gardenDao.getRootGarden()?.toDomain()
     }
