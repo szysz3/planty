@@ -13,7 +13,7 @@ class ObserveTasksUseCase @Inject constructor(
 ) : BaseUseCase<NoParams, Flow<List<Task>>>() {
 
     override suspend fun invoke(input: NoParams): Flow<List<Task>> {
-        return repository.getTasksWithSubTasksFlow().map { tasks ->
+        return repository.observeTasks().map { tasks ->
             tasks.sortedWith(
                 compareBy<Task> { it.isCompleted }
                     .thenBy { it.index }

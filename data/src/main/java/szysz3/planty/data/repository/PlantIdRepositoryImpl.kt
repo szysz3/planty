@@ -16,6 +16,11 @@ import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
+/**
+ * Implementation of [PlantIdRepository] that handles plant identification using a remote API.
+ *
+ * @property client OkHttpClient instance used for making network requests
+ */
 class PlantIdRepositoryImpl @Inject constructor(
     private val client: OkHttpClient
 ) : PlantIdRepository {
@@ -30,6 +35,14 @@ class PlantIdRepositoryImpl @Inject constructor(
         moshi.adapter(PlantIdResponse::class.java)
     }
 
+    /**
+     * Identifies a plant based on the provided image data.
+     *
+     * @param image Binary data of the image to be identified
+     * @param apiKey API key for authentication with the plant identification service
+     * @return Result containing [PlantIdResponse] if successful, or an error if the request fails
+     * @throws IllegalArgumentException if the image data is empty or the API key is blank
+     */
     override suspend fun identifyPlant(image: ByteArray, apiKey: String): Result<PlantIdResponse> =
         withContext(Dispatchers.IO) {
             try {

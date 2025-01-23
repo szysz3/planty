@@ -5,7 +5,7 @@ import szysz3.planty.domain.model.SubTask
 import szysz3.planty.domain.model.Task
 
 interface TaskRepository {
-    suspend fun getTasksWithSubTasksFlow(): Flow<List<Task>>
+    suspend fun observeTasks(): Flow<List<Task>>
 
     suspend fun getTasks(): List<Task>
 
