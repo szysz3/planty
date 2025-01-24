@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import szysz3.planty.screen.mygarden.model.MergedCell
 import szysz3.planty.theme.Shapes
 import szysz3.planty.theme.dimensions
@@ -64,7 +63,10 @@ fun GardenMergedCellBox(
 private fun GardenCellContent(mergedCell: MergedCell) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically),
+        verticalArrangement = Arrangement.spacedBy(
+            MaterialTheme.dimensions().spacing4,
+            Alignment.CenterVertically
+        ),
         modifier = Modifier.padding(MaterialTheme.dimensions().spacing8)
     ) {
         if (mergedCell.subGardenId != null) {

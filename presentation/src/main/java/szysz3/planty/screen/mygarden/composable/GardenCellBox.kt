@@ -21,7 +21,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import szysz3.planty.R
@@ -29,6 +28,7 @@ import szysz3.planty.core.model.Plant
 import szysz3.planty.screen.mygarden.composable.map.GardenMapState
 import szysz3.planty.screen.mygarden.model.CellPosition
 import szysz3.planty.theme.Shapes
+import szysz3.planty.theme.dimensions
 
 private val DesaturatedColorMatrix = ColorMatrix().apply { setToSaturation(0.3f) }
 
@@ -54,12 +54,12 @@ fun GardenCellBox(
                     && it.column == position.column
         }
     val isSelected = mapState.isCellSelected(position.row, position.column)
-
+    val dimens = MaterialTheme.dimensions()
     Box(
         modifier = Modifier
             .offset(x = cellSize * position.column, y = cellSize * position.row)
             .size(cellSize)
-            .padding(2.dp)
+            .padding(dimens.spacing2)
             .background(
                 color = when {
                     isSelected && mapState.isEditMode -> MaterialTheme.colorScheme.secondary.copy(
@@ -72,7 +72,7 @@ fun GardenCellBox(
                 shape = Shapes.extraSmall
             )
             .border(
-                width = if (isSelected && mapState.isEditMode) 2.dp else 1.dp,
+                width = if (isSelected && mapState.isEditMode) dimens.size2 else dimens.size1,
                 color = if (isSelected && mapState.isEditMode)
                     MaterialTheme.colorScheme.primary
                 else

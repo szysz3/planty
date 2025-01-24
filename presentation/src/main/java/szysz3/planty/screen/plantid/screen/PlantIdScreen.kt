@@ -27,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import szysz3.planty.R
@@ -132,7 +131,7 @@ private fun PlantIdContent(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp),
+                        .padding(dimens.spacing16),
                     contentPadding = PaddingValues(dimens.spacing8),
                     verticalArrangement = Arrangement.spacedBy(dimens.spacing16)
                 ) {

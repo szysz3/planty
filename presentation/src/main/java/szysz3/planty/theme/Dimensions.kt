@@ -26,6 +26,7 @@ class Dimensions {
     val corner12 = 12.dp
     val corner16 = 16.dp
 
+    val size1 = 1.dp
     val size2 = 2.dp
     val size4 = 4.dp
     val size8 = 8.dp

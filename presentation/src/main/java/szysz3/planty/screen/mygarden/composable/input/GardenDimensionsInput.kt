@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -23,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import szysz3.planty.core.composable.RoundedButton
 import szysz3.planty.theme.Shapes
 import szysz3.planty.theme.dimensions
@@ -59,7 +57,7 @@ fun GardenDimensionsInput(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(MaterialTheme.dimensions().spacing16),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = "Enter Garden Details", style = MaterialTheme.typography.titleLarge)
@@ -96,7 +94,7 @@ private fun GardenInputContent(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp)),
+            .clip(Shapes.medium),
         label = { Text("Name (max ${GardenInputConstants.MAX_NAME_LENGTH} characters)") },
         singleLine = true,
         isError = inputState.nameError

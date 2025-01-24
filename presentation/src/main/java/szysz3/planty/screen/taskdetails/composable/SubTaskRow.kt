@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.dp
 import szysz3.planty.core.model.SubTask
 import szysz3.planty.theme.dimensions
 
@@ -60,7 +59,7 @@ fun SubTaskRow(
         Spacer(modifier = Modifier.width(dimens.size4))
         VerticalDivider(
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-            thickness = 1.dp,
+            thickness = dimens.size1,
             modifier = Modifier.height(dimens.size20)
         )
         Spacer(modifier = Modifier.width(dimens.size4))
