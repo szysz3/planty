@@ -10,18 +10,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.imagegallery.composable.ZoomableImage
 import szysz3.planty.screen.imagegallery.viewmodel.ImageGalleryViewModel
+import szysz3.planty.theme.dimensions
 
 @Composable
 fun ImageGalleryScreen(
@@ -67,12 +68,12 @@ fun ImageGalleryScreen(
                 },
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(16.dp)
+                    .padding(MaterialTheme.dimensions().spacing16)
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Close,
                     contentDescription = "Close",
-                    modifier = Modifier.size(32.dp)
+                    modifier = Modifier.size(MaterialTheme.dimensions().size32)
                 )
             }
         }

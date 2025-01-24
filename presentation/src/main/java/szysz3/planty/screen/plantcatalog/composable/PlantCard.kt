@@ -23,17 +23,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import szysz3.planty.R
 import szysz3.planty.core.model.Plant
+import szysz3.planty.theme.dimensions
 
 private object PlantCardDefaults {
     const val CARD_ASPECT_RATIO = 0.8f
     const val IMAGE_HEIGHT_FRACTION = 0.7f
-    val DEFAULT_ELEVATION = 4.dp
-    val CONTENT_PADDING = 8.dp
 }
 
 /**
@@ -54,16 +52,18 @@ fun PlantCard(
             .fillMaxWidth()
             .aspectRatio(PlantCardDefaults.CARD_ASPECT_RATIO)
             .then(onPlantSelected?.let { Modifier.clickable(onClick = it) } ?: Modifier),
-        elevation = CardDefaults.cardElevation(defaultElevation = PlantCardDefaults.DEFAULT_ELEVATION)
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = MaterialTheme.dimensions().elevation4
+        )
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(PlantCardDefaults.CONTENT_PADDING)
+                .padding(MaterialTheme.dimensions().spacing8)
         ) {
             PlantImage(plant)
-            Spacer(modifier = Modifier.height(PlantCardDefaults.CONTENT_PADDING))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions().spacing8))
             PlantDetails(plant)
         }
     }

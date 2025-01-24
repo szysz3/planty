@@ -40,6 +40,7 @@ import szysz3.planty.screen.plantid.composable.PlantResultCard
 import szysz3.planty.screen.plantid.model.PlantIdScreenState
 import szysz3.planty.screen.plantid.model.PlantIdState
 import szysz3.planty.screen.plantid.viewmodel.PlantIdViewModel
+import szysz3.planty.theme.dimensions
 
 @Composable
 fun PlantIdScreen(
@@ -114,6 +115,7 @@ private fun PlantIdContent(
     onShowPlantDetails: (plantId: Int) -> Unit,
     context: android.content.Context
 ) {
+    val dimens = MaterialTheme.dimensions()
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
@@ -131,8 +133,8 @@ private fun PlantIdContent(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp),
-                    contentPadding = PaddingValues(vertical = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    contentPadding = PaddingValues(dimens.spacing8),
+                    verticalArrangement = Arrangement.spacedBy(dimens.spacing16)
                 ) {
                     items(result.plants) { plantIdResult ->
                         PlantResultCard(plantResult = plantIdResult) { plant ->

@@ -5,9 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import szysz3.planty.theme.dimensions
 
 /**
  * Creates a grid layout with evenly distributed items across the specified number of columns.
@@ -31,7 +32,9 @@ fun <T, E> EvenGrid(
         items.chunked(columns).forEach { rowItems ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(
+                    MaterialTheme.dimensions().spacing8
+                )
             ) {
                 rowItems.forEach { item ->
                     createItem(item)

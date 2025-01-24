@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import szysz3.planty.core.model.SubTask
+import szysz3.planty.theme.dimensions
 
 /**
  * A composable that displays a subtask row with a checkbox, description field and cost field.
@@ -37,11 +38,12 @@ fun SubTaskRow(
     onDescriptionChange: ((String) -> Unit)? = null,
     onCostChange: ((Float?) -> Unit)? = null
 ) {
+    val dimens = MaterialTheme.dimensions()
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
+            .padding(vertical = dimens.spacing4)
     ) {
         Checkbox(
             checked = subTask.isCompleted,
@@ -55,16 +57,16 @@ fun SubTaskRow(
             onDescriptionChange = onDescriptionChange
         )
 
-        Spacer(modifier = Modifier.width(4.dp))
+        Spacer(modifier = Modifier.width(dimens.size4))
         VerticalDivider(
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
             thickness = 1.dp,
-            modifier = Modifier.height(18.dp)
+            modifier = Modifier.height(dimens.size20)
         )
-        Spacer(modifier = Modifier.width(4.dp))
+        Spacer(modifier = Modifier.width(dimens.size4))
 
         TaskCostField(
-            modifier = Modifier.padding(start = 4.dp),
+            modifier = Modifier.padding(start = dimens.spacing4),
             initialValue = subTask.cost?.toString() ?: "",
             onCostChange = onCostChange
         )
@@ -82,7 +84,7 @@ private fun SubTaskDescription(
     TextField(
         modifier = Modifier
             .fillMaxWidth(0.7f)
-            .padding(end = 4.dp),
+            .padding(end = MaterialTheme.dimensions().spacing4),
         value = description,
         onValueChange = { newText -> onDescriptionChange?.invoke(newText) },
         textStyle = MaterialTheme.typography.bodyMedium.copy(

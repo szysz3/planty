@@ -9,7 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import szysz3.planty.theme.dimensions
 
 /**
  * A composable button that allows adding new subtasks.
@@ -23,7 +23,7 @@ fun NewTaskButton(onClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp)
+            .padding(vertical = MaterialTheme.dimensions().spacing16)
     ) {
         Text(
             "+ New subtask",

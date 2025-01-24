@@ -16,6 +16,8 @@ import szysz3.planty.screen.mygarden.composable.GardenMergedCellBox
 import szysz3.planty.screen.mygarden.model.CellPosition
 import szysz3.planty.screen.mygarden.model.MergedCell
 
+private const val MAX_CELL_SIZE = 100
+
 /**
  * A composable that displays an interactive garden map grid with support for merged cells.
  * The map automatically scales based on available width while maintaining cell proportions.
@@ -31,7 +33,7 @@ fun GardenMap(
     callbacks: GardenMapCallbacks
 ) {
     BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
-        val cellSize = minOf(maxWidth / state.columns, 100.dp)
+        val cellSize = minOf(maxWidth / state.columns, MAX_CELL_SIZE.dp)
         GardenGrid(
             state = state,
             callbacks = callbacks,

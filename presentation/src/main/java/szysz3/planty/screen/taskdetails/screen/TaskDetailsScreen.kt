@@ -18,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import szysz3.planty.core.composable.DeleteAlertDialog
@@ -31,6 +30,7 @@ import szysz3.planty.screen.taskdetails.composable.TaskFooter
 import szysz3.planty.screen.taskdetails.composable.TaskTitle
 import szysz3.planty.screen.taskdetails.model.TaskDetailsScreenState
 import szysz3.planty.screen.taskdetails.viewmodel.TaskDetailsViewModel
+import szysz3.planty.theme.dimensions
 
 @Composable
 fun TaskDetailsScreen(
@@ -160,7 +160,7 @@ private fun TaskList(
         // Completed tasks
         if (uiState.completedSubTasks.isNotEmpty()) {
             Divider(
-                modifier = Modifier.padding(vertical = 8.dp),
+                modifier = Modifier.padding(vertical = MaterialTheme.dimensions().spacing8),
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
             )
 

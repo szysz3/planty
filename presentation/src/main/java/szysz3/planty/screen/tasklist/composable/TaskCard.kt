@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import szysz3.planty.screen.tasklist.model.TaskCardUiState
+import szysz3.planty.theme.dimensions
 
 /**
  * A composable that displays a task card with details including title, completion status, and optional cost information.
@@ -38,15 +39,16 @@ fun TaskCardView(
     modifier: Modifier = Modifier,
     onClicked: () -> Unit,
 ) {
+    val dimens = MaterialTheme.dimensions()
     Card(
         modifier = modifier
             .fillMaxWidth()
             .height(120.dp)
-            .padding(8.dp)
+            .padding(dimens.spacing8)
             .alpha(if (uiState.isCompleted) 0.6f else 1f)
             .clip(MaterialTheme.shapes.medium),
         shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = dimens.elevation8),
         onClick = onClicked
     ) {
         Row(modifier = Modifier.fillMaxSize()) {
@@ -83,10 +85,11 @@ private fun TaskDetailsContent(
     totalTasks: Int,
     modifier: Modifier = Modifier
 ) {
+    val dimens = MaterialTheme.dimensions()
     Column(
         modifier = modifier
             .fillMaxHeight()
-            .padding(8.dp)
+            .padding(dimens.spacing8)
     ) {
         Text(
             text = title,
@@ -97,13 +100,13 @@ private fun TaskDetailsContent(
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
                 .align(Alignment.Start)
-                .padding(start = 8.dp)
+                .padding(start = dimens.spacing8)
         )
 
         Row(
             modifier = Modifier
                 .align(Alignment.Start)
-                .padding(start = 32.dp, top = 8.dp)
+                .padding(start = dimens.spacing32, top = dimens.spacing8)
         ) {
             Text(
                 text = "$completedTasks",
@@ -132,7 +135,7 @@ private fun CostSection(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.padding(end = 16.dp)
+        modifier = modifier.padding(end = MaterialTheme.dimensions().spacing16)
     ) {
         Text(
             text = String.format("%.2f", completedCost),

@@ -3,6 +3,7 @@ package szysz3.planty.screen.plantid.composable
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -10,17 +11,16 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import szysz3.planty.theme.dimensions
 
 /**
  * Configuration options for customizing the appearance of [PlantMatchingBar].
  *
- * @property cornerRadius The radius of bar corners
  * @property startColor The color representing low match level
  * @property endColor The color representing high match level
  * @property backgroundColor The background color of the bar
  */
 data class PlantMatchingBarConfig(
-    val cornerRadius: Float = 16f,
     val startColor: Color = Color.Transparent,
     val endColor: Color = Color.Transparent,
     val backgroundColor: Color = Color.Transparent
@@ -40,6 +40,7 @@ fun PlantMatchingBar(
     modifier: Modifier = Modifier,
     config: PlantMatchingBarConfig = PlantMatchingBarConfig()
 ) {
+    val cornerRadius = MaterialTheme.dimensions().corner16.value
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.Bottom
@@ -57,7 +58,10 @@ fun PlantMatchingBar(
                 ),
                 size = size.copy(width = barWidth),
                 topLeft = Offset(0f, 0f),
-                cornerRadius = CornerRadius(config.cornerRadius, config.cornerRadius)
+                cornerRadius = CornerRadius(
+                    cornerRadius,
+                    cornerRadius
+                )
             )
         }
     }

@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import szysz3.planty.theme.dimensions
 
 /**
  * A composable that displays an editable text field for a task title.
@@ -37,7 +37,7 @@ fun TaskTitle(
             )
         },
         modifier = Modifier
-            .padding(16.dp)
+            .padding(MaterialTheme.dimensions().spacing16)
             .focusRequester(focusRequester),
         singleLine = true,
         colors = TextFieldDefaults.colors(

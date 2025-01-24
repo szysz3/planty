@@ -8,13 +8,14 @@ import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
+import szysz3.planty.theme.dimensions
 
 /**
  * A search bar component that allows users to search for plants.
@@ -33,7 +34,10 @@ fun SearchBar(
 ) {
     val searchBarModifier = modifier
         .fillMaxWidth()
-        .padding(horizontal = 16.dp, vertical = 8.dp)
+        .padding(
+            horizontal = MaterialTheme.dimensions().spacing16,
+            vertical = MaterialTheme.dimensions().spacing8
+        )
 
     OutlinedTextField(
         value = query,

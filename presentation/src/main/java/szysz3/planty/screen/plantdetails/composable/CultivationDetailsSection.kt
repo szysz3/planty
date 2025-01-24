@@ -8,9 +8,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import szysz3.planty.R
 import szysz3.planty.core.composable.ImageWithTextHorizontal
+import szysz3.planty.theme.dimensions
 
 /**
  * A composable section that displays cultivation details for a plant.
@@ -20,17 +20,18 @@ import szysz3.planty.core.composable.ImageWithTextHorizontal
  */
 @Composable
 fun CultivationDetailsSection(details: String) {
+    val dimens = MaterialTheme.dimensions()
     Column {
         ImageWithTextHorizontal(
             imageRes = R.drawable.icon_info,
             title = "Cultivation details",
-            iconSize = 32,
+            iconSize = dimens.size36,
             textStyle = MaterialTheme.typography.headlineSmall
         )
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(dimens.size4))
         Text(
             text = details,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(dimens.spacing8)
         )
     }
 }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -34,6 +35,7 @@ import szysz3.planty.screen.base.topbar.TopBarBackButton
 import szysz3.planty.screen.plantcatalog.composable.PlantCard
 import szysz3.planty.screen.plantcatalog.composable.SearchBar
 import szysz3.planty.screen.plantcatalog.viewmodel.PlantCatalogViewModel
+import szysz3.planty.theme.dimensions
 
 @Composable
 fun PlantCatalogScreen(
@@ -125,12 +127,13 @@ private fun PlantGrid(
     gardenId: Int?,
     onShowPlantDetails: (plantId: Int, row: Int?, column: Int?, gardenId: Int?) -> Unit
 ) {
+    val dimens = MaterialTheme.dimensions()
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 150.dp),
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(dimens.spacing16),
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(dimens.spacing16),
+        horizontalArrangement = Arrangement.spacedBy(dimens.spacing16)
     ) {
         when (plants.loadState.refresh) {
             is LoadState.Loading -> {

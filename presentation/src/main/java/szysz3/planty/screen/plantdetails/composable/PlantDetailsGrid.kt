@@ -2,13 +2,14 @@ package szysz3.planty.screen.plantdetails.composable
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import szysz3.planty.core.composable.EvenGrid
 import szysz3.planty.core.composable.ImageWithTextHorizontal
 import szysz3.planty.core.model.Plant
 import szysz3.planty.screen.plantdetails.model.toDetailItems
+import szysz3.planty.theme.dimensions
 
 /**
  * A grid-based display of plant details, showing various attributes of a plant in a 2-column layout.
@@ -32,7 +33,7 @@ fun PlantDetailsGrid(
                 imageRes = item.imageRes,
                 title = item.title,
                 modifier = modifier
-                    .padding(4.dp)
+                    .padding(MaterialTheme.dimensions().spacing4)
             )
         }
     )

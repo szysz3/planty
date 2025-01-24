@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,8 +28,8 @@ import szysz3.planty.R
 import szysz3.planty.core.model.Plant
 import szysz3.planty.screen.mygarden.composable.map.GardenMapState
 import szysz3.planty.screen.mygarden.model.CellPosition
+import szysz3.planty.theme.Shapes
 
-private val CellShape = RoundedCornerShape(4.dp)
 private val DesaturatedColorMatrix = ColorMatrix().apply { setToSaturation(0.3f) }
 
 /**
@@ -70,7 +69,7 @@ fun GardenCellBox(
                     cell?.plant != null -> MaterialTheme.colorScheme.secondaryContainer
                     else -> MaterialTheme.colorScheme.surface
                 },
-                shape = CellShape
+                shape = Shapes.extraSmall
             )
             .border(
                 width = if (isSelected && mapState.isEditMode) 2.dp else 1.dp,
@@ -78,7 +77,7 @@ fun GardenCellBox(
                     MaterialTheme.colorScheme.primary
                 else
                     MaterialTheme.colorScheme.outline,
-                shape = CellShape
+                shape = Shapes.extraSmall
             )
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
@@ -111,7 +110,7 @@ private fun PlantContent(
             modifier = Modifier
                 .fillMaxSize()
                 .aspectRatio(1f)
-                .clip(CellShape)
+                .clip(Shapes.extraSmall)
         )
     } else {
         Text(

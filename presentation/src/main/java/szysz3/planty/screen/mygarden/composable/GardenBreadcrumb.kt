@@ -28,9 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import szysz3.planty.R
 import szysz3.planty.domain.model.Garden
+import szysz3.planty.theme.dimensions
 
 private object BreadcrumbConstants {
     const val ANIMATION_DURATION = 300
@@ -84,11 +84,12 @@ private fun BreadcrumbRow(
     onNavigate: (Int?) -> Unit,
     scrollState: ScrollState
 ) {
+    val dimens = MaterialTheme.dimensions()
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .horizontalScroll(scrollState)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = dimens.spacing16, vertical = dimens.spacing8),
         verticalAlignment = Alignment.CenterVertically
     ) {
         items.forEachIndexed { index, garden ->
@@ -107,6 +108,7 @@ private fun BreadcrumbItem(
     onNavigate: (Int?) -> Unit,
     isLastItem: Boolean
 ) {
+    val dimens = MaterialTheme.dimensions()
     val itemAlpha by animateFloatAsState(
         targetValue = if (isLastItem) BreadcrumbConstants.ACTIVE_ITEM_ALPHA
         else BreadcrumbConstants.INACTIVE_ITEM_ALPHA,
@@ -116,7 +118,7 @@ private fun BreadcrumbItem(
 
     Box(
         modifier = Modifier
-            .height(36.dp)
+            .height(dimens.spacing36)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
@@ -129,13 +131,13 @@ private fun BreadcrumbItem(
             contentDescription = if (!isLastItem)
                 "Navigate to ${garden.name.ifEmpty { "Garden-${garden.id}" }}"
             else null,
-            modifier = Modifier.height(36.dp),
+            modifier = Modifier.height(dimens.spacing36),
             tint = MaterialTheme.colorScheme.surface
         )
         Text(
             text = garden.name.ifEmpty { "Garden-${garden.id}" },
             modifier = Modifier
-                .padding(horizontal = 18.dp)
+                .padding(horizontal = dimens.spacing16)
                 .align(Alignment.Center),
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.bodyLarge

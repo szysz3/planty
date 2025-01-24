@@ -7,7 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import szysz3.planty.theme.dimensions
 
 /**
  * A customized Material 3 button with rounded corners and elevation.
@@ -24,6 +24,7 @@ fun RoundedButton(
     enabled: Boolean = true,
     modifier: Modifier = Modifier
 ) {
+    val dimensions = MaterialTheme.dimensions()
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
@@ -32,11 +33,11 @@ fun RoundedButton(
         ),
         shape = MaterialTheme.shapes.large,
         modifier = modifier
-            .padding(16.dp),
+            .padding(dimensions.spacing16),
         enabled = enabled,
         elevation = ButtonDefaults.buttonElevation(
-            defaultElevation = 8.dp,
-            pressedElevation = 4.dp,
+            defaultElevation = dimensions.elevation8,
+            pressedElevation = dimensions.elevation4,
         ),
     ) {
         Text(text = text, style = MaterialTheme.typography.labelLarge)

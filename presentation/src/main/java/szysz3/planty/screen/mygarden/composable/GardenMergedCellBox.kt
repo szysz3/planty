@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +19,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import szysz3.planty.screen.mygarden.model.MergedCell
+import szysz3.planty.theme.Shapes
+import szysz3.planty.theme.dimensions
 
 /**
  * Displays a merged cell in the garden grid that shows either existing sub-garden info or an empty state.
@@ -34,6 +35,7 @@ fun GardenMergedCellBox(
     cellSize: Dp,
     onClick: () -> Unit
 ) {
+    val dimens = MaterialTheme.dimensions()
     Box(
         modifier = Modifier
             .offset(
@@ -41,15 +43,15 @@ fun GardenMergedCellBox(
                 y = cellSize * mergedCell.startRow
             )
             .size(cellSize * mergedCell.width, cellSize * mergedCell.height)
-            .padding(2.dp)
+            .padding(dimens.spacing2)
             .background(
                 color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
-                shape = RoundedCornerShape(4.dp)
+                shape = Shapes.extraSmall
             )
             .border(
-                width = 2.dp,
+                width = dimens.size2,
                 color = MaterialTheme.colorScheme.primary,
-                shape = RoundedCornerShape(4.dp)
+                shape = Shapes.extraSmall
             )
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
@@ -63,7 +65,7 @@ private fun GardenCellContent(mergedCell: MergedCell) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically),
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier.padding(MaterialTheme.dimensions().spacing8)
     ) {
         if (mergedCell.subGardenId != null) {
             mergedCell.subGardenName?.let { name ->

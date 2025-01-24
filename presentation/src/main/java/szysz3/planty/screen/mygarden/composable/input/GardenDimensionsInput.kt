@@ -25,6 +25,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import szysz3.planty.core.composable.RoundedButton
+import szysz3.planty.theme.Shapes
+import szysz3.planty.theme.dimensions
 
 private object GardenInputConstants {
     const val MAX_NAME_LENGTH = 10
@@ -61,7 +63,7 @@ fun GardenDimensionsInput(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = "Enter Garden Details", style = MaterialTheme.typography.titleLarge)
-            Spacer(modifier = Modifier.height(22.dp))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions().spacing20))
 
             GardenInputContent(
                 inputState = inputState,
@@ -106,7 +108,7 @@ private fun GardenInputContent(
             style = MaterialTheme.typography.bodyMedium
         )
     }
-    Spacer(modifier = Modifier.height(12.dp))
+    Spacer(modifier = Modifier.height(MaterialTheme.dimensions().spacing12))
 
     // Width Input
     TextField(
@@ -121,7 +123,7 @@ private fun GardenInputContent(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp)),
+            .clip(Shapes.medium),
         label = { Text("Width (in cells, max $maxDimension)") },
         singleLine = true,
         isError = inputState.widthError,
@@ -134,7 +136,7 @@ private fun GardenInputContent(
             style = MaterialTheme.typography.bodyMedium
         )
     }
-    Spacer(modifier = Modifier.height(12.dp))
+    Spacer(modifier = Modifier.height(MaterialTheme.dimensions().spacing12))
 
     // Height Input
     TextField(
@@ -149,7 +151,7 @@ private fun GardenInputContent(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp)),
+            .clip(Shapes.medium),
         label = { Text("Height (in cells, max $maxDimension)") },
         singleLine = true,
         isError = inputState.heightError,
@@ -163,7 +165,7 @@ private fun GardenInputContent(
         )
     }
 
-    Spacer(modifier = Modifier.height(22.dp))
+    Spacer(modifier = Modifier.height(MaterialTheme.dimensions().spacing20))
 
     val width = inputState.width.toIntOrNull() ?: GardenInputConstants.DEFAULT_MIN_DIMENSION
     val height = inputState.height.toIntOrNull() ?: GardenInputConstants.DEFAULT_MIN_DIMENSION

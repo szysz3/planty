@@ -11,9 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import szysz3.planty.core.composable.RoundedButton
 import szysz3.planty.screen.taskdetails.model.TaskDetailsScreenState
+import szysz3.planty.theme.dimensions
 
 /**
  * Footer component displaying action button and cost summary for a task.
@@ -53,7 +53,10 @@ private fun CostDisplay(
     totalCost: Double,
 ) {
     Column(
-        modifier = Modifier.padding(end = 16.dp, bottom = 16.dp),
+        modifier = Modifier.padding(
+            end = MaterialTheme.dimensions().spacing16,
+            bottom = MaterialTheme.dimensions().spacing16
+        ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(

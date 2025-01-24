@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -16,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import szysz3.planty.R
@@ -35,6 +35,7 @@ import szysz3.planty.screen.plantdetails.composable.PlantImageSection
 import szysz3.planty.screen.plantdetails.composable.PlantNameSection
 import szysz3.planty.screen.plantdetails.composable.WebSearchButton
 import szysz3.planty.screen.plantdetails.viewmodel.PlantDetailsViewModel
+import szysz3.planty.theme.dimensions
 
 @Composable
 fun PlantDetailsScreen(
@@ -123,9 +124,10 @@ fun PlantDetailsContent(
     onWebSearch: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val dimens = MaterialTheme.dimensions()
     Column(
         modifier = modifier
-            .padding(16.dp)
+            .padding(dimens.spacing16)
             .verticalScroll(rememberScrollState())
     ) {
         PlantImageSection(
@@ -134,21 +136,21 @@ fun PlantDetailsContent(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(dimens.size24))
 
         PlantNameSection(plant = plant)
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(dimens.size2))
 
         PlantDetailsGrid(plant = plant, modifier = Modifier.weight(1f))
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(dimens.size16))
 
         if (!plant.cultivationDetails.isNullOrEmpty()) {
             CultivationDetailsSection(details = plant.cultivationDetails)
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(dimens.size16))
 
         Box(
             modifier = Modifier.fillMaxWidth(),
@@ -159,7 +161,7 @@ fun PlantDetailsContent(
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(dimens.size16))
 
         if (isPlantButtonVisible) {
             RoundedButton(

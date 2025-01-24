@@ -31,6 +31,7 @@ import coil.request.ImageRequest
 import szysz3.planty.R
 import szysz3.planty.core.model.Plant
 import szysz3.planty.screen.plantid.model.PlantResult
+import szysz3.planty.theme.dimensions
 
 /**
  * A card component that displays plant identification results.
@@ -43,12 +44,13 @@ fun PlantResultCard(
     plantResult: PlantResult,
     onCardClick: (plant: Plant?) -> Unit
 ) {
+    val dimens = MaterialTheme.dimensions()
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(140.dp)
             .clip(MaterialTheme.shapes.medium),
-        elevation = CardDefaults.cardElevation(4.dp),
+        elevation = CardDefaults.cardElevation(dimens.size4),
         shape = MaterialTheme.shapes.medium,
         onClick = { onCardClick(plantResult.plant) }
     ) {
@@ -66,7 +68,7 @@ fun PlantResultCard(
                     matchLevel = plantResult.confidence.toFloat(),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(8.dp)
+                        .height(dimens.size8)
                         .align(Alignment.CenterHorizontally),
                     config = PlantMatchingBarConfig(
                         startColor = MaterialTheme.colorScheme.surface,
@@ -82,7 +84,7 @@ fun PlantResultCard(
 private fun PlantCardDecorator(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
-            .size(64.dp)
+            .size(MaterialTheme.dimensions().size64)
             .rotate(45f)
             .offset(y = (-48).dp)
             .background(color = MaterialTheme.colorScheme.primary)
@@ -91,18 +93,23 @@ private fun PlantCardDecorator(modifier: Modifier = Modifier) {
 
 @Composable
 private fun PlantInfo(plantResult: PlantResult) {
+    val dimens = MaterialTheme.dimensions()
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+            .padding(
+                top = dimens.spacing16,
+                start = dimens.spacing16,
+                end = dimens.spacing16
+            )
     ) {
         PlantImage(plantResult.plant)
 
         Column(
             modifier = Modifier
                 .align(Alignment.CenterVertically)
-                .padding(start = 16.dp)
+                .padding(start = dimens.spacing16)
         ) {
             plantResult.name?.let {
                 Text(

@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -40,6 +41,7 @@ import szysz3.planty.screen.mygarden.composable.map.toGardenMapState
 import szysz3.planty.screen.mygarden.model.MyGardenScreenState
 import szysz3.planty.screen.mygarden.model.MyGardenScreenUiEvent
 import szysz3.planty.screen.mygarden.viewmodel.MyGardenViewModel
+import szysz3.planty.theme.dimensions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -119,7 +121,7 @@ private fun MyGardenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(MaterialTheme.dimensions().spacing16)
     ) {
         GardenBreadcrumb(
             modifier = Modifier.height(56.dp),

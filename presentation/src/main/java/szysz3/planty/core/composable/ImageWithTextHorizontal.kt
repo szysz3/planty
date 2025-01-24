@@ -14,7 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Dp
+import szysz3.planty.theme.dimensions
 
 /**
  * A composable that displays an image and text horizontally aligned.
@@ -30,21 +31,23 @@ import androidx.compose.ui.unit.dp
 fun ImageWithTextHorizontal(
     imageRes: Int,
     title: String,
-    iconSize: Int = 36,
+    iconSize: Dp = MaterialTheme.dimensions().size32,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
-            .padding(8.dp)
+            .padding(MaterialTheme.dimensions().spacing8)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        horizontalArrangement = Arrangement.spacedBy(
+            MaterialTheme.dimensions().spacing16
+        )
     ) {
         Image(
             painter = painterResource(id = imageRes),
             contentDescription = title,
-            modifier = Modifier.size(iconSize.dp)
+            modifier = Modifier.size(iconSize)
         )
         Text(
             overflow = TextOverflow.Ellipsis,

@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
+import szysz3.planty.theme.dimensions
 
 /**
  * A composable that creates a Material Design 3 Floating Action Button (FAB)
@@ -36,8 +36,10 @@ fun FloatingActionButton(
             containerColor = MaterialTheme.colorScheme.secondary,
             contentColor = MaterialTheme.colorScheme.onSecondary,
             modifier = Modifier
-                .padding(16.dp),
-            elevation = FloatingActionButtonDefaults.elevation(8.dp)
+                .padding(MaterialTheme.dimensions().spacing16),
+            elevation = FloatingActionButtonDefaults.elevation(
+                MaterialTheme.dimensions().spacing8
+            )
         ) {
             Icon(
                 imageVector = icon,
