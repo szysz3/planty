@@ -1,6 +1,71 @@
 <resources>
     <string name="app_name">Planty</string>
 
+    <!-- TASK LIST -->
+    <string name="task_completed_count">%1$d</string>
+    <string name="task_count_separator">/</string>
+    <string name="task_total_count">%1$d</string>
+    <string name="cost_completed">%.2f</string>
+    <string name="cost_separator">out of</string>
+    <string name="cost_total">%.2f</string>
+
+    <!-- TASK DETAILS -->
+    <string name="add_new_subtask">+ New subtask</string>
+    <string name="subtask_title_placeholder">Sub task title</string>
+
+    <string name="task_action_add">Add</string>
+    <string name="task_action_update">Update</string>
+    <string name="task_cost_format">%.2f</string>
+    <string name="task_cost_out_of"> out of </string>
+    <string name="task_title_placeholder">Title</string>
+
+    <string name="delete_task">Delete Task</string>
+    <string name="delete_task_confirmation">Are you sure you want to delete this task?</string>
+
+    <!-- PLANT DETAILS -->
+    <string name="cultivation_details_title">Cultivation details</string>
+    <string name="web_search_button_text">More details</string>
+    <string name="delete_plant">Delete Plant</string>
+    <string name="delete_plant_confirmation">Are you sure you want to delete this plant?</string>
+    <string name="delete_button">Delete</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="plant_button">Plant!</string>
+
+    <!-- PLANT CATALOG SCREEN -->
+    <string name="search_bar_hint">Search for a plant…</string>
+    <string name="search_icon_description">Search</string>
+    <string name="clear_search_icon_description">Clear Search</string>
+
+    <!-- MY GARDEN SCREEN -->
+    <string name="garden_input_title">Enter Garden Details</string>
+
+    <string name="garden_name_label">Name (max %1$d characters)</string>
+    <string name="garden_name_error">Garden name is required</string>
+
+    <string name="garden_width_label">Width (in cells, max %1$d)</string>
+    <string name="garden_width_error">Width cannot exceed %1$d</string>
+
+    <string name="garden_height_label">Height (in cells, max %1$d)</string>
+    <string name="garden_height_error">Height cannot exceed %1$d</string>
+
+    <string name="garden_confirm_button">Confirm</string>
+
+    <string name="navigate_to_garden">Navigate to %1$s</string>
+    <string name="garden_default_name">Garden-%1$d</string>
+
+    <string name="garden_edit_cancel">Cancel</string>
+    <string name="garden_edit_merge">Merge Cells</string>
+
+    <string name="garden_cell_tap_to_create">Tap to create\nsub-garden</string>
+    <string name="garden_cell_dimensions">%1$d×%2$d</string>
+
+    <string name="add_garden">Add garden</string>
+    <string name="delete_garden">Delete Garden</string>
+
+    <string name="delete_garden_confirmation">Are you sure you want to delete this garden?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+
     <!-- PLANT DETAILS SCREEN -->
 
     <!-- Moisture -->
@@ -34,16 +99,16 @@
     <string name="ph_acidic">pH &lt; 7</string>
     <string name="ph_neutral">pH = 7</string>
     <string name="ph_alkaline">pH &gt; 7</string>
-    <string name="ph_acidic_to_neutral">pH 5-7</string>
-    <string name="ph_neutral_to_alkaline">pH 7-9</string>
-    <string name="ph_all_levels">pH 5-9</string>
+    <string name="ph_acidic_to_neutral">pH 5–7</string>
+    <string name="ph_neutral_to_alkaline">pH 7–9</string>
+    <string name="ph_all_levels">pH 5–9</string>
     <string name="ph_unknown">Unknown</string>
 
     <!-- Frost Tender -->
     <string name="frost_tender_yes">Tender</string>
     <string name="frost_tender_no">Tolerant</string>
     <string name="frost_tender_unknown">Unknown</string>
-    
+
     <!-- Soil Tolerances -->
     <string name="heavy_clay_yes">Clay OK</string>
     <string name="heavy_clay_no">No Clay</string>

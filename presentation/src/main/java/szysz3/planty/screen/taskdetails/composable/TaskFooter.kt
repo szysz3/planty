@@ -10,7 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import szysz3.planty.R
 import szysz3.planty.core.composable.RoundedButton
 import szysz3.planty.screen.taskdetails.model.TaskDetailsScreenState
 import szysz3.planty.theme.dimensions
@@ -33,7 +35,9 @@ fun TaskFooter(
         RoundedButton(
             modifier = Modifier.fillMaxWidth(0.5f),
             onClick = onButtonClick,
-            text = if (state.taskId == null) "Add" else "Update"
+            text = if (state.taskId == null) stringResource(R.string.task_action_add) else stringResource(
+                R.string.task_action_update
+            )
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -60,19 +64,19 @@ private fun CostDisplay(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = String.format("%.2f", completedCost),
+            text = String.format(stringResource(R.string.task_cost_format), completedCost),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
             textAlign = TextAlign.Center
         )
         Text(
-            text = " out of ",
+            text = stringResource(R.string.task_cost_out_of),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
             textAlign = TextAlign.Center
         )
         Text(
-            text = String.format("%.2f", totalCost),
+            text = String.format(stringResource(R.string.task_cost_format), totalCost),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
             textAlign = TextAlign.Center

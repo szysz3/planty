@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import szysz3.planty.R
 import szysz3.planty.domain.model.Garden
 import szysz3.planty.theme.dimensions
@@ -116,6 +117,9 @@ private fun BreadcrumbItem(
         label = "item_alpha"
     )
 
+    val gardenDisplayName =
+        garden.name.ifEmpty { stringResource(R.string.garden_default_name, garden.id) }
+
     Box(
         modifier = Modifier
             .height(dimens.spacing36)
@@ -129,13 +133,13 @@ private fun BreadcrumbItem(
         Icon(
             painter = painterResource(id = R.drawable.chevron_button),
             contentDescription = if (!isLastItem)
-                "Navigate to ${garden.name.ifEmpty { "Garden-${garden.id}" }}"
+                stringResource(R.string.navigate_to_garden, gardenDisplayName)
             else null,
             modifier = Modifier.height(dimens.spacing36),
             tint = MaterialTheme.colorScheme.surface
         )
         Text(
-            text = garden.name.ifEmpty { "Garden-${garden.id}" },
+            text = gardenDisplayName,
             modifier = Modifier
                 .padding(horizontal = dimens.spacing16)
                 .align(Alignment.Center),

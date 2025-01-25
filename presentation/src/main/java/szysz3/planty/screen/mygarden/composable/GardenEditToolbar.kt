@@ -19,7 +19,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import szysz3.planty.R
 import szysz3.planty.theme.dimensions
 
 private const val TOOLBAR_ANIMATION_DURATION = 300
@@ -63,7 +65,7 @@ fun GardenEditToolbar(
         ) {
             Icon(
                 imageVector = Icons.Default.Close,
-                contentDescription = "Cancel"
+                contentDescription = stringResource(R.string.garden_edit_cancel)
             )
         }
 
@@ -71,7 +73,7 @@ fun GardenEditToolbar(
             onClick = onConfirmMerge,
             enabled = isVisible && isMergeEnabled
         ) {
-            Text("Merge Cells")
+            Text(stringResource(R.string.garden_edit_merge))
         }
     }
 }

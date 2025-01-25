@@ -18,8 +18,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import szysz3.planty.R
 import szysz3.planty.core.composable.DeleteAlertDialog
 import szysz3.planty.screen.base.BaseScreen
 import szysz3.planty.screen.base.topbar.TopBarActionButton
@@ -111,10 +113,10 @@ private fun TaskContent(
 
         if (uiState.isDeleteDialogVisible) {
             DeleteAlertDialog(
-                title = "Delete Task",
-                message = "Are you sure you want to delete this task?",
-                confirmButtonText = "Delete",
-                dismissButtonText = "Cancel",
+                title = stringResource(R.string.delete_task),
+                message = stringResource(R.string.delete_task_confirmation),
+                confirmButtonText = stringResource(R.string.delete_button),
+                dismissButtonText = stringResource(R.string.cancel_button),
                 onConfirmDelete = {
                     viewModel.deleteTask()
                     viewModel.showDeleteDialog(false)

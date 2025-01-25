@@ -19,10 +19,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import szysz3.planty.R
 import szysz3.planty.screen.tasklist.model.TaskCardUiState
 import szysz3.planty.theme.dimensions
 
@@ -109,17 +111,17 @@ private fun TaskDetailsContent(
                 .padding(start = dimens.spacing32, top = dimens.spacing8)
         ) {
             Text(
-                text = "$completedTasks",
+                text = stringResource(R.string.task_completed_count, completedTasks),
                 style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
             )
             Text(
-                text = " / ",
+                text = stringResource(R.string.task_count_separator),
                 style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
             )
             Text(
-                text = "$totalTasks",
+                text = stringResource(R.string.task_total_count, totalTasks),
                 style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
             )
@@ -138,21 +140,21 @@ private fun CostSection(
         modifier = modifier.padding(end = MaterialTheme.dimensions().spacing16)
     ) {
         Text(
-            text = String.format("%.2f", completedCost),
+            text = stringResource(R.string.cost_completed, completedCost),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
             textAlign = TextAlign.Center,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         Text(
-            text = " out of ",
+            text = stringResource(R.string.cost_separator),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
             textAlign = TextAlign.Center,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         Text(
-            text = String.format("%.2f", totalCost),
+            text = stringResource(R.string.cost_total, totalCost),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
             textAlign = TextAlign.Center,

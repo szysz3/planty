@@ -90,7 +90,7 @@ private fun PlantImage(plant: Plant?) {
 @Composable
 private fun PlantDetails(plant: Plant?) {
     Text(
-        text = plant?.latinName ?: "Lorem ipsum",
+        text = plant?.latinName ?: "",
         textAlign = TextAlign.Center,
         overflow = TextOverflow.Ellipsis,
         style = MaterialTheme.typography.titleMedium,

@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import szysz3.planty.R
 import szysz3.planty.core.composable.ImageWithTextHorizontal
 import szysz3.planty.theme.dimensions
@@ -24,7 +25,7 @@ fun CultivationDetailsSection(details: String) {
     Column {
         ImageWithTextHorizontal(
             imageRes = R.drawable.icon_info,
-            title = "Cultivation details",
+            title = stringResource(R.string.cultivation_details_title),
             iconSize = dimens.size36,
             textStyle = MaterialTheme.typography.headlineSmall
         )

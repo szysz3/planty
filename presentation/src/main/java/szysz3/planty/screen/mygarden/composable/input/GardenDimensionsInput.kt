@@ -21,7 +21,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import szysz3.planty.R
 import szysz3.planty.core.composable.RoundedButton
 import szysz3.planty.theme.Shapes
 import szysz3.planty.theme.dimensions
@@ -32,14 +34,6 @@ private object GardenInputConstants {
     const val DEFAULT_MIN_DIMENSION = 2
 }
 
-/**
- * A bottom sheet composable that allows users to input garden dimensions and name.
- *
- * @param bottomSheetState The state of the bottom sheet
- * @param maxDimension Maximum allowed dimension for width and height
- * @param onDismissRequest Callback invoked when the bottom sheet is dismissed
- * @param onDimensionsSubmitted Callback invoked when valid dimensions are submitted
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GardenDimensionsInput(
@@ -60,7 +54,10 @@ fun GardenDimensionsInput(
                 .padding(MaterialTheme.dimensions().spacing16),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Enter Garden Details", style = MaterialTheme.typography.titleLarge)
+            Text(
+                text = stringResource(R.string.garden_input_title),
+                style = MaterialTheme.typography.titleLarge
+            )
             Spacer(modifier = Modifier.height(MaterialTheme.dimensions().spacing20))
 
             GardenInputContent(
@@ -95,20 +92,21 @@ private fun GardenInputContent(
         modifier = Modifier
             .fillMaxWidth()
             .clip(Shapes.medium),
-        label = { Text("Name (max ${GardenInputConstants.MAX_NAME_LENGTH} characters)") },
+        label = {
+            Text(stringResource(R.string.garden_name_label, GardenInputConstants.MAX_NAME_LENGTH))
+        },
         singleLine = true,
         isError = inputState.nameError
     )
     if (inputState.nameError) {
         Text(
-            text = "Garden name is required",
+            text = stringResource(R.string.garden_name_error),
             color = MaterialTheme.colorScheme.error,
             style = MaterialTheme.typography.bodyMedium
         )
     }
     Spacer(modifier = Modifier.height(MaterialTheme.dimensions().spacing12))
 
-    // Width Input
     TextField(
         value = inputState.width,
         onValueChange = { input ->
@@ -122,21 +120,22 @@ private fun GardenInputContent(
         modifier = Modifier
             .fillMaxWidth()
             .clip(Shapes.medium),
-        label = { Text("Width (in cells, max $maxDimension)") },
+        label = {
+            Text(stringResource(R.string.garden_width_label, maxDimension))
+        },
         singleLine = true,
         isError = inputState.widthError,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
     if (inputState.widthError) {
         Text(
-            text = "Width cannot exceed $maxDimension",
+            text = stringResource(R.string.garden_width_error, maxDimension),
             color = MaterialTheme.colorScheme.error,
             style = MaterialTheme.typography.bodyMedium
         )
     }
     Spacer(modifier = Modifier.height(MaterialTheme.dimensions().spacing12))
 
-    // Height Input
     TextField(
         value = inputState.height,
         onValueChange = { input ->
@@ -150,14 +149,16 @@ private fun GardenInputContent(
         modifier = Modifier
             .fillMaxWidth()
             .clip(Shapes.medium),
-        label = { Text("Height (in cells, max $maxDimension)") },
+        label = {
+            Text(stringResource(R.string.garden_height_label, maxDimension))
+        },
         singleLine = true,
         isError = inputState.heightError,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
     if (inputState.heightError) {
         Text(
-            text = "Height cannot exceed $maxDimension",
+            text = stringResource(R.string.garden_height_error, maxDimension),
             color = MaterialTheme.colorScheme.error,
             style = MaterialTheme.typography.bodyMedium
         )
@@ -180,6 +181,6 @@ private fun GardenInputContent(
             }
         },
         enabled = isEnabled,
-        text = "Confirm"
+        text = stringResource(R.string.garden_confirm_button)
     )
 }

@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -158,7 +159,7 @@ private fun MyGardenContent(
             } else {
                 FloatingActionButton(
                     icon = Icons.Rounded.Add,
-                    contentDescription = "Add garden",
+                    contentDescription = stringResource(R.string.add_garden),
                     onClick = { viewModel.showBottomSheet(true) }
                 )
             }
@@ -197,10 +198,10 @@ private fun MyGardenDialogs(
 ) {
     if (uiState.dialogState.isDeleteDialogVisible) {
         DeleteAlertDialog(
-            title = "Delete Garden",
-            message = "Are you sure you want to delete this garden?",
-            confirmButtonText = "Delete",
-            dismissButtonText = "Cancel",
+            title = stringResource(R.string.delete_garden),
+            message = stringResource(R.string.delete_garden_confirmation),
+            confirmButtonText = stringResource(R.string.delete),
+            dismissButtonText = stringResource(R.string.cancel),
             onConfirmDelete = {
                 viewModel.clearGarden()
                 viewModel.showDeleteDialog(false)

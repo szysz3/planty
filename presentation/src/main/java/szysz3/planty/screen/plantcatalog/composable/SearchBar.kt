@@ -13,8 +13,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import szysz3.planty.R
 import szysz3.planty.theme.dimensions
 
 /**
@@ -48,11 +50,11 @@ fun SearchBar(
         ),
         maxLines = 1,
         modifier = searchBarModifier,
-        label = { Text("Search for a plant...") },
+        label = { Text(stringResource(R.string.search_bar_hint)) },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Rounded.Search,
-                contentDescription = "Search"
+                contentDescription = stringResource(R.string.search_icon_description)
             )
         },
         trailingIcon = {
@@ -60,7 +62,7 @@ fun SearchBar(
                 IconButton(onClick = onClearQuery) {
                     Icon(
                         imageVector = Icons.Rounded.Clear,
-                        contentDescription = "Clear Search"
+                        contentDescription = stringResource(R.string.clear_search_icon_description)
                     )
                 }
             }

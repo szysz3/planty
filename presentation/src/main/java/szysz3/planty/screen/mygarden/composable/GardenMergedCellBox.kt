@@ -14,9 +14,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import szysz3.planty.R
 import szysz3.planty.screen.mygarden.model.MergedCell
 import szysz3.planty.theme.Shapes
 import szysz3.planty.theme.dimensions
@@ -82,21 +84,29 @@ private fun GardenCellContent(mergedCell: MergedCell) {
             }
             if (mergedCell.subGardenRows != null && mergedCell.subGardenColumns != null) {
                 Text(
-                    text = "${mergedCell.subGardenColumns}×${mergedCell.subGardenRows}",
+                    text = stringResource(
+                        R.string.garden_cell_dimensions,
+                        mergedCell.subGardenColumns,
+                        mergedCell.subGardenRows
+                    ),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
                 )
             }
         } else {
             Text(
-                text = "Tap to create\nsub-garden",
+                text = stringResource(R.string.garden_cell_tap_to_create),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimary,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center
             )
             Text(
-                text = "${mergedCell.width}×${mergedCell.height}",
+                text = stringResource(
+                    R.string.garden_cell_dimensions,
+                    mergedCell.width,
+                    mergedCell.height
+                ),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
             )

@@ -16,7 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
+import szysz3.planty.R
 import szysz3.planty.core.model.SubTask
 import szysz3.planty.theme.dimensions
 
@@ -92,7 +94,7 @@ private fun SubTaskDescription(
         ),
         placeholder = {
             Text(
-                text = "Sub task title",
+                text = stringResource(R.string.subtask_title_placeholder),
                 textDecoration = textDecoration,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             )

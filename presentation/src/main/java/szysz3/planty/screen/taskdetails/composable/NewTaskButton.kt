@@ -9,6 +9,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import szysz3.planty.R
 import szysz3.planty.theme.dimensions
 
 /**
@@ -26,7 +28,7 @@ fun NewTaskButton(onClick: () -> Unit) {
             .padding(vertical = MaterialTheme.dimensions().spacing16)
     ) {
         Text(
-            "+ New subtask",
+            stringResource(R.string.add_new_subtask),
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
             modifier = Modifier.clickable {
                 onClick()

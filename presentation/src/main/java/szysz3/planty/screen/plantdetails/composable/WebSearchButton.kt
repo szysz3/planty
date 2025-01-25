@@ -6,6 +6,8 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import szysz3.planty.R
 import szysz3.planty.core.composable.ImageButton
 import szysz3.planty.theme.dimensions
 
@@ -20,7 +22,7 @@ fun WebSearchButton(
 ) {
     ImageButton(
         icon = Icons.Rounded.Search,
-        text = "More details",
+        text = stringResource(R.string.web_search_button_text),
         modifier = Modifier
             .padding(MaterialTheme.dimensions().spacing8)
     ) {

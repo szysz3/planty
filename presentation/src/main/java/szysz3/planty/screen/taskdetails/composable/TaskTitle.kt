@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import szysz3.planty.R
 import szysz3.planty.theme.dimensions
 
 /**
@@ -32,7 +34,7 @@ fun TaskTitle(
         textStyle = MaterialTheme.typography.headlineLarge.copy(color = MaterialTheme.colorScheme.onSurface),
         placeholder = {
             Text(
-                text = "Title",
+                text = stringResource(R.string.task_title_placeholder),
                 color = MaterialTheme.colorScheme.onSurface
             )
         },

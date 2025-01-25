@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import szysz3.planty.R
@@ -99,10 +100,10 @@ fun PlantDetailsScreen(
 
             if (uiState.isDeleteDialogVisible) {
                 DeleteAlertDialog(
-                    title = "Delete Plant",
-                    message = "Are you sure you want to delete this plant?",
-                    confirmButtonText = "Delete",
-                    dismissButtonText = "Cancel",
+                    title = stringResource(R.string.delete_plant),
+                    message = stringResource(R.string.delete_plant_confirmation),
+                    confirmButtonText = stringResource(R.string.delete_button),
+                    dismissButtonText = stringResource(R.string.cancel_button),
                     onConfirmDelete = {
                         plantDetailsViewModel.persistPlant(plant = null)
                         plantDetailsViewModel.showDeleteDialog(false)
@@ -169,7 +170,7 @@ fun PlantDetailsContent(
                     onPlantChosen?.invoke()
                 },
                 modifier = Modifier.fillMaxWidth(),
-                text = "Plant!"
+                text = stringResource(R.string.plant_button)
             )
         }
     }
