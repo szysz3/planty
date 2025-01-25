@@ -137,7 +137,9 @@ private fun TaskList(
     viewModel: TaskDetailsViewModel
 ) {
     Column(
-        modifier = modifier.verticalScroll(rememberScrollState())
+        modifier = modifier
+            .verticalScroll(rememberScrollState())
+            .padding(MaterialTheme.dimensions().spacing16)
     ) {
         // Active tasks
         uiState.activeSubTasks.forEach { subTask ->

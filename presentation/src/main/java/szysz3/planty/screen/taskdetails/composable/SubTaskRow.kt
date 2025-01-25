@@ -44,7 +44,6 @@ fun SubTaskRow(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = dimens.spacing4)
     ) {
         Checkbox(
             checked = subTask.isCompleted,
